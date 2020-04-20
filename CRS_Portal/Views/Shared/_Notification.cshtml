@@ -1,0 +1,64 @@
+﻿
+<div class="widget-content-right header-user-info ml-3" style="padding-right:5px;">
+    <a href="#" onclick="return false;" class="btn-shadow p-1 btn btn-sm " role="button"
+       data-toggle="dropdown" id="NotificationDropDownMenu" data-target="#" style="float: left" aria-expanded="true">
+        <i class="fas fa-bell fa-2x" style="color:white;line-height:0px !important; margin-top:12px;">
+        </i>
+        <span id="spBadgeCnt" class="badge badge-danger" style="margin-left:0px; top: -11px;"></span>
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-left pull-right" role="menu" aria-labelledby="NotificationDropDownMenu" id="ulNotifyMenu">
+        <ul class="timeline timeline-icons timeline-sm" style="margin:10px;width:210px">
+            <a href="#" id="aMarkAsRead" style="float:right;">Mark all as Read</a>
+            <br />
+            <div id="dvNotification">
+
+            </div>
+            <a id="aViewmore" asp-controller="UserDetails" asp-action="Notification" style="text-align:center; padding-left: 20px;">View more...</a>
+            <br />
+            <br />
+        </ul>
+
+    </ul>
+</div>
+<input id="btnloadNotification" value="edit" type="hidden" data-url='@Url.Action("GetNewNotification","Dashboard")' />
+<input id="btnNotificationRead" value="edit" type="hidden" data-url='@Url.Action("NotificationAsRead","Dashboard")' />
+<script>
+    $(document).ready(function () {
+        LoadNotification();
+    });
+    function LoadNotification() {
+        $.ajax(
+            {
+                type: 'GET',
+                data: "",
+                url: $("#btnloadNotification").data('url'),
+                success: function (json) {
+                    //console.log(json);
+                    $('#dvNotification').html(json.message);
+                    $('#spBadgeCnt').html(json.msgCount);
+                    if (parseInt(json.msgCount) == 0) {
+                        $('#ulNotifyMenu').hide();
+                    }
+                }
+            });
+    }
+    $("#aMarkAsRead").click(function () {
+        markNotificationAsRead();
+    });
+    $("#aViewmore").click(function () {
+        markNotificationAsRead();
+    });
+    function markNotificationAsRead() {
+        $.ajax(
+            {
+                type: 'GET',
+                data: "",
+                url: $("#btnNotificationRead").data('url'),
+                success: function (json) {
+                    //console.log(json);
+                    $('#spBadgeCnt').html(json.msgCount);
+                }
+            });
+    }
+</script>

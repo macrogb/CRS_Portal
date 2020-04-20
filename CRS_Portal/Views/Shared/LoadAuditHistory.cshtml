@@ -1,0 +1,417 @@
+﻿@{
+    ViewData["Title"] = "Audit History";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary bg-TelegramSingle" style="display:inline !important;">
+                <h4 class="card-title ">SCV Audit History Details</h4>
+                @*<div class="card-category" style="text-transform:lowercase !important;">Please use action icon edit/delete to update Product Details</div>*@
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <button class="btn btn-primary mr-2 btn-lg" id="btnDownloadSeletedReport" onclick="DownloadSeletedAuditReport()"><i class="fas fa-download" style="color:lawngreen;"></i> Download selected audit report</button>
+                    <button class="btn btn-primary mr-2 btn-lg" id="btnDownloadSeletedReport" onclick="DeleteSeletedAuditReport()"><i class="fas fa-trash" style="color:#ff9393;"></i> Delete seleted audit report</button>
+                    <br />
+                    <br />
+                    <div style="width:100%; margin:0 auto;">
+                        <table id="AuditHistoryGrid" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="width:4%"></th>
+                                    <th style="width:3%">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" name="select_all" value="1" id="AuditHistoryGridSelectAll">
+                                            <label class="custom-control-label" for="AuditHistoryGridSelectAll"></label>
+                                        </div>
+                                    </th>
+                                    <th style="width:1%">ID</th>
+                                    <th style="width:20%">Reference No</th>
+                                    <th style="width:20%">Audit Status</th>
+                                    <th style="width:20%">Audit Date</th>
+                                    <th style="width:16%">Action</th>
+                                </tr>
+                            </thead>
+                            @*<tfoot>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>ReferenceNumber</th>
+                                        <th>AuditStatus</th>
+                                        <th>AuditDate</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>*@
+                            <tbody></tbody>
+                        </table>
+                        @*<table id="example" class="display" width="100%"></table>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input id="btnAuditHistoryGrid" value="edit" type="hidden" data-url='@Url.Action("LoadAuditHistoryDetailsForGrid","RunAudit")' />
+<input id="btnDownloadSummaryAuditReportMultiple" value="edit" type="hidden" data-url='@Url.Action("DownloadSCVAuditSummaryReportMultiple","RunAudit")' />
+
+<input id="btnDeleteSummaryAuditReportSingle" value="edit" type="hidden" data-url='@Url.Action("DeleteAuditReportSingle","RunAudit")' />
+<input id="btnDeleteSummaryAuditReportMultiple" value="edit" type="hidden" data-url='@Url.Action("DeleteAuditReportMultiple","RunAudit")' />
+
+<style>
+    td.details-control {
+        cursor: pointer;
+        background: url('../images/Plus.png')no-repeat center center;
+    }
+
+    tr.shown td.details-control {
+        cursor: pointer;
+        background: url('../images/minus.png')no-repeat center center;
+    }
+</style>
+
+<script>
+    //function getData(cb_func) {
+    //    $.ajax({
+    //    "url": $("#btnAuditHistoryGrid").data('url'),
+    //    "type": "POST",
+    //    "dataType": "text",
+    //    success: cb_func
+    //    });
+    //}
+
+    //$(document).ready(function () {
+    //    getData(function (data) {
+    //        console.log(data);
+    //        var columns = [];
+    //        data = JSON.parse(data);
+    //        columnNames = Object.keys(data.data[0]);
+    //        for (var i in columnNames) {
+    //            columns.push({ data: columnNames[i], title: columnNames[i] });
+    //        }
+    //        $('#example').DataTable({
+    //            data: data.data,
+    //            columns: columns
+    //        });
+    //    });
+
+    //});
+    var selectedIDs = "";
+
+    $(document).ready(function () {
+        LoadAuditHistoryGrid();
+
+    });
+
+    function DeleteAuditReportSingle(id) {
+        alertify.confirm('SCV Portal', 'Are you sure want to delete the file?', function () { _DeleteAuditReportSingle(id); }
+            , function() {});
+    }
+
+    function _DeleteAuditReportSingle(id) {
+        $.ajax(
+            {
+                url: $("#btnDeleteSummaryAuditReportSingle").data('url'),
+                data: { "referenceNumber": id },
+                success: function (data) {
+                    if (data.success == false) {
+                        spinner_Off();
+                        enableErrorDiv(data.message);
+                    }
+                    else {
+                        spinner_Off();
+                        alertify.alert('SCV Portal', data.message);
+                    }
+                },
+                error: function (data) {
+                    spinner_Off();
+                    enableErrorDiv(data.message);
+                }
+            });
+    }
+
+    function DeleteSeletedAuditReport() {
+        if (selectedIDs.length == 0) {
+            alertify.alert('SCV Portal', "Please choose audit file");
+            return;
+
+        }
+        alertify.confirm('SCV Portal', 'Are you sure want to delete selected files?', function () { _DeleteSeletedAuditReport(); }
+            , function () { });
+    }
+
+    function _DeleteSeletedAuditReport() {
+        if (selectedIDs.length == 0) {
+            alertify.alert('SCV Portal', "Please choose audit file");
+            return;
+        }
+        $.ajax(
+            {
+                url: $("#btnDeleteSummaryAuditReportMultiple").data('url'),
+                data: { "referenceNumber": selectedIDs },
+                success: function (data) {
+                    if (data.success == false) {
+                        spinner_Off();
+                        enableErrorDiv(data.message);
+                    }
+                    else {
+                        spinner_Off();
+                        alertify.alert('SCV Portal', data.message);
+                    }
+                },
+                error: function (data) {
+                    spinner_Off();
+                    enableErrorDiv(data.message);
+                }
+            });
+
+    }
+    function DownloadSeletedAuditReport() {
+
+        window.location.href = "/RunAudit/DownloadSCVAuditSummaryReportMultiple?referenceNumber=" + selectedIDs;
+        //console.log(selectedIDs);
+        //$.ajax(
+        //    {
+        //        url: $("#btnDownloadSummaryAuditReportMultiple").data('url'),
+        //        data: { "referenceNumber": selectedIDs },
+        //        success: function (data) {
+        //            if (data.success == false) {
+        //                spinner_Off();
+        //                enableErrorDiv(data.message);
+        //            }
+        //            else {
+        //                spinner_Off();
+        //            }
+        //        },
+        //        error: function (data) {
+        //            spinner_Off();
+        //            enableErrorDiv(data.message);
+        //        }
+        //    });
+
+
+    }
+    function moreInfoForAuditHistory(id) {
+        alert(id);
+    }
+    function LoadAuditHistoryGrid() {
+        spinner_On();
+        $.ajax(
+            {
+                "url": $("#btnAuditHistoryGrid").data('url'),
+                "type": "POST",
+                "dataType": "json",
+                success: function (data) {
+                    console.log(data);
+                    $('#AuditHistoryGrid').show();
+                    var datatableInstance = $('#AuditHistoryGrid').DataTable({
+                        data: data,
+                        paging: true,
+                        bDestroy: true,
+                        processing: true,
+                        pageLength: 10,
+                        order: [],
+                        columns: [
+                            {
+                                'data': '',
+                                'className': 'details-control',
+                                'data': null,
+                                'sortable': false,
+                                'defaultContent': ''
+                            },
+                            { 'data': '', 'className': 'SCVCheckBox', },
+                            { 'data': 'ID', "visible": false, },
+                            {
+                                'data': 'ReferenceNumber',
+                                'render': function json(data, type, full, meta) {
+                                    return "<a href='#' onclick=moreInfoForAuditHistory('" + full.ReferenceNumber + "'); >" + full.ReferenceNumber + "</a>";
+                                }
+                            },
+                            { 'data': 'KeyRunSts' },
+                            { 'data': 'AuditDate' },
+                            {
+                                'data': '',
+                                'sortable': false,
+                                'render': function json(data, type, full, meta) {
+                                    return "<i  class='fas fa-download' style='cursor:pointer;color:#03d203;' onclick=downloadAuditReortSingle('" + full.AuditRptFileName + "'); ></i>"
+                                        + " " + "<i class='fas fa-trash-alt' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;' onclick=DeleteAuditReportSingle('" + full.ReferenceNumber + "'); ></i >"
+                                        + " " + "<i class='fas fa-envelope' style='padding-left: 7px; color:#FF9900; cursor:pointer;' onclick=ShowMailAlertDetails('" + full.ReferenceNumber + "'); ></i >";
+                                }
+                            },
+                        ],
+                        'columnDefs': [{
+                            'targets': 1,
+                            'searchable': false,
+                            'orderable': false,
+                            'className': 'dt-body-center',
+                            'render': function (data, type, full, meta) {
+                                return '<div class="custom-control custom-checkbox scvcheck" id="scvcheck"> <input onclick="avr(this);" name="scvCheckBox" type="checkbox" class="custom-control-input" id="id_' + full.ReferenceNumber + '" value="' + full.ReferenceNumber + '"> <label id="lblScvCheck" class="custom-control-label" for="id_' + full.ReferenceNumber + '"></label> </div>';
+                            }
+                        }],
+                    });
+                    spinner_Off();
+                },
+                error: function (json) {
+                    spinner_Off();
+                }
+            });
+    }
+
+
+
+
+
+    // Handle click on "Select all" control
+    $('#AuditHistoryGridSelectAll').on('click', function () {
+        // Get all rows with search applied
+        var table = $('#AuditHistoryGrid').DataTable();
+        var rows = table.rows({ 'search': 'applied' }).nodes();
+        // Check/uncheck checkboxes for all rows in the table
+        $('input[type="checkbox"]', rows).prop('checked', this.checked);
+    });
+
+
+    // Handle click on checkbox to set state of "Select all" control
+    $('#AuditHistoryGrid tbody').on('change', 'input[type="checkbox"]', function () {
+        // If checkbox is not checked
+        console.log(1);
+        if (!this.checked) {
+            var el = $('#AuditHistoryGridSelectAll').get(0);
+            var el1 = $('#AuditHistoryGrid tbody tr td div').get(0);
+            console.log(el1);
+            // If "Select all" control is checked and has 'indeterminate' property
+            if (el && el.checked && ('indeterminate' in el)) {
+                // Set visual state of "Select all" control
+                // as 'indeterminate'
+                el.indeterminate = true;
+            }
+        }
+    });
+
+    //Adding Child grid - Start
+
+    // Add event listener for opening and closing details
+    $('#AuditHistoryGrid tbody').on('click', 'td.details-control', function () {
+        var table = $('#AuditHistoryGrid').DataTable();
+        var tr = $(this).closest('tr');
+        var row = table.row(tr);
+
+        if (row.child.isShown()) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child(format(row.data())).show();
+            tr.addClass('shown');
+        }
+    });
+
+
+
+    function avr(elem) {
+        var id = $(elem).attr("id");
+        if (selectedIDs.indexOf(id) != -1) {
+            selectedIDs = selectedIDs.replace(id, "id_");
+        }
+        else {
+            selectedIDs = selectedIDs + " , " + id;
+        }
+    }
+    /* Formatting function for row details - modify as you need */
+    function format(d) {
+        // `d` is the original data object for the row
+        return '<div class="container"><table class="table" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+            '<tr>' +
+            '<td><b>Audit Start Date</b></td>' +
+            '<td>' + d.AuditStartDate + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td><b>Audit Start Time</b></td>' +
+            '<td>' + d.AuditStartTime + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td><b>Audit End Date</b></td>' +
+            '<td>' + d.AuditEndDate + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td><b>Audit End Time</b></td>' +
+            '<td>' + d.AuditEndTime + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td><b>Audit Report File Name</b></td>' +
+            '<td>' + d.AuditRptFileName + '</td>' +
+            '</tr>' +
+            //'<td><b>Audit Report File Name</b></td>' +
+            //'<td>' + d.AuditRptFilePath + '</td>' +
+            //'</tr>' +
+            '</table></div>';
+    }
+
+    function downloadAuditReortSingle(fileName) {
+        window.location.href = "/RunAudit/DownloadSCVAuditSummaryReportSingle?filePathwithName=" + fileName;
+
+    }
+
+    //Adding Child grid - End
+
+
+    function ShowMailAlertDetails(ReferenceNumber) {
+        spinner_On();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetEmailContent", "RunAudit")',
+            data: { ReferenceNo: ReferenceNumber },
+            success: function (data) {
+                //jQuery.noConflict();
+                $('#mailcontent').html(data);
+                $('#ModalMail').modal('show');
+                if (data == null || data == "") {
+                    $('#mailcontent').html('No Content Available');
+                    $("#mailcontent").css('color', 'red');
+                    $('#btnresend').prop('disabled', true);
+                    $('#btnresend').css('cursor', 'not-allowed');
+                    spinner_Off();
+                }
+                else {
+                    $('#btnresend').prop('disabled', false);
+                    $('#btnresend').css('cursor', 'pointer');
+                    spinner_Off();
+                }
+                $('#btnresend').on('click', function (e) {
+                    $('#btnresend').attr('disabled', 'disabled');
+                    $('#ModalMail').modal('hide');
+                    spinner_On();
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("ResendEmail","RunAudit")',
+                        data: { ReferenceNo: ReferenceNumber },
+                        success: function (result) {
+                            $('#btnresend').removeAttr('disabled');
+                            if (result) {
+                                spinner_Off();
+                                $('#ModalMail').modal('hide');
+                                $('#ModalSuccess').modal('show');
+                                $('#StatusContent').html("Mail has been sent successfully!");
+                                $("#StatusContent").css('color', 'green');
+                            }
+                            else {
+                                spinner_Off();
+                                $('#ModalMail').modal('hide');
+                                $('#ModalSuccess').modal('show');
+                                $('#StatusContent').html("Error occured while sending mail alert!");
+                                $("#StatusContent").css('color', 'red');
+                            }
+
+                        }
+                    });
+                    e.stopImmediatePropagation();
+                    return false;
+                });
+
+            }
+        });
+    }
+
+</script>

@@ -1,0 +1,200 @@
+﻿<div class="app-main" id="dvSliderhead">
+    @if (!string.IsNullOrEmpty(Context.Session.GetString("UserID")))
+    {
+        <div class="app-sidebar sidebar-shadow bg-Telegram-light-r sidebar-text-dark" id="dvSlider">
+            <div class="app-header__logo">
+                <div class="logo-src"></div>
+                <div class="header__pane ml-auto">
+                    <div>
+                        <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
+                            <span class="hamburger-box">
+                                <span class="hamburger-inner"></span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="app-header__mobile-menu">
+                <div>
+                    <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
+                        <span class="hamburger-box">
+                            <span class="hamburger-inner"></span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <div class="app-header__menu">
+                <span>
+                    <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+                        <span class="btn-icon-wrapper">
+                            <i class="fa fa-ellipsis-v fa-w-6"></i>
+                        </span>
+                    </button>
+                </span>
+            </div>
+            <div class="scrollbar-sidebar">
+                <div class="app-sidebar__inner" id="dvSlider">
+                    <ul class="vertical-nav-menu">
+                        <li class="app-sidebar__heading"></li>
+                        <li>
+                            <a id="sliderDashboard" asp-controller="Dashboard" asp-action="Index" onclick="sliderActive()">
+                                <i class="metismenu-icon fa fa-tachometer">
+                                </i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="app-sidebar__heading"></li>
+                        <li>
+                            <a id="liSCVAudit" href="#">
+                                <i class="metismenu-icon pe-7s-diamond"></i>
+                                <span>SCV Audit</span>
+                                <span id="liSCVAuditFont" class="fas fa-angle-down sliderHeaderArrow"></span>
+                            </a>
+                            <ul id="liSCVAuditMenu">
+                                <li>
+                                    <a id="sliderRunAudit" class="slider" asp-controller="RunAudit" asp-action="Index">
+                                        <i class="fas fa-running"></i>
+                                        Initiate Audit
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="sliderLoadAuditStatus" asp-controller="RunAudit" asp-action="LoadAuditStatus">
+                                        <i class="pe-7s-display2"></i>
+                                        Audit Status
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="sliderAuditRptDownload" asp-controller="RunAudit" asp-action="AuditRptDownload">
+                                        <i class="fas fa-download"></i>
+                                        Download Audit Report
+                                    </a>
+                                </li>
+                                @*<li>
+                                    <a id="sliderAuditHistory" asp-controller="ExceptionSummary" asp-action="Index">
+                                        <i class="fas fa-file-alt"></i>
+                                        Exception Summary Old
+                                    </a>
+                                </li>*@
+                                <li>
+                                    <a id="sliderExceptionSummary" asp-controller="CompareExpRpt" asp-action="Index">
+                                        @*<a id="sliderExceptionSummary" asp-controller="ExceptionSummary" asp-action="Index">*@
+                                            <i class="fas fa-clipboard-list"></i>
+                                            Exception Summary
+                                        </a>
+</li>
+                            </ul>
+                        </li>
+                        <li class="app-sidebar__heading"></li>
+                        <li>
+                            <a id="liSCVAuditBS" href="#">
+                                <i class="metismenu-icon fas fa-cog"></i>
+                                Bank Settings
+                                <span id="liSCVAuditBSFont" class="fas fa-angle-down sliderHeaderArrow"></span>
+                            </a>
+                            <ul id="liSCVAuditBSMenu">
+                                <li>
+                                    <a id="sliderBSAcctStsCodeDet" asp-controller="AccountStatusCode" asp-action="Index">
+                                        <i class="fas fa-gem"></i>
+                                        Account Status Code
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="sliderBSBICDet" asp-controller="BIC" asp-action="Index">
+                                        <i class="fas fa-list"></i>
+                                        BIC Details
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="sliderBSCorp" asp-controller="CorpAccount" asp-action="Index">
+                                        <i class="fas fa-list-alt"></i>
+                                        Corporate Account
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="sliderBSPOA" asp-controller="POAAccount" asp-action="Index">
+                                        <i class="fas fa-poll-h"></i>
+                                        POA Accounts
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="sliderBSProductDet" asp-controller="Product" asp-action="Index">
+                                        <i class="fas fa-cube"></i>
+                                        Product Details
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="sliderBSSortCode" asp-controller="SortCode" asp-action="Index">
+                                        <i class="fas fa-stream"></i>
+                                        Sort Code
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="sliderBSExcRptExcludeSts" asp-controller="ExcRptExcludeSts" asp-action="Index">
+                                        <i class="fas fa-outdent"></i>
+                                        Ignore Findings
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="sliderBSIgnoreDupCust" asp-controller="NotDuplicateCustomers" asp-action="Index">
+                                        <i class="fas fa-outdent"></i>
+                                        Ignore Duplicate Customer
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="sliderBSExpRpts" asp-controller="ExceptionRpt" asp-action="Index">
+                                        <i class="fas fa-table"></i>
+                                        Exception Reports
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="app-sidebar__heading"></li>
+                        <li>
+                            <a id="liSCVAuditUsr" href="#">
+                                <i class="metismenu-icon fas fa-user-cog"></i>
+                                User Settings
+                                <span id="liSCVAuditUsrFont" class="fas fa-angle-down sliderHeaderArrow"></span>
+                            </a>
+                            <ul id="liSCVAuditUsrMenu">
+                                @if (!string.IsNullOrEmpty(Context.Session.GetString("UserType")) && Context.Session.GetString("UserType") == "SuperAdmin")
+                                {
+                                    <li class="app-sidebar__heading" id="liadminSetting">Admin Settings</li>
+                                    <li>
+                                        <a id="sliderAdminUsr" asp-controller="UserDetails" asp-action="Index">
+                                            <i class="metismenu-icon fas fa-users-cog"></i>
+                                            Users
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a id="sliderAdminUsrModule" asp-controller="Module" asp-action="Index">
+                                            <i class="metismenu-icon fas fa-sitemap"></i>
+                                            Module Control
+                                        </a>
+                                    </li>
+                                }
+                                <li>
+                                    <a id="sliderUsrNotification" asp-controller="UserDetails" asp-action="Notification">
+                                        <i class="fas fa-bell"></i>
+                                        Notification
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="sliderUsrChangePassword" asp-controller="UserDetails" asp-action="ChangePassword">
+                                        <i class="fas fa-user-cog"></i>
+                                        Change Password
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="sliderUsrProfile" asp-controller="UserDetails" asp-action="Profile">
+                                        <i class="fas fa-user-edit"></i>
+                                        Profile
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+@*</div>*@

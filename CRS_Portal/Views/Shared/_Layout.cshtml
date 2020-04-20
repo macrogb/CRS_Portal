@@ -1,0 +1,423 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @*<meta charset="utf-8" />*@
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    @*<meta name="viewport" content="width=device-width, initial-scale=1.0" />*@
+    <title>@ViewData["Title"] - SCV Portal</title>
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+
+    <script src="~/js/alertify.min.js"></script>
+
+    <script src="~/js/jquery.uploadfile.min.js"></script>
+    <script src="~/js/jquery-ui.min.js"></script>
+    @*-- For Datatable start*@
+    <script src="~/js/jquery.dataTables.min.js"></script>
+
+    <script src="~/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"></script>
+
+
+    @*-- For Datatable end*@
+    <script src="~/js/popper.min.js"></script>
+
+    <script src="~/js/main.js"></script>
+    <script src="~/js/site.js"></script>
+
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/alertify.min.css" rel="stylesheet" />
+    <link href="~/css/jquery-ui.css" rel="stylesheet" />
+    <link href="~/css/uploadfile.css" rel="stylesheet" />
+    <link href="~/css/main.css" rel="stylesheet" />
+
+    <link href="~/css/Custom.css" rel="stylesheet" />
+    <link href="~/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/CirclePercentage.css" rel="stylesheet" />
+    <link href="~/css/Notification.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    @*-- For Datatable start*@
+    <link href="~/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/responsive.bootstrap.min.css" rel="stylesheet" />
+    @*-- For Datatable end*@
+</head>
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        <partial name="_Header" />
+        @*<partial name="_ColorChooser" />*@
+
+
+        @*@Html.Partial("_Slider");*@
+
+        <partial name="_Slider" />
+        <div class="app-main__outer">
+            <div class="app-main__inner">
+                @RenderBody()
+
+            </div>
+            @*<div class="modal fade" tabindex="-1" role="dialog" id="modal2" data-keyboard="false" data-backdrop="static">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="text-center">
+                                    <img src="~/images/loading.gif">
+                                    <p class="txt-load">Please Wait...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+
+            @*<div class="footer text-center">
+                    <p> &copy; 2019 - Macro Global All Rights Reserved</p>
+                </div>
+                <br />
+                <br />*@
+
+        </div>
+    </div>
+
+    <div class="spinner" style="display:none">
+        <div class="center-div">
+            <div class="inner-div">
+                <div class="loader"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bd-example-modal-lg" id="ModalMail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="mySmallModalLabel">Mail Alert Details</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+
+                <div>
+                    <div class="card-body">
+                        <pre id="mailcontent" class="modal-body"></pre>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" id="btnresend">Resend Email</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnclose">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ModalSuccess" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="mySmallModalLabel">Mail Resend Status</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+
+                <div>
+                    <div class="card-body">
+                        <pre id="StatusContent" class="modal-body"></pre>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal" id="btnclose">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<div class="modal fade" tabindex="-1" role="dialog" id="modal2" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <img src="~/images/loading.gif">
+                            <p class="txt-load">Please Wait...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+
+
+    @*<input id="btnUSRLevel" value="edit" type="hidden" data-url='@Url.Action("GetActiveMenuList","Module")' />
+        @RenderSection("Scripts", required: false)*@
+</body>
+@*<div class="modal fade bd-example-modal-lg" id="modalLoading" data-backdrop="static" data-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="width: 48px">
+            <span class="fa fa-spinner fa-spin fa-3x"></span>
+        </div>
+    </div>
+</div>*@
+</html>
+
+<style>
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        /*background-color: #FAFBFC;*/
+        color: #000;
+        text-align: center;
+        padding-top: 12px;
+        /*border-top: 1px solid #d0d0d0;*/
+        z-index:15;
+    }
+    
+</style>
+
+@*<div id="AddModalPopup"></div>*@
+<script type="text/javascript">
+    $(document).ready(function () {
+        showHideSubMenus();
+        selectSliderMenu();
+    });
+
+    function showHideSubMenus() {
+        var menuList = '@Context.Session.GetString("lstOfMenus")';
+        console.log(menuList);
+        if (menuList != '') {
+            var array = menuList.split(",");
+            for (i = 0; i < array.length; i++) {
+                $("#" + array[i] + "").hide();
+            }
+        }
+    }
+
+    $("#liDashboard").click(function () {      
+        var id = $('#liSCVAuditDSMenu').hasClass("show");
+        if (id) {
+            $("#liSCVAuditDSMenu").removeClass("show");
+            $("#liSCVAuditDSFont").removeClass("fas fa-angle-up");
+            $("#liSCVAuditDSFont").addClass("fas fa-angle-down");          
+            return false;
+        }
+        else {
+            $("#liSCVAuditDSMenu").addClass("show");
+            $("#liSCVAuditDSFont").removeClass("fas fa-angle-down");
+            $("#liSCVAuditDSFont").addClass("fas fa-angle-up");           
+            return false;
+        }
+    });
+
+    $("#liSCVAudit").click(function () {
+        var id = $('#liSCVAuditMenu').hasClass("show");
+        if (id) {
+            $("#liSCVAuditMenu").removeClass("show");
+            $("#liSCVAuditFont").removeClass("fas fa-angle-up");
+            $("#liSCVAuditFont").addClass("fas fa-angle-down");
+            return false;
+        }
+        else {
+            $("#liSCVAuditMenu").addClass("show");
+            $("#liSCVAuditFont").removeClass("fas fa-angle-down");
+            $("#liSCVAuditFont").addClass("fas fa-angle-up");
+            return false;
+        }
+    });
+
+    $("#liBankSetting").click(function () {
+        var id = $('#liSCVAuditBSMenu').hasClass("show");
+        if (id) {
+            $("#liSCVAuditBSMenu").removeClass("show");
+            $("#liSCVAuditBSFont").removeClass("fas fa-angle-up");
+            $("#liSCVAuditBSFont").addClass("fas fa-angle-down");
+            return false;
+        }
+        else {
+            $("#liSCVAuditBSMenu").addClass("show");
+            $("#liSCVAuditBSFont").removeClass("fas fa-angle-down");
+            $("#liSCVAuditBSFont").addClass("fas fa-angle-up");
+            return false;
+        }
+    });
+
+    $("#liUsrSetting").click(function () {
+        var id = $('#liSCVAuditUsrMenu').hasClass("show");
+        if (id) {
+            $("#liSCVAuditUsrMenu").removeClass("show");
+            $("#liSCVAuditUsrFont").removeClass("fas fa-angle-up");
+            $("#liSCVAuditUsrFont").addClass("fas fa-angle-down");
+            return false;
+        }
+        else {
+            $("#liSCVAuditUsrMenu").addClass("show");
+            $("#liSCVAuditUsrFont").removeClass("fas fa-angle-down");
+            $("#liSCVAuditUsrFont").addClass("fas fa-angle-up");
+            return false;
+        }
+    });
+    
+    function selectSliderMenu() {
+        var cntrlName = window.location.pathname;
+        console.log(cntrlName);
+        $(".slider").removeClass('mm-active');
+
+         if (cntrlName == "/RunAudit" || cntrlName == "/RunAudit/LoadAuditStatus" || cntrlName == "/RunAudit/AuditRptDownload"
+             || cntrlName == "/ExceptionSummary" || cntrlName == "/RunAudit/ExpSum" || cntrlName == "/RunAudit/LoadAuditHistoryData"
+             || cntrlName == "/CompareExpRpt") {
+
+             $("#liSCVAudit").attr("aria-expanded", "true");
+             $("#liSCVAuditMenu").addClass("mm-show");
+             $("#liSCVAudit").addClass("mm-active");
+            $("#liSCVAuditFont").removeClass("fas fa-angle-down");
+            $("#liSCVAuditFont").addClass("fas fa-angle-up");
+        }
+        else if (cntrlName == "/Product" || cntrlName == "/Product#" || cntrlName == "/BIC" || cntrlName == "/CorpAccount" || cntrlName == "/AccountStatusCode" ||
+             cntrlName == "/SortCode" || cntrlName == "/NotDuplicateCustomers"  || cntrlName == "/POAAccount" || cntrlName == "/ExceptionRpt" || cntrlName == "/ExcRptExcludeSts") {
+
+            $("#liSCVAuditBS").attr("aria-expanded", "true");
+             $("#liSCVAuditBSMenu").addClass("mm-show");
+             $("#liSCVAuditBS").addClass("mm-active");
+            $("#liSCVAuditBSFont").removeClass("fas fa-angle-down");
+            $("#liSCVAuditBSFont").addClass("fas fa-angle-up");
+        }
+        else if (cntrlName == "/UserDetails/ChangePassword" || cntrlName == "/UserDetails/Profile" || cntrlName == "/UserDetails/Notification") {
+
+            $("#liSCVAuditUsr").attr("aria-expanded", "true");
+             $("#liSCVAuditUsrMenu").addClass("mm-show");
+             $("#liSCVAuditUsr").addClass("mm-active");
+            $("#liSCVAuditUsrFont").removeClass("fas fa-angle-down");
+            $("#liSCVAuditUsrFont").addClass("fas fa-angle-up");
+        }
+        
+        if (cntrlName == "/Dashboard") {
+            $("#sliderDashboard").addClass("mm-active");
+        }
+        else if (cntrlName == "/RunAudit") {
+            $("#sliderRunAudit").addClass("mm-active");
+            
+        }
+        else if (cntrlName == "/") {
+            $("#sliderDashboard").addClass("mm-active");
+        }
+        else if (cntrlName == "/RunAudit/LoadAuditStatus") {
+            $("#sliderLoadAuditStatus").addClass("mm-active");
+        }
+        else if (cntrlName == "/RunAudit/AuditRptDownload") {
+            $("#sliderAuditRptDownload").addClass("mm-active");
+        }
+        else if (cntrlName == "/ExceptionSummary") {
+            $("#sliderAuditHistory").addClass("mm-active");
+        }
+        else if (cntrlName == "/CompareExpRpt") {
+            $("#sliderExceptionSummary").addClass("mm-active");
+        }
+        else if (cntrlName == "/RunAudit/ExpSum") {
+            $("#sliderExceptionSummary").addClass("mm-active");
+        }
+        else if (cntrlName == "/RunAudit/LoadAuditHistoryData") {
+            $("#sliderAuditHistory").addClass("mm-active");
+        }
+
+        else if (cntrlName == "/ClientAdmin") {
+            $("#sliderClientAdmin").addClass("mm-active");
+        }
+
+        else if (cntrlName == "/UserDetails/BankSettings") {
+            $("#sliderBankSettings").addClass("mm-active");
+        }
+
+         //Automation sub menus
+        else if (cntrlName == "/RunAutomation") {
+            $("#sliderRunAutomation").addClass("mm-active");
+        }
+        else if (cntrlName == "/RunAutomation/LoadAutomationStatus") {
+            $("#sliderAutomationStatus").addClass("mm-active");
+        }
+        else if (cntrlName == "/RunAutomation/AutomationRptDownload") {
+            $("#sliderAutomationRptDownload").addClass("mm-active");
+        }
+
+        
+
+        //BankSettings
+        else if (cntrlName == "/Product" || cntrlName == "/Product#") {
+            $("#sliderBSProductDet").addClass("mm-active");
+        }
+        else if (cntrlName == "/BIC") {
+            $("#sliderBSBICDet").addClass("mm-active");
+        }
+        else if (cntrlName == "/CorpAccount") {
+            $("#sliderBSCorp").addClass("mm-active");
+        }
+        else if (cntrlName == "/AccountStatusCode") {
+            $("#sliderBSAcctStsCodeDet").addClass("mm-active");
+        }
+        else if (cntrlName == "/SortCode") {
+            $("#sliderBSSortCode").addClass("mm-active");
+        }
+        else if (cntrlName == "/NotDuplicateCustomers") {
+            $("#sliderBSIgnoreDupCust").addClass("mm-active");
+        }
+        else if (cntrlName == "/POAAccount") {
+            $("#sliderBSPOA").addClass("mm-active");
+        }
+        else if (cntrlName == "/ExceptionRpt") {
+            $("#sliderBSExpRpts").addClass("mm-active");
+        }
+        else if (cntrlName == "/ExcRptExcludeSts") {
+            $("#sliderBSExcRptExcludeSts").addClass("mm-active");
+        }
+
+       
+
+        //user menu
+        else if (cntrlName == "/UserDetails/ChangePassword") {
+            $("#sliderUsrChangePassword").addClass("mm-active");
+        }
+        else if (cntrlName == "/UserDetails/Profile") {
+            $("#sliderUsrProfile").addClass("mm-active");
+        }
+        else if (cntrlName == "/UserDetails/Notification") {
+            $("#sliderUsrNotification").addClass("mm-active");
+        }
+
+        //Admin menu
+        else if (cntrlName == "/UserDetails") {
+            $("#sliderAdminUsr").addClass("mm-active");
+        }
+        else if (cntrlName == "/Module") {
+            $("#sliderAdminUsrModule").addClass("mm-active");
+        }
+
+    }
+
+    function loadModalPopup_Polmtpf(vale) {
+    console.log("ths");
+    console.log(vale);
+    @*$("#AddModalPopup").dialog({
+        width: 'auto', // overcomes width:'auto' and maxWidth bug
+        maxWidth: 'auto',
+        height: 'auto',
+        fluid: true, //new option
+        resizable: false,
+        autoOpen: true,
+        position: { my: "center", at: "top+300", of: window },
+        title: 'Edit POLMTPF',
+        modal: true,
+        open: function () {
+            $(this).load('@Url.Action("Polmtpf_PV", "SCVAutomation")', { "id": vale });
+
+        }
+    });*@
+    return false;
+    }
+    //$("#clsMenubtn").click(function () {
+    //    //alert(12);
+    //    var te = $("#dvSlider").is(':hidden');
+    //    //console.log(te);
+
+    //    if (te) {
+    //        $("#dvSlider").show();
+    //        $(".app-main__outer").css("padding-left", "280px");
+    //    }
+    //    else {
+    //        $("#dvSlider").hide();
+    //        $(".app-main__outer").css("padding-left", "0px");
+    //    }
+    //});
+</script>

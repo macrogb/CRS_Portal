@@ -1,0 +1,73 @@
+﻿@model SCV_Portal.Models.POLMTPF
+
+
+<div class="modal-body" id="dvPOLMTPF">
+    <form id="frmPOLMTPF">
+        <div class="form-row">
+            <div class="col-md-6">
+                <div class="position-relative form-group">
+                    <label for="PMODULE" class="">Module</label>
+                    @Html.HiddenFor(m => m.ID)
+                    @Html.TextBoxFor(m => m.PMODULE, new { placeholder = "Module", @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="position-relative form-group">
+                    <label for="PTYPE" class="">Type</label>
+                    @Html.TextBoxFor(m => m.PTYPE, new { placeholder = "Type", @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-8">
+                <div class="position-relative form-group">
+                    <label for="PDESC" class="">Description</label>
+                    @Html.TextBoxFor(m => m.PDESC, new { placeholder = "Description", @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-2">
+                <div class="position-relative form-group">
+                    <label for="myonoffswitch" class="">IsActive</label>
+                    <div class="onoffswitch">
+                        @Html.CheckBoxFor(m => m.myonoffswitch, new { @class = "form-control" })
+                        @*<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>*@
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-12">
+                <div class="position-relative form-group">
+                    <label for="POLDET" class="">Value</label>
+                    @Html.TextBoxFor(m => m.POLDET, new { placeholder = "POLDET", @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer" style="background:#fff !important;">
+    @*<button type="button" class="btn btn-secondary" onclick="closeModalPopup(this)">Close</button>*@
+    <button type="button" id="btnPolmtpfSave" class="btn btn-primary" data-url='@Url.Action("Polmtpf_Save","SCVAutomation")'>Save</button>
+</div>
+
+<script>
+    function closeModalPopup(val) {
+        $(val).dialog("close");
+    }
+
+    $("#btnPolmtpfSave").click(function () {
+        $.ajax(
+            {
+                type: 'POST',
+                data: $("#frmPOLMTPF").serialize(),
+                url: $("#btnPolmtpfSave").data('url'),
+                success: function (json) {
+                    alertify.alert('Alert', 'Data saved Successfully !', function () { LoadGridDatas("APCNFG", 1); });
+                }
+            });
+    });
+
+</script>
