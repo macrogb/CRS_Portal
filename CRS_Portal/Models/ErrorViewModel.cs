@@ -1,6 +1,6 @@
 using System;
 
-namespace SCV_Portal.Models
+namespace CRS_Portal.Models
 {
     public class ErrorViewModel
     {

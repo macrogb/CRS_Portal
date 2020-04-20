@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SCV_Portal.Entity;
-using SCV_Portal.HelperMethods;
-using SCV_Portal.Models;
+using CRS_Portal.Entity;
+using CRS_Portal.HelperMethods;
+using CRS_Portal.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace SCV_Portal.Controllers
+namespace CRS_Portal.Controllers
 {
     public class LoginController : Controller
     {

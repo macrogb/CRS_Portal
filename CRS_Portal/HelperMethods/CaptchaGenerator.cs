@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SCV_Portal.HelperMethods
+namespace CRS_Portal.HelperMethods
 {
     public class CaptchaGenerator
     {

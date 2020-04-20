@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SCV_Portal.Models
+namespace CRS_Portal.Models
 {
     public enum ProductTypeEnum
     {

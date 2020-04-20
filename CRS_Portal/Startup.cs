@@ -11,9 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using SCV_Portal.Models;
+using CRS_Portal.Models;
 
-namespace SCV_Portal
+namespace CRS_Portal
 {
     public class Startup
     {

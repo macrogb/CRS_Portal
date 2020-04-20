@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SCV_Portal.Models
+namespace CRS_Portal.Models
 {
     public class NotDuplicateCustomer
     {

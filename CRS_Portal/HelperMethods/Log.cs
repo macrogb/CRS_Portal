@@ -1,9 +1,9 @@
-﻿using SCV_Portal.Entity;
-using SCV_Portal.Models;
+﻿using CRS_Portal.Entity;
+using CRS_Portal.Models;
 using System;
 using System.IO;
 
-namespace SCV_Portal.HelperMethods
+namespace CRS_Portal.HelperMethods
 {
     static class Log
     {

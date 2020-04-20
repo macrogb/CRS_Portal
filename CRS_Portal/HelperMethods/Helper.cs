@@ -7,13 +7,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using SCV_Portal.Models;
+using CRS_Portal.Models;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Globalization;
 using System.Data;
-using SCV_Portal.Entity;
+using CRS_Portal.Entity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Net.Mail;
 using System.Collections;
@@ -24,7 +24,7 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
 
-namespace SCV_Portal.HelperMethods
+namespace CRS_Portal.HelperMethods
 {
     public static class Helper
     {

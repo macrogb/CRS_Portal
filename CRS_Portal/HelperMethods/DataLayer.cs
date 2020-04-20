@@ -14,10 +14,10 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
-using SCV_Portal.Models;
-using SCV_Portal.Entity;
+using CRS_Portal.Models;
+using CRS_Portal.Entity;
 
-namespace SCV_Portal.HelperMethods
+namespace CRS_Portal.HelperMethods
 {
     public class DataLayer
     {

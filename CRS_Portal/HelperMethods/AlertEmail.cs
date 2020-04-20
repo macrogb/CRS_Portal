@@ -10,7 +10,7 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
-namespace SCV_Portal.HelperMethods
+namespace CRS_Portal.HelperMethods
 {
     public sealed class AlertEmail
     {

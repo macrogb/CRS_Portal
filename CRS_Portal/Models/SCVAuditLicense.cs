@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-namespace SCV_Portal.Models
+namespace CRS_Portal.Models
 {
     [DataContract]
     public class SCVAuditLicense

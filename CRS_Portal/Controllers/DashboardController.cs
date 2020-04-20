@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using SCV_Portal.Entity;
-using SCV_Portal.HelperMethods;
-using SCV_Portal.Models;
+using CRS_Portal.Entity;
+using CRS_Portal.HelperMethods;
+using CRS_Portal.Models;
 
-namespace SCV_Portal.Controllers
+namespace CRS_Portal.Controllers
 {
     [CheckSessionIsAvailable]
     public class DashboardController : Controller

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace SCV_Portal.HelperMethods
+namespace CRS_Portal.HelperMethods
 {
     public class Methods
     {

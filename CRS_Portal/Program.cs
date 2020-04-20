@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace SCV_Portal
+namespace CRS_Portal
 {
     public class Program
     {

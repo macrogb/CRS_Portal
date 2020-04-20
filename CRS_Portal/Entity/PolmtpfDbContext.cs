@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SCV_Portal.HelperMethods;
-using SCV_Portal.Models;
+using CRS_Portal.HelperMethods;
+using CRS_Portal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SCV_Portal.Entity
+namespace CRS_Portal.Entity
 {
     public class PolmtpfDbContext : DbContext
     {
