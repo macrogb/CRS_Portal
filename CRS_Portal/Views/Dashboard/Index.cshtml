@@ -1,0 +1,351 @@
+﻿@model SCV_Portal.Models.SCVAuditRun
+@{
+    ViewData["Title"] = "Dashboard";
+    bool IsAuditRunning = ViewBag.IsSCVAuditRunning;
+}
+<partial name="_PageTitle" />
+@if (IsAuditRunning)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-3 widget-content" style=" background:orange">
+                <div class="widget-content-wrapper" style="padding-bottom:9px;">
+                    <div class="widget-content-left">
+                        <div class="widget-heading">
+                            <a href="@Url.Action("LoadAuditStatus", "RunAudit")" style="text-decoration : none;color:floralwhite">SCV Audit is in progress</a>
+                        </div>
+                        <div class="widget-subheading"></div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div>
+                            <img src="~/images/Loading.gif" height="25" width="25">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="col-sm-6 col-lg-6">
+        <div class="brand-card">
+            <div class="brand-card-header bg-TelegramSingle"  style="height:7rem;">
+                <div class="widget-content">
+                    <div class="widget-numbers text-white"><span>SCV Audit Licence Information</span></div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="social-box-chart-3" height="110"></canvas>
+                </div>
+            </div>
+            <br />
+            <div class="brand-card-body" style="height:6rem;">
+                <div>
+                    <div class="text-uppercase text-muted small"><b>License Effective Date</b></div>
+                    <div class="text-value" style="color:green">
+                        <h5><span id="auditStDt">@Html.ValueFor(m => m.SCVLicenseActivatedDate)</span></h5>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-uppercase text-muted small"><b>License Expires on</b></div>
+                    <div class="text-value" style="color:red"><h5><span id="auditEdDt">@Html.ValueFor(m => m.SCVLicenseExpiryDate)</span></h5></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-6">
+        <div class="main-card mb-3" style="border: 2.5px solid #fff;border-radius: 0.60rem !important;">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <div class="widget-content p-0">
+                        <div class="widget-content-outer">
+                            <div class="widget-content-wrapper">
+                                <div class="widget-content-left">
+                                    <div class="widget-heading">Total Audit Count</div>
+                                </div>
+                                <div class="widget-content-right">
+                                    <div id="dvtotAuditCount" class="c100 p100 blue" style="font-size:45px !important; margin :0 !important;">
+                                        <span id="spanbtotAuditCount"><span id="btotAuditCount" class='widget-numbers'>@Html.ValueFor(m => m.TotalSCVAuditCount)</span></span>
+                                        <div class="slice">
+                                            <div class="bar"></div>
+                                            <div class="fill"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="widget-content p-0">
+                        <div class="widget-content-outer">
+                            <div class="widget-content-wrapper">
+                                <div class="widget-content-left">
+                                    <div class="widget-heading">Remaining Audit count</div>
+                                </div>
+                                <div class="widget-content-right">
+                                    <div id="dvRemainAuditCount" class="c100 p100 red" style="font-size:45px !important; margin :0 !important;">
+                                        <span id="spanRemainAuditCount"><span id="bremainAuditCount" class='widget-numbers'>@Html.ValueFor(m => m.RemainingSCVAuditCount)</span></span>
+                                        <div class="slice">
+                                            <div class="bar"></div>
+                                            <div class="fill"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                           
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="widget-content p-0">
+                        <div class="widget-content-outer">
+                            <div class="widget-content-wrapper">
+                                <div class="widget-content-left">
+                                    <div class="widget-heading">Completed Audit Count</div>
+                                </div>
+                                <div class="widget-content-right">
+                                    <div id="dvCompAuditCount" class="c100 p100 green" style="font-size:45px !important; margin :0 !important;">
+                                        <span id="spanCompAuditCount"><span id="bCompAuditCount" class='widget-numbers'>@Html.ValueFor(m => m.CompletedSCVAuditCount)</span></span>
+                                        <div class="slice">
+                                            <div class="bar"></div>
+                                            <div class="fill"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-xl-2" style="cursor:pointer">
+        <a href="@Url.Action("Index", "RunAudit")" style="text-decoration : none">
+            <div class="card mb-3 widget-content dashboardWidgetBorderBottomBlue">
+                <div class="widget-content-wrapper" style="padding-bottom:9px;">
+                    <div class="widget-content-left">
+                        <div class="widget-heading" style="text-decoration: underline;">Initiate Audit</div>
+                        <div class="widget-subheading"></div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers "><span>   <i class="metismenu-icon fas fa-running"></i></span></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-xl-2">
+        <a href="@Url.Action("LoadAuditStatus", "RunAudit")" style="text-decoration : none">
+            <div class="card mb-3 widget-content dashboardWidgetBorderBottomOrange">
+                <div class="widget-content-wrapper" style="padding-bottom:9px;">
+                    <div class="widget-content-left">
+                        <div class="widget-heading" style="text-decoration: underline;">Audit Status</div>
+                        <div class="widget-subheading"></div>
+                    </div>
+
+                    <div class="widget-content-right">
+                        <div class="widget-numbers "><i class="metismenu-icon pe-7s-display2"></i></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-xl-2" style="cursor:pointer">
+        <a href="@Url.Action("AuditRptDownload", "RunAudit")" style="text-decoration : none">
+            <div class="card mb-3 widget-content dashboardWidgetBorderBottomGreen">
+                <div class="widget-content-wrapper" style="padding-bottom:9px;">
+                    <div class="widget-content-left">
+                        <div class="widget-heading" style="text-decoration: underline;">Download Audit Report </div>
+                        <div class="widget-subheading"></div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers "><span>   <i class="metismenu-icon fas fa-download"></i></span></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-6 col-xl-2" style="cursor:pointer">
+        <a href="@Url.Action("Index", "ExceptionSummary")" style="text-decoration : none">
+            <div class="card mb-3 widget-content dashboardWidgetBorderBottomBlue">
+                <div class="widget-content-wrapper" style="padding-bottom:9px;">
+                    <div class="widget-content-left">
+                        <div class="widget-heading" style="text-decoration: underline;">Exception Summary</div>
+                        <div class="widget-subheading"></div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers "><span>   <i class="metismenu-icon fas fa-clipboard-list"></i></span></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-xl-2">
+        <a href="@Url.Action("Index", "AccountStatusCode")" style="text-decoration : none">
+            <div class="card mb-3 widget-content dashboardWidgetBorderBottomOrange">
+                <div class="widget-content-wrapper" style="padding-bottom:9px;">
+                    <div class="widget-content-left">
+                        <div class="widget-heading" style="text-decoration: underline;">Account status code</div>
+                        <div class="widget-subheading"></div>
+                    </div>
+
+                    <div class="widget-content-right">
+                        <div class="widget-numbers "><i class="metismenu-icon fas fa-gem"></i></div>
+                    </div>
+                </div>
+
+
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-xl-2" style="cursor:pointer">
+        <a href="@Url.Action("Index", "Product")" style="text-decoration : none">
+            <div class="card mb-3 widget-content dashboardWidgetBorderBottomGreen">
+                <div class="widget-content-wrapper" style="padding-bottom:9px;">
+                    <div class="widget-content-left">
+                        <div class="widget-heading" style="text-decoration: underline;">Product</div>
+                        <div class="widget-subheading"></div>
+                    </div>
+                    <div class="widget-content-right">
+                        <div class="widget-numbers "><span>   <i class="metismenu-icon fas fa-cube"></i></span></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header card-header-primary bg-TelegramSingle" style="display:inline !important;">
+                    <h4 class="card-title ">SCV Audit Risk Chart</h4>
+                    <div id="dvRiskChartSubHead" class="card-category" style="text-transform:lowercase !important;">Based on recent SCV Audit Report generated on  <span id="auditDate"></span></div>
+                </div>
+                <br />
+                <div class="card-body" id="dvchart">
+                    <br />
+                    <br />
+                    <canvas id="myChart"></canvas>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <partial name="LoadAuditHistory" />
+        </div>
+    </div>
+    <input id="btnloadDS" value="edit" type="hidden" data-url='@Url.Action("LoadDashboard","Dashboard")' />
+    <script>
+        $(document).ready(function () {
+            $("#pageTitle").text("Dashboard");
+            spinner_On();
+
+            setTimeout(function () {
+                //LoadChartValues();
+                LoadDashboard();
+                //showHideSubMenus();
+                //selectSliderMenu();
+                spinner_Off();
+            }, 2000);
+
+        });
+
+        function LoadDashboard() {
+            $.ajax(
+                {
+                    type: 'GET',
+                    data: "",
+                    url: $("#btnloadDS").data('url'),
+                    success: function (json) {
+                        //console.log(json);
+                        $("#auditDate").text(json.SCVLastAuditRunDate);
+                        $('#auditStDt').text(json.SCVLicenseActivatedDate);
+                        $('#auditEdDt').text(json.SCVLicenseExpiryDate);
+                        $('#bCompAuditCount').text(json.CompletedSCVAuditCount);
+                        $('#btotAuditCount').text(json.TotalSCVAuditCount);
+                        $('#bremainAuditCount').text(json.RemainingSCVAuditCount);
+
+                        var compAuditCount = json.CompletedSCVAuditCount;
+                        var totAuditCount = json.TotalSCVAuditCount;
+                        var remainAuditCount = json.RemainingSCVAuditCount;
+
+                        var cal = (remainAuditCount / totAuditCount) * 100;
+
+                        var cal1 = (compAuditCount / totAuditCount) * 100;
+
+                        var compAuditCountClass = ".c100 p" + cal1.toFixed(0) + " green";
+                        $("#dvCompAuditCount").removeClass(".c100 p100 green");
+                        $("#dvCompAuditCount").addClass(compAuditCountClass);
+
+                        var remainAuditCountClass = ".c100 p" + cal.toFixed(0) + " red";
+                        $("#dvRemainAuditCount").removeClass(".c100 p100 red");
+                        $("#dvRemainAuditCount").addClass(remainAuditCountClass);
+
+                        if (json.ExpectionRpt_HighRiskCount != 0 &&
+                            json.ExpectionRpt_MediumRiskCount != 0 &&
+                            json.ExpectionRpt_LowRiskCount != 0) {
+                            LoadChartValues(json.ExpectionRpt_HighRiskCount, json.ExpectionRpt_MediumRiskCount, json.ExpectionRpt_LowRiskCount)
+                        }
+                        else {
+                            $("#dvchart").html("NO SCV Audit is performed.")
+                            $("#dvRiskChartSubHead").hide();
+                        }
+
+                    }
+                });
+        }
+        function LoadChartValues(v1, v2, v3) {
+            var ctx = document.getElementById('myChart');
+            var options = {
+                responsive: true,
+                hover: {
+                    mode: 'label',
+                },
+                tooltips: {
+                    enabled: true,
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var label = data.labels[tooltipItem.index];
+                            var val = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                            return label;
+                        }
+                    }
+
+                }
+            };
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['High risk items : ' + v1 , 'Medium risk items : '+v2, 'Low risk items : '+v3],
+                    showInLegend: true,
+                    toolTipContent: "{name}",
+                    datasets: [{
+                        //label: '# of Risk items',
+                        data: [v1, v2, v3],
+                        //data: [24, 44, 42],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(54, 162, 235, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: options
+            });
+        }
+    </script>
