@@ -46,7 +46,7 @@ namespace CRS_Portal.Models
 
     public class EntityLookupSummaryDto
     {
-        public string CUSTID { get; set; }
+        public string EntityID { get; set; }
         public string EntityName { get; set; }
         public string EntityType { get; set; }
     }

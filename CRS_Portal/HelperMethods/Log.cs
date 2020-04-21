@@ -7,7 +7,7 @@ namespace CRS_Portal.HelperMethods
 {
     static class Log
     {
-        static string  logFileLocation = SCVMacroSettings.LogFilePath;
+        static string  logFileLocation = CRSMacroSettings.LogFilePath;
 
         public async static void WriteEventLogwithParam(string controller, string method, string type, string position,  string message, string userID)
         {

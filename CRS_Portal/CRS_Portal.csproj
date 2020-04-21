@@ -27,11 +27,4 @@
     <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Content Update="wwwroot\TemplateFiles\SCV_DuplicateCustomer_Template.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
 </Project>

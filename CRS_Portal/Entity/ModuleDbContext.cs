@@ -17,7 +17,7 @@ namespace CRS_Portal.Entity
         {
             if (!optionsBuilder.IsConfigured)
             {
-                string CS = SCVMacroSettings.Initial_CS;
+                string CS = CRSMacroSettings.Initial_CS;
                 optionsBuilder.UseSqlServer(CS);
             }
         }

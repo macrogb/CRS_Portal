@@ -42,7 +42,7 @@ namespace CRS_Portal.Controllers
                     //To Check Email function
                     EmailParam objEmailParam = new EmailParam();
                     SendEmail sendEmail = new SendEmail();
-                    string emailTemplatePath = sendEmail.GetEmailTemplateByBankname(sBankName, SCVMacroSettings.FilePath);
+                    string emailTemplatePath = sendEmail.GetEmailTemplateByBankname(sBankName, CRSMacroSettings.FilePath);
                     string msgbdy = System.IO.File.ReadAllText(emailTemplatePath);
 
                     objEmailParam.PrimaryEnableSsl = bool.Parse(Helper.ReturnPolmtpf("MAILPrimary", "PrimaryEnableSsl"));
@@ -100,7 +100,7 @@ namespace CRS_Portal.Controllers
                     //To Check Email function
                     EmailParam objEmailParam = new EmailParam();
                     SendEmail sendEmail = new SendEmail();
-                    string emailTemplatePath = sendEmail.GetEmailTemplateByBankname(sBankName, SCVMacroSettings.FilePath);
+                    string emailTemplatePath = sendEmail.GetEmailTemplateByBankname(sBankName, CRSMacroSettings.FilePath);
                     string msgbdy = System.IO.File.ReadAllText(emailTemplatePath);
 
                     objEmailParam.SecondaryEnableSsl = bool.Parse(Helper.ReturnPolmtpf("MAILSecondary", "SecondaryEnableSsl"));
@@ -180,7 +180,7 @@ namespace CRS_Portal.Controllers
                             HttpContext.Session.SetString("BankName", usr.BankName.ToString());
                             HttpContext.Session.SetString("BankFRN", usr.BankFRNNo.ToString());
 
-                            SCVMacroSettings.BankName = usr.BankName.ToString();
+                            CRSMacroSettings.BankName = usr.BankName.ToString();
 
                             usr.LastLoginDate = DateTime.Today.ToString("yyyyMMdd");
                             usr.LastLoginTime = DateTime.Now.ToString("HHmmss");

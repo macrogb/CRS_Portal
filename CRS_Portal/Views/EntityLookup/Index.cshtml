@@ -1,0 +1,128 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+<partial name="_PageTitle" />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary bg-TelegramSingle" style="display:inline !important;">
+                <h4 class="card-title ">
+                    Enity Lookup Details
+                    <div class="" style="float:right;">
+                        <span class="col-md-12">
+                            <span style="font-size:small;">Export Data To : </span>
+                            <a id="EntityCustExport" class="ExlExport">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAACU0lEQVRIie2UT0jTYRjHP+9PjV3WyNZBaNGtH82ptdCDHQryluQKWXoPKRI7hYiR/YM6REcTwgpic1E4dZRBsHQe8lLBb8FPo0tdDOdiDHU4treD7dfm/ip08wvP4Xmf532+z/M+z/PCLspAlHM4cr3VbKpJNKYVeVQg7YBTSqa0u58fVEJQna04+h37lKo9dilwgnRKgVOwrkpQRFY+QuH9jipouHFcVnLJUmfBUmcpZl4JuPzWjKJUmsk2sD9bqS7mVQoOaz0n1VY8+hjd6kXjXIuE0SLhHN+CBG32M9hqD+L/NEl0NcqJw04abA4mvwSIxCPUW+10qW48+hhdqvvfRZ3KCOKJOH1tvZhNZh4HR7h34Q5LsSWezj0HwKv7eBObBqDd7ypZbUGCj9/n+aDP4G7uJJFMcMBspfdFH1JuzkCX6uby6R7a/S6mOsaNe17dh0cfK08A8HD6Ea+vvqTn1CW88z4Wf30zbOHIV7y6zwiawdbngRJTVF1VA0BapjHVmIq5lUVBAkUo3Dw3yHJ8mdHQM847O2iwOQx7psmw+VwZcVjr82IVXDR3cycDZ/sZeDVIUJ8hcG2C6GoU93A3qXSq3KIRcPmNuHkVCCEwm8wMB0d4q71jbWONoYnbhBbnOFRrM7LONHeqY9yQ7J3IIK/JUkqezI7mnM0uhJhdCBn6dpq8o03WImF+6D8B8sZyK/7HX7SSreRUIJPJ2vzvGnVrIrGl2K3QleBQJWw5BNp97Tcw91cAaBlq2bueSjYKKZvSiGNC0IRkY3tF7aIE/gAUZ9xSdGe7owAAAABJRU5ErkJggg==">
+                                <span style="color:black;">
+                                    XLSX
+                                </span>
+                            </a>
+                        </span>
+                    </div>
+                </h4>
+                <div class="card-category" style="text-transform:lowercase !important;">Please use action icon edit/delete to update Entity Lookup Details</div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div style="width:80%; margin:0 auto;">
+                        <table id="EntityLookupGrid" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0" style="display:none;">
+                            <thead>
+                                <tr>
+                                    <th>Entity ID</th>
+                                    <th>Entity Name</th>
+                                    <th>Entity Type</th>
+                                    <th style="width:10%;">Action</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Entity ID</th>
+                                    <th>Entity Name</th>
+                                    <th>Entity Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </tfoot>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input id="btnEntityLookupDetGrid" value="load" type="hidden" data-url='@Url.Action("LoadEntityLookupDetails","EntityLookup")' />
+
+<style>
+    /*move tfoot to next to grid header*/
+    tfoot {
+        display: table-header-group;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $("#pageTitle").text("Entity Lookup Details");
+        LoadEntityLookupGrid();
+    });
+
+    function LoadEntityLookupGrid() {
+        spinner_On();
+        $.ajax(
+            {
+                "url": $("#btnEntityLookupDetGrid").data('url'),
+                "type": "POST",
+                "dataType": "json",
+                success: function (data) {
+                    //console.log(data);
+                    $('#EntityLookupGrid').show();
+                    var datatableInstance = $('#EntityLookupGrid').DataTable({
+                        data: data,
+                        paging: true,
+                        bDestroy: true,
+                        processing: true,
+                        pageLength: 10,
+                        order: [],
+                        columns: [
+                            { 'data': 'EntityID' },
+                            { 'data': 'EntityName' },
+                            { 'data': 'EntityType' },
+                            {
+                                'data': '',
+                                'sortable': false,
+                                'render': function json(data, type, full, meta) {
+
+                                    return "<i  class='fas fa-edit' style='cursor:pointer;'  ></i>"
+                                        + " " + "<i class='fas fa-trash-alt' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;'></i >";
+                                }
+                            },
+                        ]
+                    });
+
+                    // To decide it's textbox or Select Filter
+                    $("#EntityLookupGrid tfoot th").each(function (i) {
+                        var title = $('#EntityLookupGrid thead th').eq($(this).index()).text();
+                        if (title == "Entity ID" || title == "Entity Name" || title == "Entity Type") {
+                            $(this).html('<div class="search"><input type="text" class="form-control" placeholder="Search ' + title + '"></div>');
+                        }
+                        else {
+                            $(this).html('<input type="button" class="btn btn-primary" value="Clear" onclick="clearSearch()"/>');
+                        }
+                    });
+
+                    // Filter : Textbox keyup Action...
+                    datatableInstance.columns().every(function () {
+                        var dataTableColumn = this;
+                        $(this.footer()).find('input').on('keyup change', function () {
+                            //console.log(this.value);
+                            dataTableColumn.search(this.value).draw();
+                        });
+                    });
+                    spinner_Off();
+                },
+                error: function (json) {
+                    spinner_Off();
+                }
+            });
+    }
+</script>
+
