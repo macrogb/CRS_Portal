@@ -17,7 +17,7 @@
       },
       "applicationUrl": "https://localhost:5001"
     },
-    "SCV_Portal": {
+    "CRS_Portal": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

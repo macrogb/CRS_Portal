@@ -130,7 +130,7 @@ namespace CRS_Portal.Controllers
             {
                 _userID = HttpContext.Session.GetString("UsrID_BankName");
                 Log.WriteEventLogwithParam("Dashboard", "Logout", "Get", "Start", "Logout method called by User", _userID);
-                SCVMacroSettings.BankName = "";
+                CRSMacroSettings.BankName = "";
                 HttpContext.Session.SetString("lstOfMenus", "");
                 HttpContext.Session.SetString("UserID", "");
                 HttpContext.Session.SetString("UserName", "");
