@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewData["Title"] = "CRS - Initiate CRS Report Generation & Audit";
+  
+}
+
+<partial name="_PageTitle" />
+
+<div class="row" >
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary bg-TelegramSingle" style="display:inline !important;">
+                <h4 class="card-title ">Initiate CRS Report Generation & Audit</h4>
+
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <button class="btn btn-primary mr-2 btn-lg" id="btnStartCRS" onclick="StartCRS()"><i class="fas fa-play" style="color:lawngreen;"></i> Start CRS Report Generation & Audit</button>
+                    <div style="width:80%; margin:0 auto;">
+                        <table id="CRSStatusGrid" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0" >
+                            <thead>
+                                <tr>
+                                    <th>CRS Process</th>
+                                    <th>Status</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Analysing Input Data</td>
+                                    <td class="Analyse">Pending &nbsp;&nbsp; <i class="fas fa-spinner" style="color:lawngreen;display:none"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>Starting CRS Automation</td>
+                                    <td class="Start">Pending &nbsp;&nbsp; <i class="fas fa-spinner" style="color:lawngreen;display:none"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>Processing the CRS Input Data</td>
+                                    <td class="Start">Pending &nbsp;&nbsp; <i class="fas fa-spinner" style="color:lawngreen;display:none"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>Generating CRS Reports</td>
+                                    <td class="Start">Pending &nbsp;&nbsp; <i class="fas fa-spinner" style="color:lawngreen;display:none"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>Terminating CRS Automation</td>
+                                    <td class="Start">Pending &nbsp;&nbsp; <i class="fas fa-spinner" style="color:lawngreen;display:none"></i></td>
+                                </tr>
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <th>CRS Process</th>
+                                    <th>Status</th>
+                                </tr>
+                            </tfoot>
+                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    /*move tfoot to next to grid header*/
+    tfoot {
+        display: table-header-group;
+    }
+</style>
+<script type="text/javascript">
+    function StartCRS() {
+        spinner_On();
+        $.ajax(
+            {
+                "url": $("#btnEntityLookupDetGrid").data('url'),
+                "type": "GET",
+                "dataType": "json",
+                success: function (data) {
+                    //console.log(data);
+
+
+            });
+    }
+</script>
