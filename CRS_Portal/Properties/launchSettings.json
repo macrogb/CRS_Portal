@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SCV_Portal": {
+    "CRS_Portal": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

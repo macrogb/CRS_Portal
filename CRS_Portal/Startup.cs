@@ -94,18 +94,19 @@ namespace CRS_Portal
 
         private void LoadConnectionStrings()
         {
-            //SCVMacroSettings.BankName = Configuration.GetSection("Data").GetSection("BankName").Value;
-            SCVMacroSettings.Initial_CS = Configuration.GetSection("Data").GetSection("Initial_CS").Value;
-            SCVMacroSettings.Canara_Audit_CS = Configuration.GetSection("Data").GetSection("Canara_Audit_CS").Value;
-            SCVMacroSettings.BOI_Audit_CS = Configuration.GetSection("Data").GetSection("BOI_Audit_CS").Value;
-            SCVMacroSettings.ICICI_Audit_CS = Configuration.GetSection("Data").GetSection("ICICI_Audit_CS").Value;
+            //Temp
+            //CRSMacroSettings.BankName = Configuration.GetSection("Data").GetSection("BankName").Value;
+            CRSMacroSettings.Initial_CS = Configuration.GetSection("Data").GetSection("Initial_CS").Value;
+            CRSMacroSettings.Canara_CS = Configuration.GetSection("Data").GetSection("Canara_CS").Value;
+            CRSMacroSettings.BOI_CS = Configuration.GetSection("Data").GetSection("BOI_CS").Value;
+            CRSMacroSettings.ICICI_CS = Configuration.GetSection("Data").GetSection("ICICI_CS").Value;
 
-            SCVMacroSettings.Domain = Configuration.GetSection("Data").GetSection("Domain").Value;
-            SCVMacroSettings.UserName = Configuration.GetSection("Data").GetSection("UserName").Value;
-            SCVMacroSettings.Password = Configuration.GetSection("Data").GetSection("Password").Value;
-            SCVMacroSettings.SCVWebAPIURL = Configuration.GetSection("Data").GetSection("SCVWebAPIURL").Value;
-            SCVMacroSettings.LogFilePath = Configuration.GetSection("Data").GetSection("SCVPortalLogFilePath").Value;
-            SCVMacroSettings.FilePath = Configuration.GetSection("Data").GetSection("SCVPortalFilePath").Value;
+            CRSMacroSettings.Domain = Configuration.GetSection("Data").GetSection("Domain").Value;
+            CRSMacroSettings.UserName = Configuration.GetSection("Data").GetSection("UserName").Value;
+            CRSMacroSettings.Password = Configuration.GetSection("Data").GetSection("Password").Value;
+            CRSMacroSettings.CRSWebAPIURL = Configuration.GetSection("Data").GetSection("CRSWebAPIURL").Value;
+            CRSMacroSettings.LogFilePath = Configuration.GetSection("Data").GetSection("CRSPortalLogFilePath").Value;
+            CRSMacroSettings.FilePath = Configuration.GetSection("Data").GetSection("CRSPortalFilePath").Value;
         }
 
     }

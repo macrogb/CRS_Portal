@@ -33,23 +33,23 @@ namespace CRS_Portal.HelperMethods
         
         public static string LoadDatabaseByBankName()
         {
-            string sBankName = SCVMacroSettings.BankName;
+            string sBankName = CRSMacroSettings.BankName;
 
             if (sBankName == "Canara")
             {
-                return SCVMacroSettings.Canara_Audit_CS;
+                return CRSMacroSettings.Canara_CS;
             }
             if (sBankName == "BOI")
             {
-                return SCVMacroSettings.BOI_Audit_CS;
+                return CRSMacroSettings.BOI_CS;
             }
             if (sBankName == "ICICI")
             {
-                return SCVMacroSettings.ICICI_Audit_CS;
+                return CRSMacroSettings.ICICI_CS;
             }
             else
             {
-                return SCVMacroSettings.Initial_CS;
+                return CRSMacroSettings.Initial_CS;
             }
         }
 
@@ -64,7 +64,7 @@ namespace CRS_Portal.HelperMethods
         public static string GetPathAndFilename(string filename, string processName, IHostingEnvironment env)
         {
             string dt = DateTime.Now.ToString("yyyy-MM-dd");
-            string bankName = SCVMacroSettings.BankName;
+            string bankName = CRSMacroSettings.BankName;
             string path = ReturnPolmtpf("FILE", "SAASUPLOAD") + bankName + @"\" + processName + @"\" + dt + @"\";
             //string path = env.WebRootPath + "\\uploads\\" + bankName + "\\" + processName + "\\" + dt + "\\";
 
@@ -87,7 +87,7 @@ namespace CRS_Portal.HelperMethods
 
         public static SCVAuditLicense GetAuditLicDataForBank(string BankName, string FRNnum)
         {
-            string Baseurl = SCVMacroSettings.SCVWebAPIURL;
+            string Baseurl = CRSMacroSettings.CRSWebAPIURL;
             SCVAuditLicense _model = new SCVAuditLicense();
             using (HttpClient client = new HttpClient())
             {
@@ -121,7 +121,7 @@ namespace CRS_Portal.HelperMethods
 
         public static void UpdateAuditSettingsToAuditHistory(string BankName, string FRNnum, string fileInfo)
         {
-            string Baseurl = SCVMacroSettings.SCVWebAPIURL;
+            string Baseurl = CRSMacroSettings.CRSWebAPIURL;
             SCVAuditLicense _model = new SCVAuditLicense();
             using (HttpClient client = new HttpClient())
             {
@@ -155,7 +155,7 @@ namespace CRS_Portal.HelperMethods
 
         public static List<SCVAuditHistory> GetAuditHistotyDataForBank(string BankName, string FRNnum)
         {
-            string Baseurl = SCVMacroSettings.SCVWebAPIURL;
+            string Baseurl = CRSMacroSettings.CRSWebAPIURL;
             //string Baseurl = "https://localhost:44319";
             List<SCVAuditHistory> _model = new List<SCVAuditHistory>();
             using (HttpClient client = new HttpClient())
@@ -193,7 +193,7 @@ namespace CRS_Portal.HelperMethods
 
         public static EMContentPF GetEmailContent(string BankName, string FRNnum, string ReferenceNo)
         {
-            string Baseurl = SCVMacroSettings.SCVWebAPIURL;
+            string Baseurl = CRSMacroSettings.CRSWebAPIURL;
             //string Baseurl = "http://localhost:62164";
             EMContentPF EmailContent = new EMContentPF();
             using (HttpClient client = new HttpClient())
@@ -232,7 +232,7 @@ namespace CRS_Portal.HelperMethods
 
         public static bool ResendMailAlert(string BankName, string FRNnum, string ReferenceNo)
         {
-            //string Baseurl = SCVMacroSettings.SCVWebAPIURL;
+            //string Baseurl = CRSMacroSettings.CRSWebAPIURL;
             string Baseurl = "http://localhost:62164";
             bool status = false;
             using (HttpClient client = new HttpClient())
@@ -272,7 +272,7 @@ namespace CRS_Portal.HelperMethods
 
         public static SCVAuditLicense UpdateAuditLicDataForBank(string BankName, string FRNnum, string toEmail, string ccEmail, string bccEmail)
         {
-            string Baseurl = SCVMacroSettings.SCVWebAPIURL;
+            string Baseurl = CRSMacroSettings.CRSWebAPIURL;
             SCVAuditLicense _model = new SCVAuditLicense();
             using (HttpClient client = new HttpClient())
             {
@@ -1394,7 +1394,7 @@ namespace CRS_Portal.HelperMethods
         public static bool DeleteSCVAuditReportFromHistory(SCVInput model)
         {
             bool result = false;
-            string Baseurl = SCVMacroSettings.SCVWebAPIURL;
+            string Baseurl = CRSMacroSettings.CRSWebAPIURL;
             SCVAuditLicense _model = new SCVAuditLicense();
             using (HttpClient client = new HttpClient())
             {
