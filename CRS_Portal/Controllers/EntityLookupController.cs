@@ -32,7 +32,7 @@ namespace CRS_Portal.Controllers
                 {
                     var _lstmodel = objEntitytDbContext.DbEntityLookup.Select(p => new EntityLookupSummaryDto()
                     {
-                        CUSTID = p.CUSTID,
+                        EntityID = p.CUSTID,
                         EntityName = p.ENTITYNAME,
                         EntityType = p.ACCHOLDTYPE
                     }).ToList();
