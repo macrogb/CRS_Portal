@@ -30,6 +30,7 @@
             </div>
         </div>
     </div>
+    <partial name="_MessageDiv" />
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -56,6 +57,7 @@
                             <table id="EntityLookupGrid" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0" style="display:none;">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Entity ID</th>
                                         <th>Entity Name</th>
                                         <th>Entity Type</th>
@@ -64,6 +66,7 @@
                                 </thead>
                                 <tfoot>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Entity ID</th>
                                         <th>Entity Name</th>
                                         <th>Entity Type</th>
@@ -80,7 +83,8 @@
     </div>
     <input id="btnEntityLookupDetGrid" value="load" type="hidden" data-url='@Url.Action("LoadEntityLookupDetails","EntityLookup")' />
     <input id="btnEntityLoad" value="edit" type="hidden" data-url='@Url.Action("LoadEntityDetailsByID","EntityLookup")' />
-    <input id="btnEntitySave" value="edit" type="hidden" data-url='@Url.Action("SaveEntityDetails","EntityLookup")' />
+    <input id="btnEntitySave" value="save" type="hidden" data-url='@Url.Action("SaveEntityDetails","EntityLookup")' />
+    <input id="btnEntityDelete" value="delete" type="hidden" data-url='@Url.Action("DeleteEntityDetails","EntityLookup")' />
     <div class="modal fade bd-example-modal-lg" id="modalentity1" data-backdrop="true" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
         <div class="modal-dialog modal-lg" role="document" style="max-width:1000px">
             <!-- /.modal-content -->
@@ -121,6 +125,7 @@
                         pageLength: 10,
                         order: [],
                         columns: [
+                            { 'data': 'ID', "visible": false, },
                             { 'data': 'EntityID' },
                             { 'data': 'EntityName' },
                             { 'data': 'EntityType' },
@@ -129,8 +134,8 @@
                                 'sortable': false,
                                 'render': function json(data, type, full, meta) {
 
-                                    return "<i  class='fas fa-edit' style='cursor:pointer;' onclick=LoadEntityData('" + full.EntityID + "');  ></i>"
-                                        + " " + "<i class='fas fa-trash-alt' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;'></i >";
+                                    return "<i  class='fas fa-edit' style='cursor:pointer;' onclick=LoadEntityData('" + full.ID + "');  ></i>"
+                                        + " " + "<i class='fas fa-trash-alt' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;'  onclick=DeleteEntityData('" + full.ID + "');></i >";
                                 }
                             },
                         ]
@@ -185,12 +190,31 @@
                 url: $("#btnEntitySave").data('url'),
                 success: function (json) {
                     if (json.success == true) {
-                        //enableSucessDiv(json.message);
+                        enableSucessDiv(json.message);
                         LoadEntityLookupGrid();
                         $('#modalentity1').modal('hide');
                     }
                     else {
-                        //enableErrorDiv(json.message);
+                        enableErrorDiv(json.message);
+                    }
+                }
+            });
+    }
+
+    function DeleteEntityData(ID) {
+        $.ajax(
+            {
+                type: 'POST',
+                data: { "id": ID },
+                url: $("#btnEntityDelete").data('url'),
+                success: function (json) {
+                    if (json.success == true) {
+                        enableSucessDiv(json.message);
+                        LoadEntityLookupGrid();
+                        $('#modalentity1').modal('hide');
+                    }
+                    else {
+                        enableErrorDiv(json.message);
                     }
                 }
             });

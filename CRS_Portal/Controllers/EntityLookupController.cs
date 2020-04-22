@@ -43,6 +43,7 @@ namespace CRS_Portal.Controllers
                 {
                     var _lstmodel = objEntitytDbContext.DbEntityLookup.Select(p => new EntityLookupSummaryDto()
                     {
+                        ID = p.ID,
                         EntityID = p.CustID,
                         EntityName = p.EntityName,
                         EntityType = p.AccHoldType
@@ -90,7 +91,7 @@ namespace CRS_Portal.Controllers
                 {
                     using (objEntitytDbContext = new EntityLookupDbContext())
                     {
-                        objModel.entity = objEntitytDbContext.DbEntityLookup.Where(r => r.CustID == id).FirstOrDefault();
+                        objModel.entity = objEntitytDbContext.DbEntityLookup.Where(r => r.ID == long.Parse(id)).FirstOrDefault();
                     }
                 }
                 return PartialView("AddEntity", objModel);
@@ -182,6 +183,29 @@ namespace CRS_Portal.Controllers
             {
                 return Json(new { success = false, message = _message });
 
+            }
+        }
+
+        [HttpPost]
+        public IActionResult DeleteEntityDetails(string id)
+        {
+            try
+            {
+                using (objEntitytDbContext = new EntityLookupDbContext())
+                {
+                    var modelFromDb = objEntitytDbContext.DbEntityLookup.Where(r => r.ID == long.Parse(id)).FirstOrDefault();
+                    if (modelFromDb != null)
+                    {
+                        objEntitytDbContext.Remove(modelFromDb);
+                        objEntitytDbContext.SaveChanges();
+                    }
+                    _message = "'" + modelFromDb.EntityName + "' - Entity has been deleted";
+                    return Json(new { success = true, message = _message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "The server has encountered an unexpected internal error. Please try again later." });
             }
         }
     }
