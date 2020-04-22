@@ -13,6 +13,7 @@ namespace CRS_Portal.Controllers
     public class EntityLookupController : Controller
     {
         EntityLookupDbContext objEntitytDbContext;
+        CountryDbContext objCountryDbContext;
         private IHostingEnvironment _hostingEnv;
 
         public EntityLookupController(IHostingEnvironment hostingEnv)
@@ -24,6 +25,11 @@ namespace CRS_Portal.Controllers
         {
             EntityLookupModel objModel = new EntityLookupModel();
             objModel.entity = new EntityLookupDetailDto();
+            using (objCountryDbContext = new CountryDbContext())
+            {
+                objModel.lstcountry = objCountryDbContext.DbCountry.AsEnumerable().ToList();
+
+            }
             return View(objModel);
         }
 
@@ -73,7 +79,13 @@ namespace CRS_Portal.Controllers
             {
                 EntityLookupModel objModel = new EntityLookupModel();
                 objModel.entity = new EntityLookupDetailDto();
-                if(!string.IsNullOrEmpty(id))
+                using (objCountryDbContext = new CountryDbContext())
+                {
+                    objModel.lstcountry = objCountryDbContext.DbCountry.AsEnumerable().ToList();
+
+                }
+
+                if (!string.IsNullOrEmpty(id))
                 {
                     using (objEntitytDbContext = new EntityLookupDbContext())
                     {

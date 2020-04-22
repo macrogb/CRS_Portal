@@ -1,4 +1,8 @@
 ﻿@model CRS_Portal.Models.EntityLookupModel
+@*<head>
+    <script src="js/bootstrap-select.js"></script>
+    <link rel="stylesheet" href="css/bootstrap-select.css">
+</head>*@
 <div class="modal-content" id="modalentityContent">
     <div class="modal-header">
         <h4 id="tppname">Add / Edit Entity Lookup details</h4>
@@ -36,7 +40,7 @@
                             Street Name
                         </label>
                         <div class="col-sm-8 z-pad">
-                            <input class="form-control" type="text" />
+                            <input class="form-control" name="entity.StreetName" id="StreetName" value="@Model.entity.StreetName" type="text" />
                         </div>
                     </div>
                     <div class="row form-group">
@@ -44,7 +48,7 @@
                             District Name <span class="req"></span>
                         </label>
                         <div class="col-sm-8 z-pad">
-                            <input class="form-control" type="text" />
+                            <input class="form-control" name="entity.DistrictName" id="DistrictName" value="@Model.entity.DistrictName" type="text" />
                         </div>
                     </div>
                 </div>
@@ -56,7 +60,7 @@
                             City
                         </label>
                         <div class="col-sm-8 z-pad">
-                            <input class="form-control" type="text" />
+                            <input class="form-control"  name="entity.City" id="City" value="@Model.entity.City" type="text" />
                         </div>
                     </div>
                     <div class="row form-group">
@@ -64,7 +68,7 @@
                             Postcode
                         </label>
                         <div class="col-sm-8 z-pad">
-                            <input class="form-control" type="text" />
+                            <input class="form-control" name="entity.PostCode" id="PostCode" value="@Model.entity.PostCode" type="text" />
                         </div>
                     </div>
                     <div class="row form-group">
@@ -72,7 +76,31 @@
                             Country Code
                         </label>
                         <div class="col-sm-8 z-pad">
+                            @{
+                                string title = "- [Choose country ] -";
+                                <div class="col-xs-4 ">
+                                    <select id="CountryCode" name="entity.CountryCode" class="form-control selectOption" data-title="@title">
+                                        @{
+                                            int j = 0;
 
+                                            <option value="0">---- All ----</option>
+                                            foreach (var item in Model.lstcountry)
+                                            {
+                                                j++;
+                                                if (Model.entity.CountryCode == item.COUNTRYCD)
+                                                {
+                                                    <option selected value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                                }
+                                                else
+                                                {
+                                                    <option  value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                                }
+                                            }
+                                        }
+
+                                    </select>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div class="row form-group">
@@ -80,7 +108,7 @@
                             Email ID
                         </label>
                         <div class="col-sm-8 z-pad">
-
+                            <input class="form-control" name="entity.EmailID" id="EmailID" value="@Model.entity.EmailID" type="text" />
                         </div>
                     </div>
                 </div>
@@ -183,17 +211,17 @@
             </div>
             <div class="col-sm-3">
                 <div class="form-group">
-
+                    <input class="form-control" name="entity.PCountryIdentityNo" id="PCountryIdentityNo" value="@Model.entity.PCountryIdentityNo" type="text" />
                 </div>
             </div>
             <div class="col-sm-3">
                 <div class="form-group">
-
+                    <input class="form-control" name="entity.SecondCountryIdentityNo" id="SecondCountryIdentityNo" value="@Model.entity.SecondCountryIdentityNo" type="text" />
                 </div>
             </div>
             <div class="col-sm-3">
                 <div class="form-group">
-
+                    <input class="form-control" name="entity.ThirdCountryIdentityNo" id="ThirdCountryIdentityNo" value="@Model.entity.ThirdCountryIdentityNo" type="text" />
                 </div>
             </div>
         </div>
@@ -236,3 +264,18 @@
         <button type="button" id="cancel" class="btn btn-outline-primary btn-lg" data-dismiss="modal">Cancel</button>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        // Enable Live Search.
+        //$('.selectOption').attr('data-live-search', true);
+
+        //$('.selectOption').selectpicker(
+        //    {
+        //        width: '100%',
+        //        title: $(this).data('title'),
+        //        style: 'btn-info',
+        //        size: 6
+        //    });
+
+    });
+</script>
