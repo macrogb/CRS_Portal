@@ -2,67 +2,341 @@
 @{
     ViewData["Title"] = "Index";
 }
-<partial name="_PageTitle" />
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header card-header-primary bg-TelegramSingle" style="display:inline !important;">
-                <h4 class="card-title ">
-                    Enity Lookup Details
-                    <div class="" style="float:right;">
-                        <span class="col-md-12">
-                            <span style="font-size:small;">Export Data To : </span>
-                            <a id="EntityCustExport" class="ExlExport">
-                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAACU0lEQVRIie2UT0jTYRjHP+9PjV3WyNZBaNGtH82ptdCDHQryluQKWXoPKRI7hYiR/YM6REcTwgpic1E4dZRBsHQe8lLBb8FPo0tdDOdiDHU4treD7dfm/ip08wvP4Xmf532+z/M+z/PCLspAlHM4cr3VbKpJNKYVeVQg7YBTSqa0u58fVEJQna04+h37lKo9dilwgnRKgVOwrkpQRFY+QuH9jipouHFcVnLJUmfBUmcpZl4JuPzWjKJUmsk2sD9bqS7mVQoOaz0n1VY8+hjd6kXjXIuE0SLhHN+CBG32M9hqD+L/NEl0NcqJw04abA4mvwSIxCPUW+10qW48+hhdqvvfRZ3KCOKJOH1tvZhNZh4HR7h34Q5LsSWezj0HwKv7eBObBqDd7ypZbUGCj9/n+aDP4G7uJJFMcMBspfdFH1JuzkCX6uby6R7a/S6mOsaNe17dh0cfK08A8HD6Ea+vvqTn1CW88z4Wf30zbOHIV7y6zwiawdbngRJTVF1VA0BapjHVmIq5lUVBAkUo3Dw3yHJ8mdHQM847O2iwOQx7psmw+VwZcVjr82IVXDR3cycDZ/sZeDVIUJ8hcG2C6GoU93A3qXSq3KIRcPmNuHkVCCEwm8wMB0d4q71jbWONoYnbhBbnOFRrM7LONHeqY9yQ7J3IIK/JUkqezI7mnM0uhJhdCBn6dpq8o03WImF+6D8B8sZyK/7HX7SSreRUIJPJ2vzvGnVrIrGl2K3QleBQJWw5BNp97Tcw91cAaBlq2bueSjYKKZvSiGNC0IRkY3tF7aIE/gAUZ9xSdGe7owAAAABJRU5ErkJggg==">
-                                <span style="color:black;">
-                                    XLSX
-                                </span>
-                            </a>
-                        </span>
-                    </div>
-                </h4>
-                <div class="card-category" style="text-transform:lowercase !important;">Please use action icon edit/delete to update Entity Lookup Details</div>
+<head>
+    <style>
+
+        tfoot {
+            display: table-header-group;
+        }
+    </style>
+</head>
+<body>
+    <partial name="_PageTitle" />
+    <div class="card">
+        <div class="card-header card-header-primary bg-TelegramSingle" style="display:inline !important;">
+            <h4 class="card-title ">Entity Customer Details</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3" id="dvCRSAddEntity" style="border-right: 2px solid #ccc;">
+                    <h5 class="card-title">Manual Input</h5><br />
+                    <button class="btn btn-primary mr-2 btn-lg" id="btnAddEntityCust"><i class="fas fa-plus"></i> Add Entity Lookup Details</button>
+                </div>
+                <div class="col-md-9" id="dvCRSImportEntity">
+                    <h5 class="card-title">Bulk Import</h5><br />
+                    <a class="btn btn-primary mr-2 btn-lg" href="@Url.Action("DownloadCRSEntityCustomerTemplate", "EntityLookup")"><i class="fas fa-file-download"></i> Download Sample Entity Lookup Template file</a>
+                    <button class="btn btn-primary mr-2 btn-lg" id="btnUploadEnityCustDet" onclick="BulkUploadDupCustDet()"><i class="fas fa-upload"></i> Bulk Upload Entity Lookup Details</button>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div style="width:80%; margin:0 auto;">
-                        <table id="EntityLookupGrid" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0" style="display:none;">
-                            <thead>
-                                <tr>
-                                    <th>Entity ID</th>
-                                    <th>Entity Name</th>
-                                    <th>Entity Type</th>
-                                    <th style="width:10%;">Action</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Entity ID</th>
-                                    <th>Entity Name</th>
-                                    <th>Entity Type</th>
-                                    <th>Action</th>
-                                </tr>
-                            </tfoot>
-                            <tbody></tbody>
-                        </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary bg-TelegramSingle" style="display:inline !important;">
+                    <h4 class="card-title ">
+                        Enity Lookup Details
+                        <div class="" style="float:right;">
+                            <span class="col-md-12">
+                                <span style="font-size:small;">Export Data To : </span>
+                                <a id="EntityCustExport" class="ExlExport">
+                                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAACU0lEQVRIie2UT0jTYRjHP+9PjV3WyNZBaNGtH82ptdCDHQryluQKWXoPKRI7hYiR/YM6REcTwgpic1E4dZRBsHQe8lLBb8FPo0tdDOdiDHU4treD7dfm/ip08wvP4Xmf532+z/M+z/PCLspAlHM4cr3VbKpJNKYVeVQg7YBTSqa0u58fVEJQna04+h37lKo9dilwgnRKgVOwrkpQRFY+QuH9jipouHFcVnLJUmfBUmcpZl4JuPzWjKJUmsk2sD9bqS7mVQoOaz0n1VY8+hjd6kXjXIuE0SLhHN+CBG32M9hqD+L/NEl0NcqJw04abA4mvwSIxCPUW+10qW48+hhdqvvfRZ3KCOKJOH1tvZhNZh4HR7h34Q5LsSWezj0HwKv7eBObBqDd7ypZbUGCj9/n+aDP4G7uJJFMcMBspfdFH1JuzkCX6uby6R7a/S6mOsaNe17dh0cfK08A8HD6Ea+vvqTn1CW88z4Wf30zbOHIV7y6zwiawdbngRJTVF1VA0BapjHVmIq5lUVBAkUo3Dw3yHJ8mdHQM847O2iwOQx7psmw+VwZcVjr82IVXDR3cycDZ/sZeDVIUJ8hcG2C6GoU93A3qXSq3KIRcPmNuHkVCCEwm8wMB0d4q71jbWONoYnbhBbnOFRrM7LONHeqY9yQ7J3IIK/JUkqezI7mnM0uhJhdCBn6dpq8o03WImF+6D8B8sZyK/7HX7SSreRUIJPJ2vzvGnVrIrGl2K3QleBQJWw5BNp97Tcw91cAaBlq2bueSjYKKZvSiGNC0IRkY3tF7aIE/gAUZ9xSdGe7owAAAABJRU5ErkJggg==">
+                                    <span style="color:black;">
+                                        XLSX
+                                    </span>
+                                </a>
+                            </span>
+                        </div>
+                    </h4>
+                    <div class="card-category" style="text-transform:lowercase !important;">Please use action icon edit/delete to update Entity Lookup Details</div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div style="width:80%; margin:0 auto;">
+                            <table id="EntityLookupGrid" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th>Entity ID</th>
+                                        <th>Entity Name</th>
+                                        <th>Entity Type</th>
+                                        <th style="width:10%;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Entity ID</th>
+                                        <th>Entity Name</th>
+                                        <th>Entity Type</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<input id="btnEntityLookupDetGrid" value="load" type="hidden" data-url='@Url.Action("LoadEntityLookupDetails","EntityLookup")' />
+    <input id="btnEntityLookupDetGrid" value="load" type="hidden" data-url='@Url.Action("LoadEntityLookupDetails","EntityLookup")' />
+    <div class="modal fade bd-example-modal-lg" id="modalentity1" data-backdrop="true" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
+        <div class="modal-dialog modal-lg" role="document" style="max-width:1000px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="tppname">Add / Edit Entity Lookup details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-horizontal form-fields cm-sec">
+                                <div class="row form-group">
+                                    <label for="inputtext3" class="col-sm-4 control-label">
+                                        Entity Customer ID<span class="req"></span>
+                                    </label>
+                                    <div class="col-sm-8 z-pad">
+                                        <input class="form-control" type="text" />
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label for="inputtext4" class="col-sm-4 control-label">
+                                        Entity Name
+                                    </label>
+                                    <div class="col-sm-8 z-pad">
+                                        <input class="form-control" type="text" />
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label for="inputtext5" class="col-sm-4 control-label">
+                                        Building Identifier <span class="req"></span>
+                                    </label>
+                                    <div class="col-sm-8 z-pad">
+                                        <input class="form-control" type="text" />
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label for="inputtext6" class="col-sm-4 control-label">
+                                        Street Name
+                                    </label>
+                                    <div class="col-sm-8 z-pad">
+                                        <input class="form-control" type="text" />
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label for="inputtext7" class="col-sm-4 control-label">
+                                        District Name <span class="req"></span>
+                                    </label>
+                                    <div class="col-sm-8 z-pad">
+                                        <input class="form-control" type="text" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-horizontal form-fields cm-sec">
+                                <div class="row form-group">
+                                    <label for="inputtext8" class="col-sm-4 control-label">
+                                        City
+                                    </label>
+                                    <div class="col-sm-8 z-pad">
+                                        <input class="form-control" type="text" />
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label for="inputtext11" class="col-sm-4 control-label">
+                                        Postcode
+                                    </label>
+                                    <div class="col-sm-8 z-pad">
+                                        <input class="form-control" type="text" />
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label for="inputtext12" class="col-sm-4 control-label">
+                                        Country Code
+                                    </label>
+                                    <div class="col-sm-8 z-pad">
 
-<style>
-    /*move tfoot to next to grid header*/
-    tfoot {
-        display: table-header-group;
-    }
-</style>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label for="inputtext14" class="col-sm-4 control-label">
+                                        Email ID
+                                    </label>
+                                    <div class="col-sm-8 z-pad">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-horizontal form-fields cm-sec">
+                                <div class="row form-group">
+                                    <label for="inputtext8" class="col-sm-2 control-label">
+                                        Entity Type<span class="req"></span>
+                                    </label>
+                                    <div class="col-sm-6 z-pad" style="margin-left: 14px;">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="sep-line">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3" style="font-size: 12px; text-align: left; padding-left: 21px;">
+                        </div>
+                        <div class="col-sm-3" style="font-size: 13px;vertical-align:middle">
+                            <label class="">Primary Country Tax Details<span style="color:red">*</span></label>
+                        </div>
+                        <div class="col-sm-3" style="font-size: 13px;vertical-align:middle">
+                            <label class="control-label">Secondary Country Tax Details</label>
+                        </div>
+                        <div class="col-sm-3" style="font-size: 13px;vertical-align:middle">
+                            <label class="control-label">Third Country Tax Details</label>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        @*<div class="form-horizontal form-fields cm-sec">*@
+                        <div class="col-sm-3">
+                            <div class="form-group" style="margin-left:15px">
+                                <label for="inputtext3" class="control-label">
+                                    Residential country code
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                        @*</div>*@
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group" style="margin-left:15px">
+                                <label for="inputtex28" class="control-label">
+                                    Organisation Identification Number Type
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group" style="margin-left:15px">
+                                <label for="inputtex29" class="control-label">
+                                    Organisation Identification Number
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group" style="margin-left:15px">
+                                <label for="inputtex29" class="control-label">
+                                    Organisation Identification Number Issued Country Code
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="sep-line">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-5"></div>
+                    <button type="button" id="save" class="btn btn-primary mr-2 btn-lg">Save</button>
+                    <button type="button" id="cancel" class="btn btn-outline-primary btn-lg" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+
+
+</body>
+
 <script>
     $(document).ready(function () {
         $("#pageTitle").text("Entity Lookup Details");
         LoadEntityLookupGrid();
+
+        $('#btnAddEntityCust').click(function () {
+            $('#modalentity1').modal('show');
+        });
     });
 
     function LoadEntityLookupGrid() {
