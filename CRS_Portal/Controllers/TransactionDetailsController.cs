@@ -131,6 +131,33 @@ namespace CRS_Portal.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult DeleteTranDetails(string id)
+        {
+            //_userID = HttpContext.Session.GetString("UsrID_BankName");
+            //Log.WriteEventLogwithParam("AccountStatusCode", "DeleteAcctStsCodeDetails", "Post", "Start", "DeleteAcctStsCodeDetails method called by User", _userID);
+            try
+            {
+                using (objTransactionDetailsDbContext = new TransactionDetailsDbContext())
+                {
+                    var modelFromDb = objTransactionDetailsDbContext.DbTransactionDetails.Where(r => r.ID == int.Parse(id)).FirstOrDefault();
+                    if (modelFromDb != null)
+                    {
+                        objTransactionDetailsDbContext.Remove(modelFromDb);
+                        objTransactionDetailsDbContext.SaveChanges();
+                    }
+                    _message = "'" + modelFromDb.ActNo + "' - Transaction detail has been deleted";
+                    //Log.WriteEventLogwithParam("AccountStatusCode", "DeleteAcctStsCodeDetails", "Post", "End", _message, _userID);
+                    return Json(new { success = true, message = _message });
+                }
+            }
+            catch (Exception ex)
+            {
+                //Log.WriteEventErrorLogwithParam("AccountStatusCode", "DeleteAcctStsCodeDetails", "Post", "Error", "Error Occurred", _userID, ex);
+                return Json(new { success = false, message = "The server has encountered an unexpected internal error. Please try again later." });
+            }
+        }
+
         private string BulkTranDetailsUpload(string fileNamewithPath, string _userID)
         {
             try

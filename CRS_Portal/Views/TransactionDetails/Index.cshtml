@@ -136,6 +136,7 @@
     </div>
     <input id="btnLoadTransactionDetailsGrid" value="Load" type="hidden" data-url='@Url.Action("LoadTransactionDetails","TransactionDetails")' />
     <input id="btnTranDetailsDeleteAll" value="deleteAll" type="hidden" data-url='@Url.Action("DeleteAllTranDetails","TransactionDetails")' />
+    <input id="btnTranDetailsDelete" value="delete" type="hidden" data-url='@Url.Action("DeleteTranDetails","TransactionDetails")' />
 </div>
 <style>
     /*move tfoot to next to grid header*/
@@ -180,7 +181,7 @@
                                 'sortable': false,
                                 'render': function json(data, type, full, meta) {
                                         return "<i  class='fas fa-edit edit' style='cursor:pointer;' ></i>"
-                                            + " " + "<i class='fas fa-trash-alt delete' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;'  ></i >";
+                                            + " " + "<i class='fas fa-trash-alt delete' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;'  onclick=DeleteTranDetailsData('" + full.ID + "','" + full.ActNo + "'); ></i >";
                                 }
                             },
                         ]
@@ -336,4 +337,30 @@
     $('.clsDv').on("click", function () {
         $(this).parent().parent().parent().parent().hide();
     });
+
+    function DeleteTranDetailsData(id, acctno) {
+        hideSuccessErrorDiv();
+        $("#bulkTranDetailsUpload").hide();
+        alertify.confirm('CRS Portal', 'Do you want to delete "' + acctno + '" Transaction Details?',
+            function () { DeleteTranDetail(id); }
+            , function () { });
+    }
+
+    function DeleteTranDetail(id) {
+        $.ajax(
+            {
+                type: 'POST',
+                data: { "id": id },
+                url: $("#btnTranDetailsDelete").data('url'),
+                success: function (json) {
+                    if (json.success == true) {
+                        LoadTranDetailsGrid();
+                        enableSucessDiv(json.message);
+                    }
+                    else {
+                        enableErrorDiv(json.message);
+                    }
+                }
+            });
+    }
 </script>
