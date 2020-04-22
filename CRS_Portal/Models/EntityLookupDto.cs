@@ -11,7 +11,7 @@ namespace CRS_Portal.Models
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public long ID { get; set; }
+        public long? ID { get; set; }
         public string CustID { get; set; }
         public string Title { get; set; }
         public string EntityName { get; set; }

@@ -79,7 +79,8 @@
         </div>
     </div>
     <input id="btnEntityLookupDetGrid" value="load" type="hidden" data-url='@Url.Action("LoadEntityLookupDetails","EntityLookup")' />
-    <input id="btnEntityEdit" value="edit" type="hidden" data-url='@Url.Action("LoadEntityDetailsByID","EntityLookup")' />
+    <input id="btnEntityLoad" value="edit" type="hidden" data-url='@Url.Action("LoadEntityDetailsByID","EntityLookup")' />
+    <input id="btnEntitySave" value="edit" type="hidden" data-url='@Url.Action("SaveEntityDetails","EntityLookup")' />
     <div class="modal fade bd-example-modal-lg" id="modalentity1" data-backdrop="true" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
         <div class="modal-dialog modal-lg" role="document" style="max-width:1000px">
             <!-- /.modal-content -->
@@ -98,6 +99,8 @@
         $('#btnAddEntityCust').click(function () {
             LoadEntityData();
         });
+
+      
     });
 
     function LoadEntityLookupGrid() {
@@ -165,13 +168,32 @@
             {
                 type: 'GET',
                 data: { "id": ID },
-                url: $("#btnEntityEdit").data('url'),
+                url: $("#btnEntityLoad").data('url'),
                 success: function (result) {
                     $("#modalentityContent").html(result);
                     $('#modalentity1').modal('show');
                 }
             });
     
+    }
+
+    function SaveEntityData() {
+        $.ajax(
+            {
+                type: 'POST',
+                data: $("#frmEntityCustDet").serialize(),
+                url: $("#btnEntitySave").data('url'),
+                success: function (json) {
+                    if (json.success == true) {
+                        //enableSucessDiv(json.message);
+                        LoadEntityLookupGrid();
+                        $('#modalentity1').modal('hide');
+                    }
+                    else {
+                        //enableErrorDiv(json.message);
+                    }
+                }
+            });
     }
 </script>
 
