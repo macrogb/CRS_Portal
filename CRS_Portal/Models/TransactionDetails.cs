@@ -11,7 +11,7 @@ namespace CRS_Portal.Models
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public Int64 ID { get; set; }
+        public Int64? ID { get; set; }
         public string ActBranch { get; set; }
         public string ActNo { get; set; }
         public string SortCode { get; set; }
@@ -40,12 +40,19 @@ namespace CRS_Portal.Models
 
     public class TransactionDetailsSummary
     {
-        public Int64 ID { get; set; }
+        public Int64? ID { get; set; }
         public string ActBranch { get; set; }
         public string ActNo { get; set; }
         public string SortCode { get; set; }
         public string IBAN { get; set; }
         public string ActBal { get; set; }
         public string IntAmt { get; set; }
+    }
+
+    public class PaymentCodeDetail
+    {
+        public int ID { get; set; }
+        public string Code { get; set; }
+        public string Description { get; set; }
     }
 }

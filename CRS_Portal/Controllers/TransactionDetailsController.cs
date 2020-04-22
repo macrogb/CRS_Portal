@@ -18,6 +18,8 @@ namespace CRS_Portal.Controllers
     public class TransactionDetailsController : Controller
     {
         TransactionDetailsDbContext objTransactionDetailsDbContext;
+        CurrencyDBContext objCurrencyDBContext;
+
         string _message = string.Empty;
         private IHostingEnvironment _hostingEnv;
         public TransactionDetailsController(IHostingEnvironment hostingEnv)
@@ -26,7 +28,14 @@ namespace CRS_Portal.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            TransactionDetailsModel objModel = new TransactionDetailsModel();
+            objModel.TranDetails = new TransactionDetails();
+            using (objCurrencyDBContext = new CurrencyDBContext())
+            {
+                objModel.lstCurrency = objCurrencyDBContext.DbCurrency.AsEnumerable().ToList();
+
+            }
+            return View(objModel);
         }
 
         public IActionResult LoadTransactionDetails()
@@ -220,6 +229,112 @@ namespace CRS_Portal.Controllers
             catch(Exception ex)
             {
                 return "false";
+            }
+        }
+
+        [HttpGet]
+        public ActionResult LoadTranDetailsByID(string id)
+        {
+            try
+            {
+                TransactionDetailsModel objModel = new TransactionDetailsModel();
+                objModel.TranDetails = new TransactionDetails();
+                using (objCurrencyDBContext = new CurrencyDBContext())
+                {
+                    objModel.lstCurrency = objCurrencyDBContext.DbCurrency.AsEnumerable().ToList();
+
+                }
+                if (!string.IsNullOrEmpty(id))
+                {
+                    using (objTransactionDetailsDbContext = new TransactionDetailsDbContext())
+                    {
+                        objModel.TranDetails = objTransactionDetailsDbContext.DbTransactionDetails.Where(r => r.ID == int.Parse(id)).FirstOrDefault();
+                    }
+                }
+                
+                return PartialView("AddTransaction", objModel);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "The server has encountered an unexpected internal error. Please try again later." });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult SaveTranDetails(TransactionDetailsModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (model.TranDetails.ID == null)
+                    {
+                        //Add
+                        using (objTransactionDetailsDbContext = new TransactionDetailsDbContext())
+                        {
+                            objTransactionDetailsDbContext.DbTransactionDetails.Add(model.TranDetails);
+                            objTransactionDetailsDbContext.SaveChanges();
+                            _message = "'" + model.TranDetails.ActNo + "' - Transaction Detail added successfully";
+                        }
+                    }
+                    else
+                    {
+                        //Edit
+                        using (objTransactionDetailsDbContext = new TransactionDetailsDbContext())
+                        {
+                            var modelFromDb = objTransactionDetailsDbContext.DbTransactionDetails.Where(r => r.ID == model.TranDetails.ID).FirstOrDefault();
+                            modelFromDb.ActBranch = model.TranDetails.ActBranch;
+                            modelFromDb.ActNo = model.TranDetails.ActNo;
+                            modelFromDb.SortCode = model.TranDetails.SortCode;
+                            modelFromDb.IBAN = model.TranDetails.IBAN;
+                            modelFromDb.CurrCode = model.TranDetails.CurrCode;
+                            modelFromDb.ActBal = model.TranDetails.ActBal;
+                            modelFromDb.IntAmt = model.TranDetails.IntAmt;
+                            modelFromDb.PaymentCode = model.TranDetails.PaymentCode;
+                            modelFromDb.ActClsInd = model.TranDetails.ActClsInd;
+                            modelFromDb.ActClsDt = model.TranDetails.ActClsDt;
+                            modelFromDb.ActOpenDt = model.TranDetails.ActOpenDt;
+                            modelFromDb.UndocumentedActInd = model.TranDetails.UndocumentedActInd;
+                            modelFromDb.DorActInd = model.TranDetails.DorActInd;
+                            modelFromDb.CustType = model.TranDetails.CustType;
+                            modelFromDb.ActType = model.TranDetails.ActType;
+                            modelFromDb.PCUSTID = model.TranDetails.PCUSTID;
+                            modelFromDb.J1CUSTID = model.TranDetails.J1CUSTID;
+                            modelFromDb.J2CUSTID = model.TranDetails.J2CUSTID;
+                            modelFromDb.J3CUSTID = model.TranDetails.J3CUSTID;
+                            modelFromDb.J4CUSTID = model.TranDetails.J4CUSTID;
+                            modelFromDb.J5CUSTID = model.TranDetails.J5CUSTID;
+                            modelFromDb.J6CUSTID = model.TranDetails.J6CUSTID;
+                            modelFromDb.J7CUSTID = model.TranDetails.J7CUSTID;
+                            modelFromDb.J8CUSTID = model.TranDetails.J8CUSTID;
+
+                            objTransactionDetailsDbContext.DbTransactionDetails.Update(modelFromDb);
+                            objTransactionDetailsDbContext.SaveChanges();
+                            _message = "'" + model.TranDetails.ActNo + "' - Transaction Detail updated successfully";
+                        }
+                    }
+                    return Json(new { success = true, message = _message });
+                }
+                else
+                {
+                    List<string> fieldOrder = new List<string>(new string[] {
+                                 "TransactionDetails" })
+                         .Select(f => f.ToLower()).ToList();
+
+                    var _message1 = ModelState
+                        .Select(m => new { Order = fieldOrder.IndexOf(m.Key.ToLower()), Error = m.Value })
+                        .OrderBy(m => m.Order)
+                        .SelectMany(m => m.Error.Errors.Select(e => e.ErrorMessage)).ToList();
+
+                    _message = string.Join("<br/>", _message1);
+                    return Json(new { success = false, message = _message });
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = _message });
+
             }
         }
 

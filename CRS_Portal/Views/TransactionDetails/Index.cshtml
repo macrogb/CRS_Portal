@@ -1,6 +1,6 @@
-﻿bulk@model CRS_Portal.Models.TransactionDetails
+﻿@model CRS_Portal.Models.TransactionDetailsModel
 @{
-    ViewData["Title"] = "TransactionDetails";
+    ViewData["Title"] = "Transaction Details";
 }
 
 <partial name="_PageTitle" />
@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-md-3" id="dvSCVABDType2" style="border-right: 2px solid #ccc;">
                     <h5 class="card-title">Manual Input</h5><br />
-                    <button class="btn btn-primary mr-2 btn-lg" id="btnAddAcctStsCode" onclick="AddAcctStsCodeData()"><i class="fas fa-plus"></i>  Add Transaction Details </button>
+                    <button class="btn btn-primary mr-2 btn-lg" id="btnAddTranDetails"><i class="fas fa-plus"></i>  Add Transaction Details </button>
                 </div>
                 <div class="col-md-9" id="dvSCVCType2">
                     <h5 class="card-title">Bulk Import</h5><br />
@@ -137,6 +137,17 @@
     <input id="btnLoadTransactionDetailsGrid" value="Load" type="hidden" data-url='@Url.Action("LoadTransactionDetails","TransactionDetails")' />
     <input id="btnTranDetailsDeleteAll" value="deleteAll" type="hidden" data-url='@Url.Action("DeleteAllTranDetails","TransactionDetails")' />
     <input id="btnTranDetailsDelete" value="delete" type="hidden" data-url='@Url.Action("DeleteTranDetails","TransactionDetails")' />
+    <input id="btnTranDetailsEdit" value="edit" type="hidden" data-url='@Url.Action("LoadTranDetailsByID","TransactionDetails")' />
+    <input id="btnTranDetailsSave" value="save" type="hidden" data-url='@Url.Action("SaveTranDetails","TransactionDetails")' />
+
+    <div class="modal fade bd-example-modal-lg" id="modalTranDetails" data-backdrop="true" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
+        <div class="modal-dialog modal-lg" role="document" style="max-width:1000px">
+            @Html.Partial("AddTransaction", Model)
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
 </div>
 <style>
     /*move tfoot to next to grid header*/
@@ -144,11 +155,14 @@
         display: table-header-group;
     }
 </style>
-
 <script>
     $(document).ready(function () {
         $("#pageTitle").text("Transaction Details");
         LoadTranDetailsGrid();
+
+        $('#btnAddTranDetails').click(function () {
+            LoadTransactionData();
+        });
     });
 
     function LoadTranDetailsGrid() {
@@ -167,7 +181,7 @@
                         bDestroy: true,
                         processing: true,
                         pageLength: 10,
-                        order: [[2, "asc"]],
+                        order: [[1, "asc"], [2, "asc"]],
                         columns: [
                             { 'data': 'ID', "visible": false, },
                             { 'data': 'ActBranch' },
@@ -180,7 +194,7 @@
                                 'data': '',
                                 'sortable': false,
                                 'render': function json(data, type, full, meta) {
-                                        return "<i  class='fas fa-edit edit' style='cursor:pointer;' ></i>"
+                                    return "<i  class='fas fa-edit edit' style='cursor:pointer;'  onclick=LoadTransactionData('" + full.ID + "');></i>"
                                             + " " + "<i class='fas fa-trash-alt delete' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;'  onclick=DeleteTranDetailsData('" + full.ID + "','" + full.ActNo + "'); ></i >";
                                 }
                             },
@@ -356,6 +370,40 @@
                     if (json.success == true) {
                         LoadTranDetailsGrid();
                         enableSucessDiv(json.message);
+                    }
+                    else {
+                        enableErrorDiv(json.message);
+                    }
+                }
+            });
+    }
+
+    function LoadTransactionData(ID) {
+        $.ajax(
+            {
+                type: 'GET',
+                data: { "id": ID },
+                url: $("#btnTranDetailsEdit").data('url'),
+                success: function (result) {
+                    $("#modalTransactionContent").html(result);
+                    $('#modalTranDetails').modal('show');
+                }
+            });
+
+    }
+
+    function SaveTranData() {
+        console.log($("#frmTranDetails").serialize());
+        $.ajax(
+            {
+                type: 'POST',
+                data: $("#frmTranDetails").serialize(),
+                url: $("#btnTranDetailsSave").data('url'),
+                success: function (json) {
+                    if (json.success == true) {
+                        enableSucessDiv(json.message);
+                        LoadTranDetailsGrid();
+                        $('#modalTranDetails').modal('hide');
                     }
                     else {
                         enableErrorDiv(json.message);
