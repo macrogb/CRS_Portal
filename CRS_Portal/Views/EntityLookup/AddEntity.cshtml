@@ -123,8 +123,34 @@
                         <label for="inputtext8" class="col-sm-2 control-label">
                             Entity Type<span class="req"></span>
                         </label>
-                        <div class="col-sm-6 z-pad" style="margin-left: 14px;">
+                        <div class="col-sm-6 z-pad" style="">
+                            @*@Html.DropDownListFor(M => M.lstEntityType,
+                            new SelectList(Model.lstEntityType, "EntityType", "EntityType",Model.entity.AccHoldType),
+                           "- [Choose Entity Type ] -",htmlAttributes:new { @class="form-control"})*@
+                            @{
+                                <div class="col-xs-4 ">
+                                    <select id="EntityType" name="entity.AccHoldType" class="form-control selectOption" data-title="- [Choose Entity Type ] -">
+                                        @{
+                                            int l = 0;
 
+                                            <option value="0">---- All ----</option>
+                                            foreach (var item in Model.lstEntityType)
+                                            {
+                                                l++;
+                                                if (Model.entity.AccHoldType!=null && Model.entity.AccHoldType.ToLower() == item.EntityType.ToLower())
+                                                {
+                                                    <option selected value="@item.EntityType">@item.EntityType</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.EntityType">@item.EntityType</option>
+                                                }
+                                            }
+                                        }
+
+                                    </select>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

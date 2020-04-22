@@ -50,4 +50,10 @@ namespace CRS_Portal.Models
         public string EntityName { get; set; }
         public string EntityType { get; set; }
     }
+
+    public class EntityTypeDto
+    {
+        public int ID { get; set; }
+        public string EntityType { get; set; }
+    }
 }
