@@ -11,36 +11,36 @@ namespace CRS_Portal.Models
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int? ID { get; set; }
-        public string CUSTID { get; set; }
-        public string TITLE { get; set; }
-        public string ENTITYNAME { get; set; }
-        public string BUILDINGIDENTIFIER { get; set; }
-        public string STREETNAME { get; set; }
-        public string DISTRICTNAME { get; set; }
-        public string CITY { get; set; }
-        public string POSTCODE { get; set; }
-        public string COUNTRYCODE { get; set; }
-        public string EMAILID { get; set; }
-        public string ACCHOLDTYPE { get; set; }
-        public string RESCOUNTRYCODE { get; set; }
-        public string PCOUNTRYIDENTITYTYPE { get; set; }
-        public string PCOUNTRYIDENTITYNO { get; set; }
-        public string PIDENITYISSUEDBY { get; set; }
-        public string SECONDRESCOUNTRYCODE { get; set; }
-        public string SECONDCOUNTRYIDENTITYTYPE { get; set; }
-        public string SECONDCOUNTRYIDENTITYNO { get; set; }
-        public string SECONDIDENITYISSUEDBY { get; set; }
-        public string THIRDRESCOUNTRYCODE { get; set; }
-        public string THIRDCOUNTRYIDENTITYTYPE { get; set; }
-        public string THIRDCOUNTRYIDENTITYNO { get; set; }
-        public string THIRDIDENITYISSUEDBY { get; set; }
-        public string CREATEDBY { get; set; }
-        public string CREATEDDT { get; set; }
-        public string CREATEDTM { get; set; }
-        public string MODIFIEDBY { get; set; }
-        public string MODIFIEDDT { get; set; }
-        public string MODIFIEDTM { get; set; }
+        public long ID { get; set; }
+        public string CustID { get; set; }
+        public string Title { get; set; }
+        public string EntityName { get; set; }
+        public string BuildingIdentifier { get; set; }
+        public string StreetName { get; set; }
+        public string DistrictName { get; set; }
+        public string City { get; set; }
+        public string PostCode { get; set; }
+        public string CountryCode { get; set; }
+        public string EmailID { get; set; }
+        public string AccHoldType { get; set; }
+        public string ResCountryCode { get; set; }
+        public string PCountryIdentityType { get; set; }
+        public string PCountryIdentityNo { get; set; }
+        public string PIdentityIssuedBy { get; set; }
+        public string secondResCountryCode { get; set; }
+        public string SecondCountryIdentityType { get; set; }
+        public string SecondCountryIdentityNo { get; set; }
+        public string SecondIdentityIssuedBy { get; set; }
+        public string ThirdResCountryCode { get; set; }
+        public string ThirdCountryIdentityType { get; set; }
+        public string ThirdCountryIdentityNo { get; set; }
+        public string ThirdIdentityIssuedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public string CreatedDT { get; set; }
+        public string CreatedTM { get; set; }
+        public string ModifiedBY { get; set; }
+        public string ModifiedDT { get; set; }
+        public string ModifiedTM { get; set; }
 
     }
 

@@ -22,7 +22,9 @@ namespace CRS_Portal.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            EntityLookupModel objModel = new EntityLookupModel();
+            objModel.entity = new EntityLookupDetailDto();
+            return View(objModel);
         }
 
         public ActionResult LoadEntityLookupDetails()
@@ -34,9 +36,9 @@ namespace CRS_Portal.Controllers
                 {
                     var _lstmodel = objEntitytDbContext.DbEntityLookup.Select(p => new EntityLookupSummaryDto()
                     {
-                        EntityID = p.CUSTID,
-                        EntityName = p.ENTITYNAME,
-                        EntityType = p.ACCHOLDTYPE
+                        EntityID = p.CustID,
+                        EntityName = p.EntityName,
+                        EntityType = p.AccHoldType
                     }).ToList();
 
                     var sa = new JsonSerializerSettings();
@@ -61,6 +63,28 @@ namespace CRS_Portal.Controllers
             catch (Exception ex)
             {
                 return File("", System.Net.Mime.MediaTypeNames.Application.Octet, "");
+            }
+        }
+
+        [HttpGet]
+        public ActionResult LoadEntityDetailsByID(string id)
+        {
+            try
+            {
+                EntityLookupModel objModel = new EntityLookupModel();
+                objModel.entity = new EntityLookupDetailDto();
+                if(!string.IsNullOrEmpty(id))
+                {
+                    using (objEntitytDbContext = new EntityLookupDbContext())
+                    {
+                        objModel.entity = objEntitytDbContext.DbEntityLookup.Where(r => r.CustID == id).FirstOrDefault();
+                    }
+                }
+                return PartialView("AddEntity", objModel);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "The server has encountered an unexpected internal error. Please try again later." });
             }
         }
     }

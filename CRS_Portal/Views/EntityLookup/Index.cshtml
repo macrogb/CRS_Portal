@@ -1,6 +1,6 @@
-﻿
+﻿@model EntityLookupModel;
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Entity Lookup";
 }
 <head>
     <style>
@@ -79,254 +79,15 @@
         </div>
     </div>
     <input id="btnEntityLookupDetGrid" value="load" type="hidden" data-url='@Url.Action("LoadEntityLookupDetails","EntityLookup")' />
+    <input id="btnEntityEdit" value="edit" type="hidden" data-url='@Url.Action("LoadEntityDetailsByID","EntityLookup")' />
     <div class="modal fade bd-example-modal-lg" id="modalentity1" data-backdrop="true" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
         <div class="modal-dialog modal-lg" role="document" style="max-width:1000px">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 id="tppname">Add / Edit Entity Lookup details</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-horizontal form-fields cm-sec">
-                                <div class="row form-group">
-                                    <label for="inputtext3" class="col-sm-4 control-label">
-                                        Entity Customer ID<span class="req"></span>
-                                    </label>
-                                    <div class="col-sm-8 z-pad">
-                                        <input class="form-control" type="text" />
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <label for="inputtext4" class="col-sm-4 control-label">
-                                        Entity Name
-                                    </label>
-                                    <div class="col-sm-8 z-pad">
-                                        <input class="form-control" type="text" />
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <label for="inputtext5" class="col-sm-4 control-label">
-                                        Building Identifier <span class="req"></span>
-                                    </label>
-                                    <div class="col-sm-8 z-pad">
-                                        <input class="form-control" type="text" />
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <label for="inputtext6" class="col-sm-4 control-label">
-                                        Street Name
-                                    </label>
-                                    <div class="col-sm-8 z-pad">
-                                        <input class="form-control" type="text" />
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <label for="inputtext7" class="col-sm-4 control-label">
-                                        District Name <span class="req"></span>
-                                    </label>
-                                    <div class="col-sm-8 z-pad">
-                                        <input class="form-control" type="text" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-horizontal form-fields cm-sec">
-                                <div class="row form-group">
-                                    <label for="inputtext8" class="col-sm-4 control-label">
-                                        City
-                                    </label>
-                                    <div class="col-sm-8 z-pad">
-                                        <input class="form-control" type="text" />
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <label for="inputtext11" class="col-sm-4 control-label">
-                                        Postcode
-                                    </label>
-                                    <div class="col-sm-8 z-pad">
-                                        <input class="form-control" type="text" />
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <label for="inputtext12" class="col-sm-4 control-label">
-                                        Country Code
-                                    </label>
-                                    <div class="col-sm-8 z-pad">
-
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <label for="inputtext14" class="col-sm-4 control-label">
-                                        Email ID
-                                    </label>
-                                    <div class="col-sm-8 z-pad">
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-horizontal form-fields cm-sec">
-                                <div class="row form-group">
-                                    <label for="inputtext8" class="col-sm-2 control-label">
-                                        Entity Type<span class="req"></span>
-                                    </label>
-                                    <div class="col-sm-6 z-pad" style="margin-left: 14px;">
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="sep-line">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-3" style="font-size: 12px; text-align: left; padding-left: 21px;">
-                        </div>
-                        <div class="col-sm-3" style="font-size: 13px;vertical-align:middle">
-                            <label class="">Primary Country Tax Details<span style="color:red">*</span></label>
-                        </div>
-                        <div class="col-sm-3" style="font-size: 13px;vertical-align:middle">
-                            <label class="control-label">Secondary Country Tax Details</label>
-                        </div>
-                        <div class="col-sm-3" style="font-size: 13px;vertical-align:middle">
-                            <label class="control-label">Third Country Tax Details</label>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        @*<div class="form-horizontal form-fields cm-sec">*@
-                        <div class="col-sm-3">
-                            <div class="form-group" style="margin-left:15px">
-                                <label for="inputtext3" class="control-label">
-                                    Residential country code
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-
-                            </div>
-                        </div>
-                        @*</div>*@
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <div class="form-group" style="margin-left:15px">
-                                <label for="inputtex28" class="control-label">
-                                    Organisation Identification Number Type
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <div class="form-group" style="margin-left:15px">
-                                <label for="inputtex29" class="control-label">
-                                    Organisation Identification Number
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <div class="form-group" style="margin-left:15px">
-                                <label for="inputtex29" class="control-label">
-                                    Organisation Identification Number Issued Country Code
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="sep-line">
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <div class="col-md-5"></div>
-                    <button type="button" id="save" class="btn btn-primary mr-2 btn-lg">Save</button>
-                    <button type="button" id="cancel" class="btn btn-outline-primary btn-lg" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
             <!-- /.modal-content -->
+            @Html.Partial("AddEntity", Model)
             <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
     </div>
-
-
-
-
 </body>
 
 <script>
@@ -335,7 +96,7 @@
         LoadEntityLookupGrid();
 
         $('#btnAddEntityCust').click(function () {
-            $('#modalentity1').modal('show');
+            LoadEntityData();
         });
     });
 
@@ -365,7 +126,7 @@
                                 'sortable': false,
                                 'render': function json(data, type, full, meta) {
 
-                                    return "<i  class='fas fa-edit' style='cursor:pointer;'  ></i>"
+                                    return "<i  class='fas fa-edit' style='cursor:pointer;' onclick=LoadEntityData('" + full.EntityID + "');  ></i>"
                                         + " " + "<i class='fas fa-trash-alt' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;'></i >";
                                 }
                             },
@@ -397,6 +158,20 @@
                     spinner_Off();
                 }
             });
+    }
+
+    function LoadEntityData(ID) {
+        $.ajax(
+            {
+                type: 'GET',
+                data: { "id": ID },
+                url: $("#btnEntityEdit").data('url'),
+                success: function (result) {
+                    $("#modalentityContent").html(result);
+                    $('#modalentity1').modal('show');
+                }
+            });
+    
     }
 </script>
 
