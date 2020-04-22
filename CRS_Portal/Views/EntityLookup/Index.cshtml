@@ -25,12 +25,60 @@
                 <div class="col-md-9" id="dvCRSImportEntity">
                     <h5 class="card-title">Bulk Import</h5><br />
                     <a class="btn btn-primary mr-2 btn-lg" href="@Url.Action("DownloadCRSEntityCustomerTemplate", "EntityLookup")"><i class="fas fa-file-download"></i> Download Sample Entity Lookup Template file</a>
-                    <button class="btn btn-primary mr-2 btn-lg" id="btnUploadEnityCustDet" onclick="BulkUploadDupCustDet()"><i class="fas fa-upload"></i> Bulk Upload Entity Lookup Details</button>
+                    <button class="btn btn-primary mr-2 btn-lg" id="btnUploadEnityCustDet" onclick="BulkUploadEntityCustDet()"><i class="fas fa-upload"></i> Bulk Upload Entity Lookup Details</button>
                 </div>
             </div>
         </div>
     </div>
     <partial name="_MessageDiv" />
+    <div class="row" id="bulkEntityUpload" style="display:none;">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <button type="button" class="close clsDv" data-dismiss="bscu" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="card-title">Upload Entity Lookup File</h5>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-3" style="padding-top:1%">
+                            <div class="checkbox checkbox-success checkbox-inline">
+                                <input type="checkbox" name="deleteExistRecord" id="deleteExistRecord" value="option1">
+                                <label for="deleteExistRecord">  Delete All Existing Entity Records? </label>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+
+                            <div id="dropContainer_SCV_AcctStsCode" class="custom-file">
+                                <span class="btn btn-primary btn-file btn-lg">
+                                    Upload Entity Lookup File<input type="file" name="files" id="file_upload_CRS_EntityDetails" accept=".xls,.xlsx" onchange="uploadFile()">
+                                </span>
+                                <span id="fileName"></span>
+                                <br>
+                                <br>
+                                <div class="mb-3 progress" id="fileUploadPgbar" style="display:none;">
+                                    <div class="progress-bar bg-success" role="progressbar"
+                                         id="progressBar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <br />
+                    <button id="btnUploadEntityDetails" class="btn btn-primary mr-2 btn-lg" data-url='@Url.Action("EntityDetailsFileUpload","EntityLookup")'
+                            onclick="uploadFiles_EntityDetails();">
+                        Upload
+                    </button>
+                    <button id="btnUploadCancel" class="btn btn-outline-primary btn-lg"
+                            onclick="clearUploadFileValue();">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -85,6 +133,8 @@
     <input id="btnEntityLoad" value="edit" type="hidden" data-url='@Url.Action("LoadEntityDetailsByID","EntityLookup")' />
     <input id="btnEntitySave" value="save" type="hidden" data-url='@Url.Action("SaveEntityDetails","EntityLookup")' />
     <input id="btnEntityDelete" value="delete" type="hidden" data-url='@Url.Action("DeleteEntityDetails","EntityLookup")' />
+    <input id="btnEntityDeleteAll" value="delete" type="hidden" data-url='@Url.Action("DeleteAllEntityDetails","EntityLookup")' />
+
     <div class="modal fade bd-example-modal-lg" id="modalentity1" data-backdrop="true" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
         <div class="modal-dialog modal-lg" role="document" style="max-width:1000px">
             <!-- /.modal-content -->
@@ -104,6 +154,9 @@
             LoadEntityData();
         });
 
+        $('.clsDv').on("click", function () {
+            $(this).parent().parent().parent().parent().hide();
+        });
       
     });
 
@@ -135,7 +188,7 @@
                                 'render': function json(data, type, full, meta) {
 
                                     return "<i  class='fas fa-edit' style='cursor:pointer;' onclick=LoadEntityData('" + full.ID + "');  ></i>"
-                                        + " " + "<i class='fas fa-trash-alt' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;'  onclick=DeleteEntityData('" + full.ID + "');></i >";
+                                        + " " + "<i class='fas fa-trash-alt' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;'  onclick=DeleteEntityDetailsData('" + full.ID + "','" + full.EntityName + "');></i >";
                                 }
                             },
                         ]
@@ -201,6 +254,14 @@
             });
     }
 
+    function DeleteEntityDetailsData(id, entityname) {
+        hideSuccessErrorDiv();
+        $("#bulkTranDetailsUpload").hide();
+        alertify.confirm('CRS Portal', 'Do you want to delete "' + entityname + '" - Entity?',
+            function () { DeleteEntityData(id); }
+            , function () { });
+    }
+
     function DeleteEntityData(ID) {
         $.ajax(
             {
@@ -218,6 +279,123 @@
                     }
                 }
             });
+    }
+
+    function clearSearch() {
+        var table = $("#EntityLookupGrid").DataTable();
+        table.search('').columns().search('').draw();
+
+        $(".search input[type='text']").val("");
+    }
+
+    function BulkUploadEntityCustDet() {
+        hideSuccessErrorDiv();
+        clearUploadFileValue();
+        $("#bulkEntityUpload").show();
+    }
+
+    function clearUploadFileValue() {
+        $("#file_upload_CRS_EntityDetails").val("");
+        hideSuccessErrorDiv();
+        $("#deleteExistRecord").prop("checked", false);
+    }
+
+    function uploadFile() {
+        var file = _("file_upload_CRS_EntityDetails").files[0];
+        var _fileName = file.name;
+        var extension = _fileName.substr((_fileName.lastIndexOf('.') + 1))
+        if (extension == 'xls' || extension == 'xlsx') {
+            var filesize = formatBytes(file.size, 4);
+            $("#fileName").html(file.name + " (" + filesize + ") ");
+            var formdata = new FormData();
+            formdata.append("file_upload_CRS_EntityDetails", file);
+            var ajax = new XMLHttpRequest();
+            ajax.upload.addEventListener("progress", progressHandler, false);
+            ajax.addEventListener("load", completeHandler, false);
+            ajax.addEventListener("error", errorHandler, false);
+            ajax.addEventListener("abort", abortHandler, false);
+            ajax.open("POST", "e");
+            ajax.send(formdata);
+        }
+    }
+
+    $("#file_upload_CRS_EntityDetails").change(function () {
+        var fileName = $(this).val().split("\\").pop();
+        var extension = fileName.substr((fileName.lastIndexOf('.') + 1))
+        if (extension == 'xls' || extension == 'xlsx') {
+            $(this).next('.custom-file-label').html(fileName);
+        }
+        else {
+            clearUploadFileValue();
+            alertify.alert('CRS Portal', "Please upload valid file format")
+        }
+    });
+
+    function uploadFiles_EntityDetails() {
+        if ($("#deleteExistRecord").prop('checked') == true) {
+            deleteAllEntityDetails();
+        }
+        else {
+            fileUpload_EntityDetails();
+        }
+    }
+
+    function deleteAllEntityDetails() {
+        $.ajax(
+            {
+                url: $("#btnEntityDeleteAll").data('url'),
+                type: "POST",
+                success: function (result) {
+                    if (result.success == true) {
+                        fileUpload_EntityDetails();
+                    }
+                    else {
+                        enableErrorDiv(result.message);
+                        return false;
+                    }
+                }
+            }
+        );
+    }
+    
+    function fileUpload_EntityDetails() {
+        var input = document.getElementById("file_upload_CRS_EntityDetails");
+        var files = input.files;
+        var formData = new FormData();
+
+        for (var i = 0; i != files.length; i++) {
+            formData.append("files", files[i]);
+        }
+        if (files.length == 0) {
+            enableErrorDiv("Please select the file");
+        }
+        else {
+            ajaxPost4EntityDetailsUpload(formData);
+        }
+    }
+
+    function ajaxPost4EntityDetailsUpload(formData) {
+        $.ajax(
+            {
+                url: $("#btnUploadEntityDetails").data('url'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (result) {
+                    if (result.success == true) {
+                        enableSucessDiv(result.message);
+                        LoadEntityLookupGrid();
+                        $("#bulkEntityUpload").hide();
+
+                    }
+                    else {
+                        enableErrorDiv(result.message);
+                        return false;
+                    }
+                }
+            }
+        );
     }
 </script>
 

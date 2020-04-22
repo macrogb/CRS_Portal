@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using CRS_Portal.Entity;
+using CRS_Portal.HelperMethods;
 using CRS_Portal.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -208,5 +213,148 @@ namespace CRS_Portal.Controllers
                 return Json(new { success = false, message = "The server has encountered an unexpected internal error. Please try again later." });
             }
         }
+
+        [HttpPost]
+        public IActionResult DeleteAllEntityDetails()
+        {
+            try
+            {
+                using (objEntitytDbContext = new EntityLookupDbContext())
+                {
+                    List<EntityLookupDetailDto> lstentityDetails = objEntitytDbContext.DbEntityLookup.Where(o => true).ToList();
+                    objEntitytDbContext.RemoveRange(lstentityDetails);
+                    objEntitytDbContext.SaveChanges();
+
+                }
+                _message = "All entity records has been deleted";
+                return Json(new { success = true, message = _message });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "The server has encountered an unexpected internal error. Please try again later." });
+            }
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> EntityDetailsFileUpload(IList<IFormFile> files)
+        {
+            try
+            {
+                bool isCountinue = false;
+                if (files.Count == 1)
+                {
+                    isCountinue = true;
+                }
+
+                if (isCountinue)
+                {
+                    string filePath = string.Empty;
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        string filename = ContentDispositionHeaderValue.Parse(files[i].ContentDisposition).FileName.ToString().Trim('"');
+                        filename = Helper.EnsureCorrectFilename(filename);
+
+                        using (FileStream output = System.IO.File.Create(Helper.GetPathAndFilename(filename, "EntityDetails", _hostingEnv)))
+                        {
+                            await files[i].CopyToAsync(output);
+                            filePath = Path.GetDirectoryName(output.Name);
+                            output.Dispose();
+                        }
+                        _message = BulkEntityDetailsUpload(filePath + @"\" + filename, HttpContext.Session.GetString("UserID"));
+                        if (_message == "false")
+                        {
+                            _message = "Uploaded Account status code file has incorrect format! Please upload correct file and try again.";
+                            //Log.WriteEventLogwithParam("AccountStatusCode", "AcctStsCodeFileUpload", "Post", "Start", _message, _userID);
+                            return Json(new { success = false, message = _message });
+                        }
+                    }
+                    _message = "Transaction details has been imported";
+                    //Log.WriteEventLogwithParam("AccountStatusCode", "AcctStsCodeFileUpload", "Post", "End", _message, _userID);
+                    return Json(new { success = true, message = _message });
+                }
+                else
+                {
+                    _message = "Imported Status code file has incorrect format! Please upload correct file and try again.";
+                    //Log.WriteEventLogwithParam("AccountStatusCode", "AcctStsCodeFileUpload", "Post", "End", _message, _userID);
+                    return Json(new { success = false, message = _message });
+                }
+            }
+            catch (Exception ex)
+            {
+                //Log.WriteEventErrorLogwithParam("AccountStatusCode", "AcctStsCodeFileUpload", "Post", "Error", "Error Occurred", _userID, ex);
+                return Json(new { success = false, message = "The server has encountered an unexpected internal error. Please try again later." });
+            }
+        }
+
+        private string BulkEntityDetailsUpload(string fileNamewithPath, string _userID)
+        {
+            try
+            {
+                DataTable dtContent = Helper.GetDataTableFromExcel(fileNamewithPath);
+                string query = string.Empty;
+                List<EntityLookupDetailDto> objlstEntityDetails = new List<EntityLookupDetailDto>();
+                foreach (DataRow item in dtContent.Rows)
+                {
+                    if (item.ItemArray.Length == 22)
+                    {
+                        EntityLookupDetailDto objEntityDetails = new EntityLookupDetailDto();
+                        objEntityDetails.CustID = item.ItemArray[0].ToString();
+                        objEntityDetails.EntityName = item.ItemArray[1].ToString();
+                        objEntityDetails.BuildingIdentifier = item.ItemArray[2].ToString();
+                        objEntityDetails.StreetName = item.ItemArray[3].ToString();
+                        objEntityDetails.DistrictName = item.ItemArray[4].ToString();
+                        objEntityDetails.City = item.ItemArray[5].ToString();
+                        objEntityDetails.PostCode = item.ItemArray[6].ToString();
+                        objEntityDetails.CountryCode = item.ItemArray[7].ToString();
+                        objEntityDetails.EmailID = item.ItemArray[8].ToString();
+                        objEntityDetails.AccHoldType = item.ItemArray[9].ToString();
+                        objEntityDetails.ResCountryCode = item.ItemArray[10].ToString();
+                        objEntityDetails.PCountryIdentityType = item.ItemArray[11].ToString();
+                        objEntityDetails.PCountryIdentityNo = item.ItemArray[12].ToString();
+                        objEntityDetails.PIdentityIssuedBy = item.ItemArray[13].ToString();
+                        objEntityDetails.secondResCountryCode = item.ItemArray[14].ToString();
+                        objEntityDetails.SecondCountryIdentityType = item.ItemArray[15].ToString();
+                        objEntityDetails.SecondCountryIdentityNo = item.ItemArray[16].ToString();
+                        objEntityDetails.SecondIdentityIssuedBy = item.ItemArray[17].ToString();
+                        objEntityDetails.ThirdResCountryCode = item.ItemArray[18].ToString();
+                        objEntityDetails.ThirdCountryIdentityType = item.ItemArray[19].ToString();
+                        objEntityDetails.ThirdCountryIdentityNo = item.ItemArray[20].ToString();
+                        objEntityDetails.ThirdIdentityIssuedBy = item.ItemArray[21].ToString();
+                       
+                        objlstEntityDetails.Add(objEntityDetails);
+
+                        if (objlstEntityDetails.Count == 1000)
+                        {
+                            using (objEntitytDbContext = new EntityLookupDbContext())
+                            {
+                                objEntitytDbContext.DbEntityLookup.AddRange(objlstEntityDetails);
+                                objEntitytDbContext.SaveChanges();
+                            }
+                            objlstEntityDetails = new List<EntityLookupDetailDto>();
+                        }
+                    }
+                    else
+                    {
+                        //To Do - Import correct records and inform few records are not in correct format
+                        return "false";
+                    }
+                }
+                if (objlstEntityDetails.Count > 0)
+                {
+                    using (objEntitytDbContext = new EntityLookupDbContext())
+                    {
+                        objEntitytDbContext.DbEntityLookup.AddRange(objlstEntityDetails);
+                        objEntitytDbContext.SaveChanges();
+                    }
+                }
+                return "true";
+            }
+            catch (Exception ex)
+            {
+                return "false";
+            }
+        }
+
     }
 }
