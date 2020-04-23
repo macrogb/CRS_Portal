@@ -35,7 +35,7 @@
                         </div>
                         <div class="row form-group">
                             <label for="inputtext5" class="col-sm-4 control-label">
-                                Building Identifier <span class="req"></span>
+                                Building Identifier 
                             </label>
                             <div class="col-sm-8 z-pad">
                                 <input name="entity.BuildingIdentifier" id="BuildingIdentifier" value="@Model.entity.BuildingIdentifier" class="form-control" type="text" />
@@ -51,7 +51,7 @@
                         </div>
                         <div class="row form-group">
                             <label for="inputtext7" class="col-sm-4 control-label">
-                                District Name <span class="req"></span>
+                                District Name 
                             </label>
                             <div class="col-sm-8 z-pad">
                                 <input class="form-control" name="entity.DistrictName" id="DistrictName" value="@Model.entity.DistrictName" type="text" />
@@ -63,7 +63,7 @@
                     <div class="form-horizontal form-fields cm-sec">
                         <div class="row form-group">
                             <label for="inputtext8" class="col-sm-4 control-label">
-                                City
+                                City <span class="req"></span>
                             </label>
                             <div class="col-sm-8 z-pad">
                                 <input class="form-control" name="entity.City" id="City" value="@Model.entity.City" type="text" />
@@ -79,7 +79,7 @@
                         </div>
                         <div class="row form-group">
                             <label for="inputtext12" class="col-sm-4 control-label">
-                                Country Code
+                                Country Code<span class="req"></span>
                             </label>
                             <div class="col-sm-8 z-pad">
                                 @{
@@ -130,8 +130,8 @@
                             </label>
                             <div class="col-sm-6 z-pad" style="">
                                 @*@Html.DropDownListFor(M => M.lstEntityType,
-                             new SelectList(Model.lstEntityType, "EntityType", "EntityType",Model.entity.AccHoldType),
-                            "- [Choose Entity Type ] -",htmlAttributes:new { @class="form-control"})*@
+                                 new SelectList(Model.lstEntityType, "EntityType", "EntityType",Model.entity.AccHoldType),
+                                "- [Choose Entity Type ] -",htmlAttributes:new { @class="form-control"})*@
                                 @{
                                     <div class="col-xs-4 ">
                                         <select id="EntityType" name="entity.AccHoldType" class="form-control selectOption" data-title="- [Choose Entity Type ] -">

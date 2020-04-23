@@ -18,36 +18,36 @@ namespace CRS_Portal.Models
         [Required(ErrorMessage = "Entity Name is required.")]
         [StringLength(105, MinimumLength = 1, ErrorMessage = "Entity Name must have minimum 1 and maximum 105 characters")]
         public string EntityName { get; set; }
-        [Required(ErrorMessage = "Building Identifier is required.")]
         [StringLength(70, MinimumLength = 1, ErrorMessage = "Building Identifier must have minimum 1 and maximum 70 characters")]
         public string BuildingIdentifier { get; set; }
         [StringLength(100, MinimumLength = 1, ErrorMessage = "Street Name must have minimum 1 and maximum 100 characters")]
         public string StreetName { get; set; }
-        [Required(ErrorMessage = "District Name is required.")]
         [StringLength(70, MinimumLength = 1, ErrorMessage = "District Name must have minimum 1 and maximum 70 characters")]
         public string DistrictName { get; set; }
         [StringLength(70, MinimumLength = 1, ErrorMessage = "City must have minimum 1 and maximum 70 characters")]
+        [Required(ErrorMessage = "City is required.")]
         public string City { get; set; }
-        [StringLength(35, MinimumLength = 1, ErrorMessage = "Post Code must have minimum 1 and maximum 35 characters")]
+        [StringLength(70, MinimumLength = 1, ErrorMessage = "Post Code must have minimum 1 and maximum 70 characters")]
         public string PostCode { get; set; }
+        [Required(ErrorMessage = "Country Code is required.")]
         public string CountryCode { get; set; }
         public string EmailID { get; set; }
         [Required(ErrorMessage = "Entity Type is required.")]
         public string AccHoldType { get; set; }
         [Required(ErrorMessage = "Primary country Tax Details required.")]
         public string ResCountryCode { get; set; }
-        [Required(ErrorMessage = "Primary country Tax Details required.")]
         public string PCountryIdentityType { get; set; }
-        [Required(ErrorMessage = "Primary country Tax Details required.")]
+        [StringLength(80, MinimumLength = 1, ErrorMessage = "Identity number must have minimum 1 and maximum 80 characters")]
         public string PCountryIdentityNo { get; set; }
-        [Required(ErrorMessage = "Primary country Tax Details required.")]
         public string PIdentityIssuedBy { get; set; }
         public string secondResCountryCode { get; set; }
         public string SecondCountryIdentityType { get; set; }
+        [StringLength(80, MinimumLength = 1, ErrorMessage = "Identity number must have minimum 1 and maximum 80 characters")]
         public string SecondCountryIdentityNo { get; set; }
         public string SecondIdentityIssuedBy { get; set; }
         public string ThirdResCountryCode { get; set; }
         public string ThirdCountryIdentityType { get; set; }
+        [StringLength(80, MinimumLength = 1, ErrorMessage = "Identity number must have minimum 1 and maximum 80 characters")]
         public string ThirdCountryIdentityNo { get; set; }
         public string ThirdIdentityIssuedBy { get; set; }
         public string CreatedBy { get; set; }
