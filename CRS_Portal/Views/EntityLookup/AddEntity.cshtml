@@ -1,11 +1,11 @@
 ﻿@model CRS_Portal.Models.EntityLookupModel
-@*<head>
+<head>
     <script src="js/bootstrap-select.js"></script>
     <link rel="stylesheet" href="css/bootstrap-select.css">
-</head>*@
+</head>
 <div class="modal-content" id="modalentityContent">
-    <div class="modal-header">
-        <h4 id="tppname">Add / Edit Entity Lookup details</h4>
+    <div class="modal-header card-header card-header-primary bg-TelegramSingle">
+        <h4 id="title" class="card-title" style="color:white">Add / Edit Entity Lookup details</h4>
     </div>
     <div class="modal-body">
         <form id="frmEntityCustDet">
@@ -85,7 +85,7 @@
                                             @{
                                                 int j = 0;
 
-                                                <option value="0">@title</option>
+                                                @*<option value="0">@title</option>*@
                                                 foreach (var item in Model.lstcountry)
                                                 {
                                                     j++;
@@ -134,7 +134,7 @@
                                             @{
                                                 int l = 0;
 
-                                                <option value="0">- [Choose Entity Type ] -</option>
+                                                @*<option value="0">- [Choose Entity Type ] -</option>*@
                                                 foreach (var item in Model.lstEntityType)
                                                 {
                                                     l++;
@@ -196,7 +196,7 @@
                                     @{
                                         int i = 0;
 
-                                        <option value="0">- [Choose country ] -</option>
+                                        @*<option value="0">- [Choose country ] -</option>*@
                                         foreach (var item in Model.lstcountry)
                                         {
                                             i++;
@@ -222,7 +222,7 @@
                                 @{
                                     int k = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstcountry)
                                     {
                                         k++;
@@ -248,7 +248,7 @@
                                 @{
                                     int a = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstcountry)
                                     {
                                         a++;
@@ -281,11 +281,11 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         @{
-                            <select id="PCountryIdentityType" name="entity.PCountryIdentityType" class="form-control selectOption" data-title="- [Choose Entity Type ] -">
+                            <select id="PCountryIdentityType" name="entity.PCountryIdentityType" class="form-control selectOption" data-title="- [Choose ID Type ] -">
                                 @{
                                     int x = 0;
 
-                                    <option value="0">- [Choose ID Type ] -</option>
+                                    @*<option value="0">- [Choose ID Type ] -</option>*@
                                     foreach (var item in Model.lstIdentityType)
                                     {
                                         x++;
@@ -311,7 +311,7 @@
                                 @{
                                     int y = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstIdentityType)
                                     {
                                         y++;
@@ -337,7 +337,7 @@
                                 @{
                                     int z = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstIdentityType)
                                     {
                                         z++;
@@ -398,7 +398,7 @@
                                 @{
                                     int p = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstcountry)
                                     {
                                         p++;
@@ -424,7 +424,7 @@
                                 @{
                                     int n = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstcountry)
                                     {
                                         n++;
@@ -450,7 +450,7 @@
                                 @{
                                     int m = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstcountry)
                                     {
                                         m++;
@@ -491,16 +491,28 @@
 <script>
     $(document).ready(function () {
         // Enable Live Search.
-        //$('.selectOption').attr('data-live-search', true);
+        $('.selectOption').attr('data-live-search', true);
 
-        //$('.selectOption').selectpicker(
-        //    {
-        //        width: '100%',
-        //        title: $(this).data('title'),
-        //        style: 'btn-info',
-        //        size: 6
-        //    });
-       
+        $('.selectOption').selectpicker(
+            {
+                width: '100%',
+                title: $(this).data('title'),
+                style: 'btn-info',
+                size: 6
+            });
+        $('.dropdown-menu').on('click', function (e) {
+            if ($(e.target).closest('.bootstrap-select.open').is(':visible') || $(e.target).closest('.btn.dropdown-toggle.btn-default').is(':visible')) {
+                selectpickerIsClicked = true;
+            }
+        });
+
+        // when the dialog is closed....
+        $('.dropdown').on('hide.bs.dropdown', function (e) {
+            if (selectpickerIsClicked) {
+                e.preventDefault();
+                selectpickerIsClicked = false;
+            }
+        });
         $('#save').click(function () {
             SaveEntityData();
         });
