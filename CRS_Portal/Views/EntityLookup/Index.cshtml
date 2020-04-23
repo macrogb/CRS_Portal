@@ -241,6 +241,8 @@
     }
 
     function SaveEntityData() {
+        hideSuccessErrorDiv();
+        $("#divErrorModal").hide();
         $.ajax(
             {
                 type: 'POST',
@@ -253,7 +255,8 @@
                         $('#modalentity1').modal('hide');
                     }
                     else {
-                        enableErrorDiv(json.message);
+                        $("#divErrorModal").show();
+                        $("#divErrorMessModal").html(json.message);
                     }
                 }
             });

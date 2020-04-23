@@ -179,7 +179,7 @@ namespace CRS_Portal.Controllers
                         .OrderBy(m => m.Order)
                         .SelectMany(m => m.Error.Errors.Select(e => e.ErrorMessage)).ToList();
 
-                    _message = string.Join("<br/>", _message1);
+                    _message = string.Join("<br/>", _message1.Distinct());
                     return Json(new { success = false, message = _message });
 
                 }

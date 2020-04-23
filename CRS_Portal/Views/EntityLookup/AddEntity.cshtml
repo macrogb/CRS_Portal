@@ -6,8 +6,12 @@
 <div class="modal-content" id="modalentityContent">
     <div class="modal-header card-header card-header-primary bg-TelegramSingle">
         <h4 id="title" class="card-title" style="color:white">Add / Edit Entity Lookup details</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     </div>
     <div class="modal-body">
+        <div class="alert alert-danger alert-dismissible fade show" id="divErrorModal" role="alert" style="display:none">
+            <strong><span id="divErrorMessModal">message</span></strong>
+        </div>
         <form id="frmEntityCustDet">
             <input name="entity.ID" id="enityID" value="@Model.entity.ID" class="form-control" type="hidden" />
             <div class="row">
