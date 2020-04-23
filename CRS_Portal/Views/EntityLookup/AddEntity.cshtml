@@ -22,7 +22,10 @@
                                 Entity Customer ID<span class="req"></span>
                             </label>
                             <div class="col-sm-8 z-pad">
-                                <input name="entity.CUSTID" id="entityCustID" value="@Model.entity.CustID" class="form-control" type="text" />
+                                @{ 
+                                    var isReadonly = Model.entity.ID!=null ? "readonly" : "";
+                                }
+                                <input name="entity.CUSTID" id="entityCustID" @isReadonly value="@Model.entity.CustID" class="form-control" type="text" />
                             </div>
                         </div>
                         <div class="row form-group">
