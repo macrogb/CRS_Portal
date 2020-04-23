@@ -1,28 +1,35 @@
 ﻿@model CRS_Portal.Models.EntityLookupModel
-@*<head>
+<head>
     <script src="js/bootstrap-select.js"></script>
     <link rel="stylesheet" href="css/bootstrap-select.css">
-</head>*@
+</head>
 <div class="modal-content" id="modalentityContent">
-    <div class="modal-header">
-        <h4 id="tppname">Add / Edit Entity Lookup details</h4>
+    <div class="modal-header card-header card-header-primary bg-TelegramSingle">
+        <h4 id="title" class="card-title" style="color:white">Add / Edit Entity Lookup details</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     </div>
     <div class="modal-body">
+        <div class="alert alert-danger alert-dismissible fade show" id="divErrorModal" role="alert" style="display:none">
+            <strong><span id="divErrorMessModal">message</span></strong>
+        </div>
         <form id="frmEntityCustDet">
             <input name="entity.ID" id="enityID" value="@Model.entity.ID" class="form-control" type="hidden" />
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-horizontal form-fields cm-sec">
                         <div class="row form-group">
-                            <label class="col-sm-4 control-label">
+                            <label for="entityCustID" class="col-sm-4 control-label">
                                 Entity Customer ID<span class="req"></span>
                             </label>
                             <div class="col-sm-8 z-pad">
-                                <input name="entity.CUSTID" id="entityCustID" value="@Model.entity.CustID" class="form-control" type="text" />
+                                @{ 
+                                    var isReadonly = Model.entity.ID!=null ? "readonly" : "";
+                                }
+                                <input name="entity.CUSTID" id="entityCustID" @isReadonly value="@Model.entity.CustID" class="form-control" type="text" />
                             </div>
                         </div>
                         <div class="row form-group">
-                            <label class="col-sm-4 control-label">
+                            <label for="entityName" class="col-sm-4 control-label">
                                 Entity Name
                             </label>
                             <div class="col-sm-8 z-pad">
@@ -30,15 +37,15 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <label for="inputtext5" class="col-sm-4 control-label">
-                                Building Identifier <span class="req"></span>
+                            <label for="BuildingIdentifier" class="col-sm-4 control-label">
+                                Building Identifier 
                             </label>
                             <div class="col-sm-8 z-pad">
                                 <input name="entity.BuildingIdentifier" id="BuildingIdentifier" value="@Model.entity.BuildingIdentifier" class="form-control" type="text" />
                             </div>
                         </div>
                         <div class="row form-group">
-                            <label for="inputtext6" class="col-sm-4 control-label">
+                            <label for="StreetName" class="col-sm-4 control-label">
                                 Street Name
                             </label>
                             <div class="col-sm-8 z-pad">
@@ -46,8 +53,8 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <label for="inputtext7" class="col-sm-4 control-label">
-                                District Name <span class="req"></span>
+                            <label for="DistrictName" class="col-sm-4 control-label">
+                                District Name 
                             </label>
                             <div class="col-sm-8 z-pad">
                                 <input class="form-control" name="entity.DistrictName" id="DistrictName" value="@Model.entity.DistrictName" type="text" />
@@ -58,15 +65,15 @@
                 <div class="col-sm-6">
                     <div class="form-horizontal form-fields cm-sec">
                         <div class="row form-group">
-                            <label for="inputtext8" class="col-sm-4 control-label">
-                                City
+                            <label for="City" class="col-sm-4 control-label">
+                                City <span class="req"></span>
                             </label>
                             <div class="col-sm-8 z-pad">
                                 <input class="form-control" name="entity.City" id="City" value="@Model.entity.City" type="text" />
                             </div>
                         </div>
                         <div class="row form-group">
-                            <label for="inputtext11" class="col-sm-4 control-label">
+                            <label for="PostCode" class="col-sm-4 control-label">
                                 Postcode
                             </label>
                             <div class="col-sm-8 z-pad">
@@ -74,8 +81,8 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <label for="inputtext12" class="col-sm-4 control-label">
-                                Country Code
+                            <label for="CountryCode" class="col-sm-4 control-label">
+                                Country Code<span class="req"></span>
                             </label>
                             <div class="col-sm-8 z-pad">
                                 @{
@@ -85,7 +92,7 @@
                                             @{
                                                 int j = 0;
 
-                                                <option value="0">@title</option>
+                                                @*<option value="0">@title</option>*@
                                                 foreach (var item in Model.lstcountry)
                                                 {
                                                     j++;
@@ -106,7 +113,7 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <label for="inputtext14" class="col-sm-4 control-label">
+                            <label for="EmailID" class="col-sm-4 control-label">
                                 Email ID
                             </label>
                             <div class="col-sm-8 z-pad">
@@ -121,20 +128,20 @@
                 <div class="col-sm-12">
                     <div class="form-horizontal form-fields cm-sec">
                         <div class="row form-group">
-                            <label for="inputtext8" class="col-sm-2 control-label">
+                            <label for="EntityType" class="col-sm-2 control-label">
                                 Entity Type<span class="req"></span>
                             </label>
                             <div class="col-sm-6 z-pad" style="">
                                 @*@Html.DropDownListFor(M => M.lstEntityType,
-                             new SelectList(Model.lstEntityType, "EntityType", "EntityType",Model.entity.AccHoldType),
-                            "- [Choose Entity Type ] -",htmlAttributes:new { @class="form-control"})*@
+                                 new SelectList(Model.lstEntityType, "EntityType", "EntityType",Model.entity.AccHoldType),
+                                "- [Choose Entity Type ] -",htmlAttributes:new { @class="form-control"})*@
                                 @{
                                     <div class="col-xs-4 ">
                                         <select id="EntityType" name="entity.AccHoldType" class="form-control selectOption" data-title="- [Choose Entity Type ] -">
                                             @{
                                                 int l = 0;
 
-                                                <option value="0">- [Choose Entity Type ] -</option>
+                                                @*<option value="0">- [Choose Entity Type ] -</option>*@
                                                 foreach (var item in Model.lstEntityType)
                                                 {
                                                     l++;
@@ -183,7 +190,7 @@
                 @*<div class="form-horizontal form-fields cm-sec">*@
                 <div class="col-sm-3">
                     <div class="form-group" style="margin-left:3px">
-                        <label for="inputtext3" class="control-label">
+                        <label for="ResCountryCode" class="control-label">
                             Residential country code
                         </label>
                     </div>
@@ -196,7 +203,7 @@
                                     @{
                                         int i = 0;
 
-                                        <option value="0">- [Choose country ] -</option>
+                                        @*<option value="0">- [Choose country ] -</option>*@
                                         foreach (var item in Model.lstcountry)
                                         {
                                             i++;
@@ -222,7 +229,7 @@
                                 @{
                                     int k = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstcountry)
                                     {
                                         k++;
@@ -248,7 +255,7 @@
                                 @{
                                     int a = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstcountry)
                                     {
                                         a++;
@@ -273,7 +280,7 @@
             <div class="row">
                 <div class="col-sm-3">
                     <div class="form-group" style="margin-left:3px">
-                        <label for="inputtex28" class="control-label">
+                        <label for="PCountryIdentityType" class="control-label">
                             Organisation Identification Number Type
                         </label>
                     </div>
@@ -281,11 +288,11 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         @{
-                            <select id="PCountryIdentityType" name="entity.PCountryIdentityType" class="form-control selectOption" data-title="- [Choose Entity Type ] -">
+                            <select id="PCountryIdentityType" name="entity.PCountryIdentityType" class="form-control selectOption" data-title="- [Choose ID Type ] -">
                                 @{
                                     int x = 0;
 
-                                    <option value="0">- [Choose ID Type ] -</option>
+                                    @*<option value="0">- [Choose ID Type ] -</option>*@
                                     foreach (var item in Model.lstIdentityType)
                                     {
                                         x++;
@@ -311,7 +318,7 @@
                                 @{
                                     int y = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstIdentityType)
                                     {
                                         y++;
@@ -337,7 +344,7 @@
                                 @{
                                     int z = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstIdentityType)
                                     {
                                         z++;
@@ -361,7 +368,7 @@
             <div class="row">
                 <div class="col-sm-3">
                     <div class="form-group" style="margin-left:3px">
-                        <label for="inputtex29" class="control-label">
+                        <label for="PCountryIdentityNo" class="control-label">
                             Organisation Identification Number
                         </label>
                     </div>
@@ -386,7 +393,7 @@
             <div class="row">
                 <div class="col-sm-3">
                     <div class="form-group" style="margin-left:3px">
-                        <label for="inputtex29" class="control-label">
+                        <label for="PIdentityIssuedBy" class="control-label">
                             Organisation Identification Number Issued Country Code
                         </label>
                     </div>
@@ -398,7 +405,7 @@
                                 @{
                                     int p = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstcountry)
                                     {
                                         p++;
@@ -424,7 +431,7 @@
                                 @{
                                     int n = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstcountry)
                                     {
                                         n++;
@@ -450,7 +457,7 @@
                                 @{
                                     int m = 0;
 
-                                    <option value="0">- [Choose country ] -</option>
+                                    @*<option value="0">- [Choose country ] -</option>*@
                                     foreach (var item in Model.lstcountry)
                                     {
                                         m++;
@@ -491,16 +498,28 @@
 <script>
     $(document).ready(function () {
         // Enable Live Search.
-        //$('.selectOption').attr('data-live-search', true);
+        $('.selectOption').attr('data-live-search', true);
 
-        //$('.selectOption').selectpicker(
-        //    {
-        //        width: '100%',
-        //        title: $(this).data('title'),
-        //        style: 'btn-info',
-        //        size: 6
-        //    });
-       
+        $('.selectOption').selectpicker(
+            {
+                width: '100%',
+                title: $(this).data('title'),
+                style: 'btn-info',
+                size: 6
+            });
+        $('.dropdown-menu').on('click', function (e) {
+            if ($(e.target).closest('.bootstrap-select.open').is(':visible') || $(e.target).closest('.btn.dropdown-toggle.btn-default').is(':visible')) {
+                selectpickerIsClicked = true;
+            }
+        });
+
+        // when the dialog is closed....
+        $('.dropdown').on('hide.bs.dropdown', function (e) {
+            if (selectpickerIsClicked) {
+                e.preventDefault();
+                selectpickerIsClicked = false;
+            }
+        });
         $('#save').click(function () {
             SaveEntityData();
         });
