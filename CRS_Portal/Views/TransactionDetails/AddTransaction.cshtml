@@ -143,7 +143,7 @@
                                 </label>
                                 <div class="col-sm-8 z-pad">
                                     @*<input  name="Tran.ActClosed" id="TranActClosed" value="@Model.TranDetails.ActClsInd" class="form-control" type="text" />*@
-                                    @if(string.IsNullOrEmpty(Model.TranDetails.ActClsInd))
+                                    @if (string.IsNullOrEmpty(Model.TranDetails.ActClsInd))
                                     {
                                         Model.TranDetails.ActClsInd = "0";
                                     }
@@ -157,7 +157,7 @@
                                     Account Closed Date
                                 </label>
                                 <div class="col-sm-8 z-pad">
-                                    <input name="TranDetails.ActClsDt" id="TranClosedDate" value="@Model.TranDetails.ActClsDt" class="form-control datetimepicker" data-date-end-date="0d" type="text" />
+                                    <input type="text" autocomplete="off" readonly name="TranDetails.ActClsDt" class="form-control datetimepicker" placeholder="Account Close Date" id="TranClosedDate" value="@Model.TranDetails.ActClsDt" />
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -165,7 +165,7 @@
                                     Account Open Date
                                 </label>
                                 <div class="col-sm-8 z-pad">
-                                    <input name="TranDetails.ActOpenDt" id="TranOpenDate" value="@Model.TranDetails.ActOpenDt" class="form-control datetimepicker" data-date-end-date="0d" type="text" />
+                                    <input type="text" autocomplete="off" readonly name="TranDetails.ActOpenDt" class="form-control datetimepicker" placeholder="Account Open Date" id="TranOpenDate" value="@Model.TranDetails.ActOpenDt"/>
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -222,7 +222,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <h4 id="tppname" class= "card-header card-header-primary bg-TelegramSingle" style="color:white;">Joint Customer Details</h4>
                 <br />
                 <div class="row">
@@ -309,11 +309,21 @@
         </div>
     </div>
 </div>
+<link href="~/css/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/js/jquery.datetimepicker.full.js"></script>
 <script>
     $(document).ready(function () {
         $('#save').click(function () {
             SaveTranData();
         });
-        
+
+        $('.datetimepicker').datetimepicker({
+            format: 'Ymd',
+            timepicker: false,
+            autoclose: true,
+            todayHighlight: true,
+            maxDate: 0,
+            validateOnBlur: false,
+        }).datepicker('update', new Date());
     });
 </script>
