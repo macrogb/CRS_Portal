@@ -947,6 +947,26 @@ a.file_upload {
 .dashboardWidgetBorderBottomOrange {
     border-bottom: 5px solid orange;
 }
+
+.fade.in {
+    opacity: 1 !important;
+}
+
+.modal.in .modal-dialog {
+    -webkit-transform: translate(0, 0) !important;
+    -o-transform: translate(0, 0) !important;
+    transform: translate(0, 0) !important;
+}
+
+.modal-backdrop .fade .in {
+    opacity: 0.5 !important;
+}
+
+.modal-backdrop.fade {
+    opacity: 0.5 !important;
+}
+
+
 /*table tbody {
     overflow: scroll;
     height: 100px;

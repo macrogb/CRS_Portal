@@ -1,0 +1,228 @@
+﻿@model CRS_Portal.Models.TransactionDetailsModel
+<div class="modal-content" id="modalTransactionContent">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 id="tppname">Add / Edit Transaction details</h4>
+        </div>
+        <div class="modal-body">
+            <form id="frmTranDetails">
+                <input name="TranDetails.ID" id="TranDetailsID" value="@Model.TranDetails.ID" class="form-control" type="hidden" />
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-horizontal form-fields cm-sec">
+                            <div class="row form-group">
+                                <label for="inputtext3" class="col-sm-4 control-label">
+                                    Account Branch<span class="req"></span>
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActBranch" id="TranActBranch" value="@Model.TranDetails.ActBranch" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext4" class="col-sm-4 control-label">
+                                    Account Number
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActNo" id="TranActNo" value="@Model.TranDetails.ActNo" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext5" class="col-sm-4 control-label">
+                                    SortCode <span class="req"></span>
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.SortCode" id="TranSortCode" value="@Model.TranDetails.SortCode" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext6" class="col-sm-4 control-label">
+                                    IBAN
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.IBAN" id="TranIBAN" value="@Model.TranDetails.IBAN" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext7" class="col-sm-4 control-label">
+                                    Currency Code <span class="req"></span>
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    @*<input name="Tran.CurCode" id="TranCurCode" value="@Model.TranDetails.CurrCode" class="form-control" type="text" />*@
+                                    @{
+                                        string Currencytitle = "- [Choose Currency ] -";
+                                        <div class="col-xs-4 ">
+                                            <select id="TranCurCode" name="TranDetails.CurrCode" class="form-control selectOption" data-title="@Currencytitle">
+                                                @{
+                                                    int j = 0;
+
+                                                    <option value="0">@Currencytitle</option>
+                                                    foreach (var item in Model.lstCurrency)
+                                                    {
+                                                        j++;
+                                                        if (Model.TranDetails.CurrCode != null && Model.TranDetails.CurrCode == item.C8CCY)
+                                                        {
+                                                            <option selected value="@item.C8CCY">@item.C8CCY - @item.C8CUR</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.C8CCY">@item.C8CCY - @item.C8CUR</option>
+                                                        }
+                                                    }
+                                                }
+
+                                            </select>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext7" class="col-sm-4 control-label">
+                                    Account Balance <span class="req"></span>
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActBal" id="TranBalance" value="@Model.TranDetails.ActBal" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext7" class="col-sm-4 control-label">
+                                    Interest Amount <span class="req"></span>
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.IntAmt" id="TranIntAmt" value="@Model.TranDetails.IntAmt" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext7" class="col-sm-4 control-label">
+                                    Primary CustomerID <span class="req"></span>
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.PCUSTID" id="TranpcustID" value="@Model.TranDetails.PCUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-horizontal form-fields cm-sec">
+                            <div class="row form-group">
+                                <label for="inputtext8" class="col-sm-4 control-label">
+                                    Payment Code
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    @*<input name="Tran.PaymentCode" id="TranPaymentCode" value="@Model.TranDetails.PaymentCode" class="form-control" type="text" />*@
+                                    @{
+                                        string PaymentCodeTitle = "- [Choose Payment Code ] -";
+                                        <div class="col-xs-4 ">
+                                            <select id="TranPaymentCode" name="TranDetails.PaymentCode" class="form-control selectOption" data-title="@PaymentCodeTitle">
+                                                @{
+                                                    int x = 0;
+
+                                                    <option value="0">@PaymentCodeTitle</option>
+                                                    foreach (var item in Model.lstPaymentCode)
+                                                    {
+                                                        x++;
+                                                        if (Model.TranDetails.PaymentCode != null && Model.TranDetails.PaymentCode == item.Code)
+                                                        {
+                                                            <option selected value="@item.Code">@item.Code - @item.Description</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Code">@item.Code - @item.Description</option>
+                                                        }
+                                                    }
+                                                }
+
+                                            </select>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext8" class="col-sm-4 control-label">
+                                    Account Closed
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    @*<input  name="Tran.ActClosed" id="TranActClosed" value="@Model.TranDetails.ActClsInd" class="form-control" type="text" />*@
+                                    <span>Yes @Html.RadioButtonFor(Model => Model.TranDetails.ActClsInd, "1")</span>
+                                    <span class="col-sm-6">No @Html.RadioButtonFor(Model => Model.TranDetails.ActClsInd, "0", new { @checked = true })</span>
+
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext11" class="col-sm-4 control-label">
+                                    Account Closed Date
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActClsDt" id="TranClosedDate" value="@Model.TranDetails.ActClsDt" class="form-control datetimepicker" data-date-end-date="0d" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext12" class="col-sm-4 control-label">
+                                    Account Open Date
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActOpenDt" id="TranOpenDate" value="@Model.TranDetails.ActOpenDt" class="form-control datetimepicker" data-date-end-date="0d" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext14" class="col-sm-4 control-label">
+                                    Undocumented Account
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    @*<input name="Tran.Undocumented" id="TranUndocumented" value="@Model.TranDetails.UndocumentedActInd" class="form-control" type="text" />*@
+                                    <span>Yes @Html.RadioButtonFor(Model => Model.TranDetails.UndocumentedActInd, "1")</span>
+                                    <span class="col-sm-6">No @Html.RadioButtonFor(Model => Model.TranDetails.UndocumentedActInd, "0", new { @checked = true })</span>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext14" class="col-sm-4 control-label">
+                                    Dormant Account
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    @*<input name="Tran.Dormant" id="TranDormant" value="@Model.TranDetails.DorActInd" class="form-control" type="text" />*@
+                                    <span>Yes @Html.RadioButtonFor(Model => Model.TranDetails.DorActInd, "1")</span>
+                                    <span class="col-sm-6">No @Html.RadioButtonFor(Model => Model.TranDetails.DorActInd, "0", new { @checked = true })</span>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext14" class="col-sm-4 control-label">
+                                    Customer Type
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.CustType" id="TranCusType" value="@Model.TranDetails.CustType" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext14" class="col-sm-4 control-label">
+                                    Account Type
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActType" id="TranActType" value="@Model.TranDetails.ActType" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="sep-line">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="col-md-5"></div>
+            <button type="button" id="save" class="btn btn-primary mr-2 btn-lg">Save</button>
+            <button type="button" id="cancel" class="btn btn-outline-primary btn-lg" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#save').click(function () {
+            SaveTranData();
+        });
+
+    });
+</script>

@@ -1,68 +1,163 @@
-﻿
+﻿@model EntityLookupModel;
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Entity Lookup";
 }
-<partial name="_PageTitle" />
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header card-header-primary bg-TelegramSingle" style="display:inline !important;">
-                <h4 class="card-title ">
-                    Enity Lookup Details
-                    <div class="" style="float:right;">
-                        <span class="col-md-12">
-                            <span style="font-size:small;">Export Data To : </span>
-                            <a id="EntityCustExport" class="ExlExport">
-                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAACU0lEQVRIie2UT0jTYRjHP+9PjV3WyNZBaNGtH82ptdCDHQryluQKWXoPKRI7hYiR/YM6REcTwgpic1E4dZRBsHQe8lLBb8FPo0tdDOdiDHU4treD7dfm/ip08wvP4Xmf532+z/M+z/PCLspAlHM4cr3VbKpJNKYVeVQg7YBTSqa0u58fVEJQna04+h37lKo9dilwgnRKgVOwrkpQRFY+QuH9jipouHFcVnLJUmfBUmcpZl4JuPzWjKJUmsk2sD9bqS7mVQoOaz0n1VY8+hjd6kXjXIuE0SLhHN+CBG32M9hqD+L/NEl0NcqJw04abA4mvwSIxCPUW+10qW48+hhdqvvfRZ3KCOKJOH1tvZhNZh4HR7h34Q5LsSWezj0HwKv7eBObBqDd7ypZbUGCj9/n+aDP4G7uJJFMcMBspfdFH1JuzkCX6uby6R7a/S6mOsaNe17dh0cfK08A8HD6Ea+vvqTn1CW88z4Wf30zbOHIV7y6zwiawdbngRJTVF1VA0BapjHVmIq5lUVBAkUo3Dw3yHJ8mdHQM847O2iwOQx7psmw+VwZcVjr82IVXDR3cycDZ/sZeDVIUJ8hcG2C6GoU93A3qXSq3KIRcPmNuHkVCCEwm8wMB0d4q71jbWONoYnbhBbnOFRrM7LONHeqY9yQ7J3IIK/JUkqezI7mnM0uhJhdCBn6dpq8o03WImF+6D8B8sZyK/7HX7SSreRUIJPJ2vzvGnVrIrGl2K3QleBQJWw5BNp97Tcw91cAaBlq2bueSjYKKZvSiGNC0IRkY3tF7aIE/gAUZ9xSdGe7owAAAABJRU5ErkJggg==">
-                                <span style="color:black;">
-                                    XLSX
-                                </span>
-                            </a>
-                        </span>
-                    </div>
-                </h4>
-                <div class="card-category" style="text-transform:lowercase !important;">Please use action icon edit/delete to update Entity Lookup Details</div>
+<head>
+    <style>
+
+        tfoot {
+            display: table-header-group;
+        }
+    </style>
+</head>
+<body>
+    <partial name="_PageTitle" />
+    <div class="card">
+        <div class="card-header card-header-primary bg-TelegramSingle" style="display:inline !important;">
+            <h4 class="card-title ">Entity Customer Details</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3" id="dvCRSAddEntity" style="border-right: 2px solid #ccc;">
+                    <h5 class="card-title">Manual Input</h5><br />
+                    <button class="btn btn-primary mr-2 btn-lg" id="btnAddEntityCust"><i class="fas fa-plus"></i> Add Entity Lookup Details</button>
+                </div>
+                <div class="col-md-9" id="dvCRSImportEntity">
+                    <h5 class="card-title">Bulk Import</h5><br />
+                    <a class="btn btn-primary mr-2 btn-lg" href="@Url.Action("DownloadCRSEntityCustomerTemplate", "EntityLookup")"><i class="fas fa-file-download"></i> Download Sample Entity Lookup Template file</a>
+                    <button class="btn btn-primary mr-2 btn-lg" id="btnUploadEnityCustDet" onclick="BulkUploadEntityCustDet()"><i class="fas fa-upload"></i> Bulk Upload Entity Lookup Details</button>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div style="width:80%; margin:0 auto;">
-                        <table id="EntityLookupGrid" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0" style="display:none;">
-                            <thead>
-                                <tr>
-                                    <th>Entity ID</th>
-                                    <th>Entity Name</th>
-                                    <th>Entity Type</th>
-                                    <th style="width:10%;">Action</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Entity ID</th>
-                                    <th>Entity Name</th>
-                                    <th>Entity Type</th>
-                                    <th>Action</th>
-                                </tr>
-                            </tfoot>
-                            <tbody></tbody>
-                        </table>
+        </div>
+    </div>
+    <partial name="_MessageDiv" />
+    <div class="row" id="bulkEntityUpload" style="display:none;">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <button type="button" class="close clsDv" data-dismiss="bscu" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="card-title">Upload Entity Lookup File</h5>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-3" style="padding-top:1%">
+                            <div class="checkbox checkbox-success checkbox-inline">
+                                <input type="checkbox" name="deleteExistRecord" id="deleteExistRecord" value="option1">
+                                <label for="deleteExistRecord">  Delete All Existing Entity Records? </label>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+
+                            <div id="dropContainer_SCV_AcctStsCode" class="custom-file">
+                                <span class="btn btn-primary btn-file btn-lg">
+                                    Upload Entity Lookup File<input type="file" name="files" id="file_upload_CRS_EntityDetails" accept=".xls,.xlsx" onchange="uploadFile()">
+                                </span>
+                                <span id="fileName"></span>
+                                <br>
+                                <br>
+                                <div class="mb-3 progress" id="fileUploadPgbar" style="display:none;">
+                                    <div class="progress-bar bg-success" role="progressbar"
+                                         id="progressBar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <br />
+                    <button id="btnUploadEntityDetails" class="btn btn-primary mr-2 btn-lg" data-url='@Url.Action("EntityDetailsFileUpload","EntityLookup")'
+                            onclick="uploadFiles_EntityDetails();">
+                        Upload
+                    </button>
+                    <button id="btnUploadCancel" class="btn btn-outline-primary btn-lg"
+                            onclick="clearUploadFileValue();">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary bg-TelegramSingle" style="display:inline !important;">
+                    <h4 class="card-title ">
+                        Enity Lookup Details
+                        <div class="" style="float:right;">
+                            <span class="col-md-12">
+                                <span style="font-size:small;">Export Data To : </span>
+                                <a id="EntityCustExport" class="ExlExport">
+                                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAACU0lEQVRIie2UT0jTYRjHP+9PjV3WyNZBaNGtH82ptdCDHQryluQKWXoPKRI7hYiR/YM6REcTwgpic1E4dZRBsHQe8lLBb8FPo0tdDOdiDHU4treD7dfm/ip08wvP4Xmf532+z/M+z/PCLspAlHM4cr3VbKpJNKYVeVQg7YBTSqa0u58fVEJQna04+h37lKo9dilwgnRKgVOwrkpQRFY+QuH9jipouHFcVnLJUmfBUmcpZl4JuPzWjKJUmsk2sD9bqS7mVQoOaz0n1VY8+hjd6kXjXIuE0SLhHN+CBG32M9hqD+L/NEl0NcqJw04abA4mvwSIxCPUW+10qW48+hhdqvvfRZ3KCOKJOH1tvZhNZh4HR7h34Q5LsSWezj0HwKv7eBObBqDd7ypZbUGCj9/n+aDP4G7uJJFMcMBspfdFH1JuzkCX6uby6R7a/S6mOsaNe17dh0cfK08A8HD6Ea+vvqTn1CW88z4Wf30zbOHIV7y6zwiawdbngRJTVF1VA0BapjHVmIq5lUVBAkUo3Dw3yHJ8mdHQM847O2iwOQx7psmw+VwZcVjr82IVXDR3cycDZ/sZeDVIUJ8hcG2C6GoU93A3qXSq3KIRcPmNuHkVCCEwm8wMB0d4q71jbWONoYnbhBbnOFRrM7LONHeqY9yQ7J3IIK/JUkqezI7mnM0uhJhdCBn6dpq8o03WImF+6D8B8sZyK/7HX7SSreRUIJPJ2vzvGnVrIrGl2K3QleBQJWw5BNp97Tcw91cAaBlq2bueSjYKKZvSiGNC0IRkY3tF7aIE/gAUZ9xSdGe7owAAAABJRU5ErkJggg==">
+                                    <span style="color:black;">
+                                        XLSX
+                                    </span>
+                                </a>
+                            </span>
+                        </div>
+                    </h4>
+                    <div class="card-category" style="text-transform:lowercase !important;">Please use action icon edit/delete to update Entity Lookup Details</div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div style="width:80%; margin:0 auto;">
+                            <table id="EntityLookupGrid" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Entity ID</th>
+                                        <th>Entity Name</th>
+                                        <th>Entity Type</th>
+                                        <th style="width:10%;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Entity ID</th>
+                                        <th>Entity Name</th>
+                                        <th>Entity Type</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<input id="btnEntityLookupDetGrid" value="load" type="hidden" data-url='@Url.Action("LoadEntityLookupDetails","EntityLookup")' />
+    <input id="btnEntityLookupDetGrid" value="load" type="hidden" data-url='@Url.Action("LoadEntityLookupDetails","EntityLookup")' />
+    <input id="btnEntityLoad" value="edit" type="hidden" data-url='@Url.Action("LoadEntityDetailsByID","EntityLookup")' />
+    <input id="btnEntitySave" value="save" type="hidden" data-url='@Url.Action("SaveEntityDetails","EntityLookup")' />
+    <input id="btnEntityDelete" value="delete" type="hidden" data-url='@Url.Action("DeleteEntityDetails","EntityLookup")' />
+    <input id="btnEntityDeleteAll" value="delete" type="hidden" data-url='@Url.Action("DeleteAllEntityDetails","EntityLookup")' />
 
-<style>
-    /*move tfoot to next to grid header*/
-    tfoot {
-        display: table-header-group;
-    }
-</style>
+    <div class="modal fade bd-example-modal-lg" id="modalentity1" data-backdrop="true" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
+        <div class="modal-dialog modal-lg" role="document" style="max-width:1000px">
+            <!-- /.modal-content -->
+            @Html.Partial("AddEntity", Model)
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</body>
+
 <script>
     $(document).ready(function () {
         $("#pageTitle").text("Entity Lookup Details");
         LoadEntityLookupGrid();
+
+        $('#btnAddEntityCust').click(function () {
+            LoadEntityData();
+        });
+
+        $('.clsDv').on("click", function () {
+            $(this).parent().parent().parent().parent().hide();
+        });
+      
     });
 
     function LoadEntityLookupGrid() {
@@ -83,6 +178,7 @@
                         pageLength: 10,
                         order: [],
                         columns: [
+                            { 'data': 'ID', "visible": false, },
                             { 'data': 'EntityID' },
                             { 'data': 'EntityName' },
                             { 'data': 'EntityType' },
@@ -91,8 +187,8 @@
                                 'sortable': false,
                                 'render': function json(data, type, full, meta) {
 
-                                    return "<i  class='fas fa-edit' style='cursor:pointer;'  ></i>"
-                                        + " " + "<i class='fas fa-trash-alt' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;'></i >";
+                                    return "<i  class='fas fa-edit' style='cursor:pointer;' onclick=LoadEntityData('" + full.ID + "');  ></i>"
+                                        + " " + "<i class='fas fa-trash-alt' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;' data-name= '" + full.EntityName+"' onclick=DeleteEntityDetailsData('" + full.ID + "');></i >";
                                 }
                             },
                         ]
@@ -123,6 +219,183 @@
                     spinner_Off();
                 }
             });
+    }
+
+    function LoadEntityData(ID) {
+        $.ajax(
+            {
+                type: 'GET',
+                data: { "id": ID },
+                url: $("#btnEntityLoad").data('url'),
+                success: function (result) {
+                    $("#modalentityContent").html(result);
+                    $('#modalentity1').modal('show');
+                }
+            });
+    
+    }
+
+    function SaveEntityData() {
+        $.ajax(
+            {
+                type: 'POST',
+                data: $("#frmEntityCustDet").serialize(),
+                url: $("#btnEntitySave").data('url'),
+                success: function (json) {
+                    if (json.success == true) {
+                        enableSucessDiv(json.message);
+                        LoadEntityLookupGrid();
+                        $('#modalentity1').modal('hide');
+                    }
+                    else {
+                        enableErrorDiv(json.message);
+                    }
+                }
+            });
+    }
+
+    function DeleteEntityDetailsData(ID) {
+        hideSuccessErrorDiv();
+        $("#bulkTranDetailsUpload").hide();
+        alertify.confirm('CRS Portal', 'Do you want to delete "' + $(this).attr('data-name') + '" - Entity?',
+            function () { DeleteEntityData(ID); }
+            , function () { });
+    }
+
+    function DeleteEntityData(ID) {
+        $.ajax(
+            {
+                type: 'POST',
+                data: { "id": ID },
+                url: $("#btnEntityDelete").data('url'),
+                success: function (json) {
+                    if (json.success == true) {
+                        enableSucessDiv(json.message);
+                        LoadEntityLookupGrid();
+                        $('#modalentity1').modal('hide');
+                    }
+                    else {
+                        enableErrorDiv(json.message);
+                    }
+                }
+            });
+    }
+
+    function clearSearch() {
+        var table = $("#EntityLookupGrid").DataTable();
+        table.search('').columns().search('').draw();
+
+        $(".search input[type='text']").val("");
+    }
+
+    function BulkUploadEntityCustDet() {
+        hideSuccessErrorDiv();
+        clearUploadFileValue();
+        $("#bulkEntityUpload").show();
+    }
+
+    function clearUploadFileValue() {
+        $("#file_upload_CRS_EntityDetails").val("");
+        hideSuccessErrorDiv();
+        $("#deleteExistRecord").prop("checked", false);
+    }
+
+    function uploadFile() {
+        var file = _("file_upload_CRS_EntityDetails").files[0];
+        var _fileName = file.name;
+        var extension = _fileName.substr((_fileName.lastIndexOf('.') + 1))
+        if (extension == 'xls' || extension == 'xlsx') {
+            var filesize = formatBytes(file.size, 4);
+            $("#fileName").html(file.name + " (" + filesize + ") ");
+            var formdata = new FormData();
+            formdata.append("file_upload_CRS_EntityDetails", file);
+            var ajax = new XMLHttpRequest();
+            ajax.upload.addEventListener("progress", progressHandler, false);
+            ajax.addEventListener("load", completeHandler, false);
+            ajax.addEventListener("error", errorHandler, false);
+            ajax.addEventListener("abort", abortHandler, false);
+            ajax.open("POST", "e");
+            ajax.send(formdata);
+        }
+    }
+
+    $("#file_upload_CRS_EntityDetails").change(function () {
+        var fileName = $(this).val().split("\\").pop();
+        var extension = fileName.substr((fileName.lastIndexOf('.') + 1))
+        if (extension == 'xls' || extension == 'xlsx') {
+            $(this).next('.custom-file-label').html(fileName);
+        }
+        else {
+            clearUploadFileValue();
+            alertify.alert('CRS Portal', "Please upload valid file format")
+        }
+    });
+
+    function uploadFiles_EntityDetails() {
+        if ($("#deleteExistRecord").prop('checked') == true) {
+            deleteAllEntityDetails();
+        }
+        else {
+            fileUpload_EntityDetails();
+        }
+    }
+
+    function deleteAllEntityDetails() {
+        $.ajax(
+            {
+                url: $("#btnEntityDeleteAll").data('url'),
+                type: "POST",
+                success: function (result) {
+                    if (result.success == true) {
+                        fileUpload_EntityDetails();
+                    }
+                    else {
+                        enableErrorDiv(result.message);
+                        return false;
+                    }
+                }
+            }
+        );
+    }
+    
+    function fileUpload_EntityDetails() {
+        var input = document.getElementById("file_upload_CRS_EntityDetails");
+        var files = input.files;
+        var formData = new FormData();
+
+        for (var i = 0; i != files.length; i++) {
+            formData.append("files", files[i]);
+        }
+        if (files.length == 0) {
+            enableErrorDiv("Please select the file");
+        }
+        else {
+            ajaxPost4EntityDetailsUpload(formData);
+        }
+    }
+
+    function ajaxPost4EntityDetailsUpload(formData) {
+        $.ajax(
+            {
+                url: $("#btnUploadEntityDetails").data('url'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (result) {
+                    if (result.success == true) {
+                        enableSucessDiv(result.message);
+                        LoadEntityLookupGrid();
+                        $("#bulkEntityUpload").hide();
+
+                    }
+                    else {
+                        enableErrorDiv(result.message);
+                        return false;
+                    }
+                }
+            }
+        );
     }
 </script>
 

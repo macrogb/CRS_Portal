@@ -1,0 +1,414 @@
+﻿@model CRS_Portal.Models.TransactionDetailsModel
+@{
+    ViewData["Title"] = "Transaction Details";
+}
+
+<partial name="_PageTitle" />
+
+<div id="AccountStatus">
+    <div class="card">
+        <div class="card-header card-header-primary bg-TelegramSingle" style="display:inline !important;">
+            <h4 class="card-title ">Transaction Details</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3" id="dvSCVABDType2" style="border-right: 2px solid #ccc;">
+                    <h5 class="card-title">Manual Input</h5><br />
+                    <button class="btn btn-primary mr-2 btn-lg" id="btnAddTranDetails"><i class="fas fa-plus"></i>  Add Transaction Details </button>
+                </div>
+                <div class="col-md-9" id="dvSCVCType2">
+                    <h5 class="card-title">Bulk Import</h5><br />
+                    <a class="btn btn-primary mr-2 btn-lg" href="@Url.Action("DownloadSCVAcctStsCodeTemplate", "AccountStatusCode")"><i class="fas fa-file-download"></i>  Download Transaction Details Template file</a>
+                    <button class="btn btn-primary mr-2 btn-lg" id="btnUploadAcctStsCodeDet" onclick="BulkUploadTranDetails()"><i class="fas fa-upload"></i>  Bulk Upload Transaction Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <partial name="_MessageDiv" />
+
+    <div class="row" id="bulkTranDetailsUpload" style="display:none;">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <button type="button" class="close clsDv" data-dismiss="bscu" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="card-title">Upload Transaction Details File</h5>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-3" style="padding-top:1%">
+                            <div class="checkbox checkbox-success checkbox-inline">
+                                <input type="checkbox" name="deleteExistRecord" id="deleteExistRecord" value="option1">
+                                <label for="deleteExistRecord">  Delete All Existing Transaction Details? </label>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+
+                            <div id="dropContainer_SCV_AcctStsCode" class="custom-file">
+                                <span class="btn btn-primary btn-file btn-lg">
+                                    Upload Transaction Details file<input type="file" name="files" id="file_upload_CRS_TranDetails" accept=".xls,.xlsx" onchange="uploadFile()">
+                                </span>
+                                <span id="fileName"></span>
+                                <br>
+                                <br>
+                                <div class="mb-3 progress" id="fileUploadPgbar" style="display:none;">
+                                    <div class="progress-bar bg-success" role="progressbar"
+                                         id="progressBar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <br />
+                    <button id="btnUploadTranDetails" class="btn btn-primary mr-2 btn-lg" data-url='@Url.Action("TranDetailsFileUpload","TransactionDetails")'
+                            onclick="uploadFiles_TranDetails();">
+                        Upload
+                    </button>
+                    <button id="btnUploadCancel" class="btn btn-outline-primary btn-lg"
+                            onclick="clearUploadFileValue();">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary bg-TelegramSingle" style="display:inline !important;">
+                    <h4 class="card-title ">
+                        Transaction Details
+                        <div class="" style="float:right;">
+                            <span class="col-md-12">
+                                <span style="font-size:small;">Export Data To : </span>
+                                <a id="AccStsExport" class="ExlExport">
+                                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAACU0lEQVRIie2UT0jTYRjHP+9PjV3WyNZBaNGtH82ptdCDHQryluQKWXoPKRI7hYiR/YM6REcTwgpic1E4dZRBsHQe8lLBb8FPo0tdDOdiDHU4treD7dfm/ip08wvP4Xmf532+z/M+z/PCLspAlHM4cr3VbKpJNKYVeVQg7YBTSqa0u58fVEJQna04+h37lKo9dilwgnRKgVOwrkpQRFY+QuH9jipouHFcVnLJUmfBUmcpZl4JuPzWjKJUmsk2sD9bqS7mVQoOaz0n1VY8+hjd6kXjXIuE0SLhHN+CBG32M9hqD+L/NEl0NcqJw04abA4mvwSIxCPUW+10qW48+hhdqvvfRZ3KCOKJOH1tvZhNZh4HR7h34Q5LsSWezj0HwKv7eBObBqDd7ypZbUGCj9/n+aDP4G7uJJFMcMBspfdFH1JuzkCX6uby6R7a/S6mOsaNe17dh0cfK08A8HD6Ea+vvqTn1CW88z4Wf30zbOHIV7y6zwiawdbngRJTVF1VA0BapjHVmIq5lUVBAkUo3Dw3yHJ8mdHQM847O2iwOQx7psmw+VwZcVjr82IVXDR3cycDZ/sZeDVIUJ8hcG2C6GoU93A3qXSq3KIRcPmNuHkVCCEwm8wMB0d4q71jbWONoYnbhBbnOFRrM7LONHeqY9yQ7J3IIK/JUkqezI7mnM0uhJhdCBn6dpq8o03WImF+6D8B8sZyK/7HX7SSreRUIJPJ2vzvGnVrIrGl2K3QleBQJWw5BNp97Tcw91cAaBlq2bueSjYKKZvSiGNC0IRkY3tF7aIE/gAUZ9xSdGe7owAAAABJRU5ErkJggg==">
+                                    <span style="color:black;">
+                                        XLSX
+                                    </span>
+                                </a>
+                            </span>
+                        </div>
+                    </h4>
+                    <div class="card-category" style="text-transform:lowercase !important;">Please use action icon edit/delete to update Transaction Details</div>
+                </div>
+                <div class="card-body" id="dvAcctStsCode">
+                    <div class="table-responsive">
+                        <div style="width:100%; margin:0 auto;">
+                            <table id="TranDetailsGrid" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th style="width:2%">ID</th>
+                                        <th style="width:14%">Account Branch</th>
+                                        <th style="width:14%">Account Number</th>
+                                        <th style="width:14%">SortCode</th>
+                                        <th style="width:14%">IBAN</th>
+                                        <th style="width:14%">Balance</th>
+                                        <th style="width:14%">Interest Amount</th>
+                                        <th style="width:14%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Account Branch</th>
+                                        <th>Account Number</th>
+                                        <th>SortCode</th>
+                                        <th>IBAN</th>
+                                        <th>Balance</th>
+                                        <th>Interest Amount</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input id="btnLoadTransactionDetailsGrid" value="Load" type="hidden" data-url='@Url.Action("LoadTransactionDetails","TransactionDetails")' />
+    <input id="btnTranDetailsDeleteAll" value="deleteAll" type="hidden" data-url='@Url.Action("DeleteAllTranDetails","TransactionDetails")' />
+    <input id="btnTranDetailsDelete" value="delete" type="hidden" data-url='@Url.Action("DeleteTranDetails","TransactionDetails")' />
+    <input id="btnTranDetailsEdit" value="edit" type="hidden" data-url='@Url.Action("LoadTranDetailsByID","TransactionDetails")' />
+    <input id="btnTranDetailsSave" value="save" type="hidden" data-url='@Url.Action("SaveTranDetails","TransactionDetails")' />
+
+    <div class="modal fade bd-example-modal-lg" id="modalTranDetails" data-backdrop="true" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
+        <div class="modal-dialog modal-lg" role="document" style="max-width:1000px">
+            @Html.Partial("AddTransaction", Model)
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+</div>
+<style>
+    /*move tfoot to next to grid header*/
+    tfoot {
+        display: table-header-group;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $("#pageTitle").text("Transaction Details");
+        LoadTranDetailsGrid();
+
+        $('#btnAddTranDetails').click(function () {
+            LoadTransactionData();
+        });
+    });
+
+    function LoadTranDetailsGrid() {
+        spinner_On();
+        $.ajax(
+            {
+                "url": $("#btnLoadTransactionDetailsGrid").data('url'),
+                "type": "POST",
+                "dataType": "json",
+                success: function (data) {
+                    console.log(data);
+                    $('#TranDetailsGrid').show();
+                    var datatableInstance = $('#TranDetailsGrid').DataTable({
+                        data: data,
+                        paging: true,
+                        bDestroy: true,
+                        processing: true,
+                        pageLength: 10,
+                        order: [[1, "asc"], [2, "asc"]],
+                        columns: [
+                            { 'data': 'ID', "visible": false, },
+                            { 'data': 'ActBranch' },
+                            { 'data': 'ActNo' },
+                            { 'data': 'SortCode' },
+                            { 'data': 'IBAN' },
+                            { 'data': 'ActBal'},
+                            { 'data': 'IntAmt'},
+                            {
+                                'data': '',
+                                'sortable': false,
+                                'render': function json(data, type, full, meta) {
+                                    return "<i  class='fas fa-edit edit' style='cursor:pointer;'  onclick=LoadTransactionData('" + full.ID + "');></i>"
+                                            + " " + "<i class='fas fa-trash-alt delete' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;'  onclick=DeleteTranDetailsData('" + full.ID + "','" + full.ActNo + "'); ></i >";
+                                }
+                            },
+                        ]
+                    });
+                    console.log("Table done");
+
+                    // To decide it's textbox or Select Filter
+                    $("#TranDetailsGrid tfoot th").each(function (i) {
+                        var title = $('#TranDetailsGrid thead th').eq($(this).index()).text();
+                        if (title == "Account Branch" || title == "Account Number" || title == "SortCode" || title == "IBAN" || title == "Balance" || title == "Interest Amount") {
+                            $(this).html('<div class="search"><input type="text" class="form-control" placeholder="Search ' + title + '"></div>');
+                        }
+                        else {
+                            $(this).html('<input type="button" class="btn btn-primary" value="Clear" onclick="clearSearch()"/>');
+                        }
+                    });
+
+                    // Filter : Textbox keyup Action...
+                    datatableInstance.columns().every(function () {
+                        var dataTableColumn = this;
+                        $(this.footer()).find('input').on('keyup change', function () {
+                            //console.log(this.value);
+                            dataTableColumn.search(this.value).draw();
+                        });
+                    });
+                    spinner_Off();
+                },
+                error: function (json) {
+                    spinner_Off();
+                }
+            });
+    }
+
+    function clearSearch() {
+        var table = $("#TranDetailsGrid").DataTable();
+        table.search('').columns().search('').draw();
+
+        $(".search input[type='text']").val("");
+    }
+
+    function BulkUploadTranDetails() {
+        hideSuccessErrorDiv();
+        clearUploadFileValue();
+        $("#bulkTranDetailsUpload").show();
+    }
+
+    function clearUploadFileValue() {
+        $("#file_upload_CRS_TranDetails").val("");
+        hideSuccessErrorDiv();
+        ResetFileUplod();
+        $("#deleteExistRecord").prop("checked", false);
+    }
+
+    
+
+    function uploadFiles_TranDetails() {
+        if ($("#deleteExistRecord").prop('checked') == true) {
+            deleteAllTranDetails();
+        }
+        else {
+            fileUpload_TranDetails();
+        }
+    }
+
+    function deleteAllTranDetails() {
+        $.ajax(
+            {
+                url: $("#btnTranDetailsDeleteAll").data('url'),
+                type: "POST",
+                success: function (result) {
+                    if (result.success == true) {
+                        fileUpload_TranDetails();
+                    }
+                    else {
+                        enableErrorDiv(result.message);
+                        return false;
+                    }
+                }
+            }
+        );
+    }
+
+    function fileUpload_TranDetails() {
+        var input = document.getElementById("file_upload_CRS_TranDetails");
+        var files = input.files;
+        var formData = new FormData();
+
+        for (var i = 0; i != files.length; i++) {
+            formData.append("files", files[i]);
+        }
+        if (files.length == 0) {
+            enableErrorDiv("Please select the file");
+        }
+        else {
+            ajaxPost4TranDetailsUpload(formData);
+        }
+    }
+
+    function ajaxPost4TranDetailsUpload(formData) {
+        $.ajax(
+            {
+                url: $("#btnUploadTranDetails").data('url'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (result) {
+                    if (result.success == true) {
+                        enableSucessDiv(result.message);
+                        LoadTranDetailsGrid();
+                        $("#bulkTranDetailsUpload").hide();
+
+                    }
+                    else {
+                        enableErrorDiv(result.message);
+                        return false;
+                    }
+                }
+            }
+        );
+    }
+
+    function uploadFile() {
+        var file = _("file_upload_CRS_TranDetails").files[0];
+        var _fileName = file.name;
+        var extension = _fileName.substr((_fileName.lastIndexOf('.') + 1))
+        if (extension == 'xls' || extension == 'xlsx') {
+            var filesize = formatBytes(file.size, 4);
+            $("#fileName").html(file.name + " (" + filesize + ") ");
+            var formdata = new FormData();
+            formdata.append("file_upload_CRS_TranDetails", file);
+            var ajax = new XMLHttpRequest();
+            ajax.upload.addEventListener("progress", progressHandler, false);
+            ajax.addEventListener("load", completeHandler, false);
+            ajax.addEventListener("error", errorHandler, false);
+            ajax.addEventListener("abort", abortHandler, false);
+            ajax.open("POST", "e");
+            ajax.send(formdata);
+        }
+    }
+
+    $("#file_upload_CRS_TranDetails").change(function () {
+        var fileName = $(this).val().split("\\").pop();
+        var extension = fileName.substr((fileName.lastIndexOf('.') + 1))
+        if (extension == 'xls' || extension == 'xlsx') {
+            $(this).next('.custom-file-label').html(fileName);
+        }
+        else {
+            clearUploadFileValue();
+            alertify.alert('SCV Portal', "Please upload valid file format")
+        }
+    });
+    $('.clsDv').on("click", function () {
+        $(this).parent().parent().parent().parent().hide();
+    });
+
+    function DeleteTranDetailsData(id, acctno) {
+        hideSuccessErrorDiv();
+        $("#bulkTranDetailsUpload").hide();
+        alertify.confirm('CRS Portal', 'Do you want to delete "' + acctno + '" Transaction Details?',
+            function () { DeleteTranDetail(id); }
+            , function () { });
+    }
+
+    function DeleteTranDetail(id) {
+        $.ajax(
+            {
+                type: 'POST',
+                data: { "id": id },
+                url: $("#btnTranDetailsDelete").data('url'),
+                success: function (json) {
+                    if (json.success == true) {
+                        LoadTranDetailsGrid();
+                        enableSucessDiv(json.message);
+                    }
+                    else {
+                        enableErrorDiv(json.message);
+                    }
+                }
+            });
+    }
+
+    function LoadTransactionData(ID) {
+        $.ajax(
+            {
+                type: 'GET',
+                data: { "id": ID },
+                url: $("#btnTranDetailsEdit").data('url'),
+                success: function (result) {
+                    $("#modalTransactionContent").html(result);
+                    $('#modalTranDetails').modal('show');
+                }
+            });
+
+    }
+
+    function SaveTranData() {
+        console.log($("#frmTranDetails").serialize());
+        $.ajax(
+            {
+                type: 'POST',
+                data: $("#frmTranDetails").serialize(),
+                url: $("#btnTranDetailsSave").data('url'),
+                success: function (json) {
+                    if (json.success == true) {
+                        enableSucessDiv(json.message);
+                        LoadTranDetailsGrid();
+                        $('#modalTranDetails').modal('hide');
+                    }
+                    else {
+                        enableErrorDiv(json.message);
+                    }
+                }
+            });
+    }
+</script>

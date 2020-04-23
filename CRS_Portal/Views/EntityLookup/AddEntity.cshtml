@@ -1,0 +1,510 @@
+﻿@model CRS_Portal.Models.EntityLookupModel
+@*<head>
+    <script src="js/bootstrap-select.js"></script>
+    <link rel="stylesheet" href="css/bootstrap-select.css">
+</head>*@
+<div class="modal-content" id="modalentityContent">
+    <div class="modal-header">
+        <h4 id="tppname">Add / Edit Entity Lookup details</h4>
+    </div>
+    <div class="modal-body">
+        <form id="frmEntityCustDet">
+            <input name="entity.ID" id="enityID" value="@Model.entity.ID" class="form-control" type="hidden" />
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-horizontal form-fields cm-sec">
+                        <div class="row form-group">
+                            <label class="col-sm-4 control-label">
+                                Entity Customer ID<span class="req"></span>
+                            </label>
+                            <div class="col-sm-8 z-pad">
+                                <input name="entity.CUSTID" id="entityCustID" value="@Model.entity.CustID" class="form-control" type="text" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-4 control-label">
+                                Entity Name
+                            </label>
+                            <div class="col-sm-8 z-pad">
+                                <input name="entity.ENTITYNAME" id="entityName" value="@Model.entity.EntityName" class="form-control" type="text" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputtext5" class="col-sm-4 control-label">
+                                Building Identifier <span class="req"></span>
+                            </label>
+                            <div class="col-sm-8 z-pad">
+                                <input name="entity.BuildingIdentifier" id="BuildingIdentifier" value="@Model.entity.BuildingIdentifier" class="form-control" type="text" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputtext6" class="col-sm-4 control-label">
+                                Street Name
+                            </label>
+                            <div class="col-sm-8 z-pad">
+                                <input class="form-control" name="entity.StreetName" id="StreetName" value="@Model.entity.StreetName" type="text" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputtext7" class="col-sm-4 control-label">
+                                District Name <span class="req"></span>
+                            </label>
+                            <div class="col-sm-8 z-pad">
+                                <input class="form-control" name="entity.DistrictName" id="DistrictName" value="@Model.entity.DistrictName" type="text" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-horizontal form-fields cm-sec">
+                        <div class="row form-group">
+                            <label for="inputtext8" class="col-sm-4 control-label">
+                                City
+                            </label>
+                            <div class="col-sm-8 z-pad">
+                                <input class="form-control" name="entity.City" id="City" value="@Model.entity.City" type="text" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputtext11" class="col-sm-4 control-label">
+                                Postcode
+                            </label>
+                            <div class="col-sm-8 z-pad">
+                                <input class="form-control" name="entity.PostCode" id="PostCode" value="@Model.entity.PostCode" type="text" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputtext12" class="col-sm-4 control-label">
+                                Country Code
+                            </label>
+                            <div class="col-sm-8 z-pad">
+                                @{
+                                    string title = "- [Choose country ] -";
+                                    <div class="col-xs-4 ">
+                                        <select id="CountryCode" name="entity.CountryCode" class="form-control selectOption" data-title="@title">
+                                            @{
+                                                int j = 0;
+
+                                                <option value="0">@title</option>
+                                                foreach (var item in Model.lstcountry)
+                                                {
+                                                    j++;
+                                                    if (Model.entity.CountryCode != null && Model.entity.CountryCode == item.COUNTRYCD)
+                                                    {
+                                                        <option selected value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                                    }
+                                                }
+                                            }
+
+                                        </select>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputtext14" class="col-sm-4 control-label">
+                                Email ID
+                            </label>
+                            <div class="col-sm-8 z-pad">
+                                <input class="form-control" name="entity.EmailID" id="EmailID" value="@Model.entity.EmailID" type="text" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-horizontal form-fields cm-sec">
+                        <div class="row form-group">
+                            <label for="inputtext8" class="col-sm-2 control-label">
+                                Entity Type<span class="req"></span>
+                            </label>
+                            <div class="col-sm-6 z-pad" style="">
+                                @*@Html.DropDownListFor(M => M.lstEntityType,
+                             new SelectList(Model.lstEntityType, "EntityType", "EntityType",Model.entity.AccHoldType),
+                            "- [Choose Entity Type ] -",htmlAttributes:new { @class="form-control"})*@
+                                @{
+                                    <div class="col-xs-4 ">
+                                        <select id="EntityType" name="entity.AccHoldType" class="form-control selectOption" data-title="- [Choose Entity Type ] -">
+                                            @{
+                                                int l = 0;
+
+                                                <option value="0">- [Choose Entity Type ] -</option>
+                                                foreach (var item in Model.lstEntityType)
+                                                {
+                                                    l++;
+                                                    if (Model.entity.AccHoldType != null && Model.entity.AccHoldType.ToLower() == item.EntityType.ToLower())
+                                                    {
+                                                        <option selected value="@item.EntityType">@item.EntityType</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.EntityType">@item.EntityType</option>
+                                                    }
+                                                }
+                                            }
+
+                                        </select>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="sep-line">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-3" style="font-size: 12px; text-align: left; padding-left: 21px;">
+                </div>
+                <div class="col-sm-3" style="font-size: 13px;vertical-align:middle">
+                    <label class="">Primary Country Tax Details<span style="color:red">*</span></label>
+                </div>
+                <div class="col-sm-3" style="font-size: 13px;vertical-align:middle">
+                    <label class="control-label">Secondary Country Tax Details</label>
+                </div>
+                <div class="col-sm-3" style="font-size: 13px;vertical-align:middle">
+                    <label class="control-label">Third Country Tax Details</label>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                @*<div class="form-horizontal form-fields cm-sec">*@
+                <div class="col-sm-3">
+                    <div class="form-group" style="margin-left:3px">
+                        <label for="inputtext3" class="control-label">
+                            Residential country code
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @{
+                            <div class="col-xs-4 ">
+                                <select id="ResCountryCode" name="entity.ResCountryCode" class="form-control selectOption" data-title="- [Choose country ] -">
+                                    @{
+                                        int i = 0;
+
+                                        <option value="0">- [Choose country ] -</option>
+                                        foreach (var item in Model.lstcountry)
+                                        {
+                                            i++;
+                                            if (Model.entity.ResCountryCode != null && Model.entity.ResCountryCode == item.COUNTRYCD)
+                                            {
+                                                <option selected value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @{
+                            <select id="secondResCountryCode" name="entity.secondResCountryCode" class="form-control selectOption" data-title="- [Choose country ] -">
+                                @{
+                                    int k = 0;
+
+                                    <option value="0">- [Choose country ] -</option>
+                                    foreach (var item in Model.lstcountry)
+                                    {
+                                        k++;
+                                        if (Model.entity.secondResCountryCode != null && Model.entity.secondResCountryCode == item.COUNTRYCD)
+                                        {
+                                            <option selected value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                        }
+                                    }
+                                }
+
+                            </select>
+                        }
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @{
+                            <select id="ThirdResCountryCode" name="entity.ThirdResCountryCode" class="form-control selectOption" data-title="- [Choose country ] -">
+                                @{
+                                    int a = 0;
+
+                                    <option value="0">- [Choose country ] -</option>
+                                    foreach (var item in Model.lstcountry)
+                                    {
+                                        a++;
+                                        if (Model.entity.ThirdResCountryCode != null && Model.entity.ThirdResCountryCode == item.COUNTRYCD)
+                                        {
+                                            <option selected value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                        }
+                                    }
+                                }
+
+                            </select>
+                        }
+                    </div>
+                </div>
+                @*</div>*@
+            </div>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group" style="margin-left:3px">
+                        <label for="inputtex28" class="control-label">
+                            Organisation Identification Number Type
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @{
+                            <select id="PCountryIdentityType" name="entity.PCountryIdentityType" class="form-control selectOption" data-title="- [Choose Entity Type ] -">
+                                @{
+                                    int x = 0;
+
+                                    <option value="0">- [Choose ID Type ] -</option>
+                                    foreach (var item in Model.lstIdentityType)
+                                    {
+                                        x++;
+                                        if (Model.entity.PCountryIdentityType != null && Model.entity.PCountryIdentityType.ToUpper() == item.IdentityType.ToUpper())
+                                        {
+                                            <option selected value="@item.IdentityType">@item.IdentityType</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.IdentityType">@item.IdentityType</option>
+                                        }
+                                    }
+                                }
+
+                            </select>
+                        }
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @{
+                            <select id="SecondCountryIdentityType" name="entity.SecondCountryIdentityType" class="form-control selectOption" data-title="- [Choose Entity Type ] -">
+                                @{
+                                    int y = 0;
+
+                                    <option value="0">- [Choose country ] -</option>
+                                    foreach (var item in Model.lstIdentityType)
+                                    {
+                                        y++;
+                                        if (Model.entity.SecondCountryIdentityType != null && Model.entity.SecondCountryIdentityType.ToUpper() == item.IdentityType.ToUpper())
+                                        {
+                                            <option selected value="@item.IdentityType">@item.IdentityType</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.IdentityType">@item.IdentityType</option>
+                                        }
+                                    }
+                                }
+
+                            </select>
+                        }
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @{
+                            <select id="ThirdCountryIdentityType" name="entity.ThirdCountryIdentityType" class="form-control selectOption" data-title="- [Choose Entity Type ] -">
+                                @{
+                                    int z = 0;
+
+                                    <option value="0">- [Choose country ] -</option>
+                                    foreach (var item in Model.lstIdentityType)
+                                    {
+                                        z++;
+                                        if (Model.entity.ThirdCountryIdentityType != null && Model.entity.ThirdCountryIdentityType.ToUpper() == item.IdentityType.ToUpper())
+                                        {
+                                            <option selected value="@item.IdentityType">@item.IdentityType</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.IdentityType">@item.IdentityType</option>
+                                        }
+                                    }
+                                }
+
+                            </select>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group" style="margin-left:3px">
+                        <label for="inputtex29" class="control-label">
+                            Organisation Identification Number
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control" name="entity.PCountryIdentityNo" id="PCountryIdentityNo" value="@Model.entity.PCountryIdentityNo" type="text" />
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control" name="entity.SecondCountryIdentityNo" id="SecondCountryIdentityNo" value="@Model.entity.SecondCountryIdentityNo" type="text" />
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control" name="entity.ThirdCountryIdentityNo" id="ThirdCountryIdentityNo" value="@Model.entity.ThirdCountryIdentityNo" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group" style="margin-left:3px">
+                        <label for="inputtex29" class="control-label">
+                            Organisation Identification Number Issued Country Code
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @{
+                            <select id="PIdentityIssuedBy" name="entity.PIdentityIssuedBy" class="form-control selectOption" data-title="- [Choose country ] -">
+                                @{
+                                    int p = 0;
+
+                                    <option value="0">- [Choose country ] -</option>
+                                    foreach (var item in Model.lstcountry)
+                                    {
+                                        p++;
+                                        if (Model.entity.PIdentityIssuedBy != null && Model.entity.PIdentityIssuedBy == item.COUNTRYCD)
+                                        {
+                                            <option selected value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                        }
+                                    }
+                                }
+
+                            </select>
+                        }
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @{
+                            <select id="SecondIdentityIssuedBy" name="entity.SecondIdentityIssuedBy" class="form-control selectOption" data-title="- [Choose country ] -">
+                                @{
+                                    int n = 0;
+
+                                    <option value="0">- [Choose country ] -</option>
+                                    foreach (var item in Model.lstcountry)
+                                    {
+                                        n++;
+                                        if (Model.entity.SecondIdentityIssuedBy != null && Model.entity.SecondIdentityIssuedBy == item.COUNTRYCD)
+                                        {
+                                            <option selected value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                        }
+                                    }
+                                }
+
+                            </select>
+                        }
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @{
+                            <select id="ThirdIdentityIssuedBy" name="entity.ThirdIdentityIssuedBy" class="form-control selectOption" data-title="- [Choose country ] -">
+                                @{
+                                    int m = 0;
+
+                                    <option value="0">- [Choose country ] -</option>
+                                    foreach (var item in Model.lstcountry)
+                                    {
+                                        m++;
+                                        if (Model.entity.ThirdIdentityIssuedBy != null && Model.entity.ThirdIdentityIssuedBy == item.COUNTRYCD)
+                                        {
+                                            <option selected value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.COUNTRYCD">@item.COUNTRYCD - @item.COUNTRY</option>
+                                        }
+                                    }
+                                }
+
+                            </select>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="sep-line">
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+       
+    </div>
+    <div class="modal-footer">
+        <div class="col-md-5"></div>
+        <button type="button" id="save" class="btn btn-primary mr-2 btn-lg">Save</button>
+        <button type="button" id="cancel" class="btn btn-outline-primary btn-lg" data-dismiss="modal">Cancel</button>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        // Enable Live Search.
+        //$('.selectOption').attr('data-live-search', true);
+
+        //$('.selectOption').selectpicker(
+        //    {
+        //        width: '100%',
+        //        title: $(this).data('title'),
+        //        style: 'btn-info',
+        //        size: 6
+        //    });
+       
+        $('#save').click(function () {
+            SaveEntityData();
+        });
+    });
+
+   
+</script>
