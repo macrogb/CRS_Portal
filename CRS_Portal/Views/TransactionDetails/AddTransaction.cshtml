@@ -1,8 +1,9 @@
 ﻿@model CRS_Portal.Models.TransactionDetailsModel
 <div class="modal-content" id="modalTransactionContent">
     <div class="modal-content">
-        <div class="modal-header">
-            <h4 id="tppname">Add / Edit Transaction details</h4>
+        <div class="modal-header card-header card-header-primary bg-TelegramSingle">
+            <h4 class="modal-title card-title" id="tppname" style="color:white;">Add / Edit Transaction details</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         </div>
         <div class="modal-body">
             <form id="frmTranDetails">
@@ -142,6 +143,10 @@
                                 </label>
                                 <div class="col-sm-8 z-pad">
                                     @*<input  name="Tran.ActClosed" id="TranActClosed" value="@Model.TranDetails.ActClsInd" class="form-control" type="text" />*@
+                                    @if(string.IsNullOrEmpty(Model.TranDetails.ActClsInd))
+                                    {
+                                        Model.TranDetails.ActClsInd = "0";
+                                    }
                                     <span>Yes @Html.RadioButtonFor(Model => Model.TranDetails.ActClsInd, "1")</span>
                                     <span class="col-sm-6">No @Html.RadioButtonFor(Model => Model.TranDetails.ActClsInd, "0", new { @checked = true })</span>
 
@@ -169,6 +174,10 @@
                                 </label>
                                 <div class="col-sm-8 z-pad">
                                     @*<input name="Tran.Undocumented" id="TranUndocumented" value="@Model.TranDetails.UndocumentedActInd" class="form-control" type="text" />*@
+                                    @if (string.IsNullOrEmpty(Model.TranDetails.UndocumentedActInd))
+                                    {
+                                        Model.TranDetails.UndocumentedActInd = "0";
+                                    }
                                     <span>Yes @Html.RadioButtonFor(Model => Model.TranDetails.UndocumentedActInd, "1")</span>
                                     <span class="col-sm-6">No @Html.RadioButtonFor(Model => Model.TranDetails.UndocumentedActInd, "0", new { @checked = true })</span>
                                 </div>
@@ -179,6 +188,10 @@
                                 </label>
                                 <div class="col-sm-8 z-pad">
                                     @*<input name="Tran.Dormant" id="TranDormant" value="@Model.TranDetails.DorActInd" class="form-control" type="text" />*@
+                                    @if (string.IsNullOrEmpty(Model.TranDetails.DorActInd))
+                                    {
+                                        Model.TranDetails.DorActInd = "0";
+                                    }
                                     <span>Yes @Html.RadioButtonFor(Model => Model.TranDetails.DorActInd, "1")</span>
                                     <span class="col-sm-6">No @Html.RadioButtonFor(Model => Model.TranDetails.DorActInd, "0", new { @checked = true })</span>
                                 </div>
@@ -209,6 +222,84 @@
                         </div>
                     </div>
                 </div>
+                <hr />
+                <h4 id="tppname" class= "card-header card-header-primary bg-TelegramSingle" style="color:white;">Joint Customer Details</h4>
+                <br />
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-horizontal form-fields cm-sec">
+                            <div class="row form-group">
+                                <label for="inputtext3" class="col-sm-4 control-label">
+                                    Joint CustomerID - 1
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActBranch" id="TranActBranch" value="@Model.TranDetails.J1CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext3" class="col-sm-4 control-label">
+                                    Joint CustomerID - 2
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActBranch" id="TranActBranch" value="@Model.TranDetails.J2CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext3" class="col-sm-4 control-label">
+                                    Joint CustomerID - 3
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActBranch" id="TranActBranch" value="@Model.TranDetails.J3CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext3" class="col-sm-4 control-label">
+                                    Joint CustomerID - 4
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActBranch" id="TranActBranch" value="@Model.TranDetails.J4CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-horizontal form-fields cm-sec">
+                            <div class="row form-group">
+                                <label for="inputtext3" class="col-sm-4 control-label">
+                                    Joint CustomerID - 5
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActBranch" id="TranActBranch" value="@Model.TranDetails.J5CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext3" class="col-sm-4 control-label">
+                                    Joint CustomerID - 6
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActBranch" id="TranActBranch" value="@Model.TranDetails.J6CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext3" class="col-sm-4 control-label">
+                                    Joint CustomerID - 7
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActBranch" id="TranActBranch" value="@Model.TranDetails.J7CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext3" class="col-sm-4 control-label">
+                                    Joint CustomerID - 8
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.ActBranch" id="TranActBranch" value="@Model.TranDetails.J8CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </form>
         </div>
         <div class="modal-footer">
@@ -223,6 +314,6 @@
         $('#save').click(function () {
             SaveTranData();
         });
-
+        
     });
 </script>

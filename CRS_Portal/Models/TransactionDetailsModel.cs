@@ -10,7 +10,6 @@ namespace CRS_Portal.Models
         public TransactionDetails TranDetails { get; set; }
         public List<Currency> lstCurrency { get; set; }
         public List<PaymentCodeDetail> lstPaymentCode { get; set; }
-        public List<IdentityDto> lstIdentityType { get; set; }
 
         public TransactionDetailsModel()
         {
