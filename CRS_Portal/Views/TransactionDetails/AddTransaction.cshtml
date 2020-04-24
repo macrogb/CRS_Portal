@@ -1,8 +1,9 @@
 ﻿@model CRS_Portal.Models.TransactionDetailsModel
 <div class="modal-content" id="modalTransactionContent">
     <div class="modal-content">
-        <div class="modal-header">
-            <h4 id="tppname">Add / Edit Transaction details</h4>
+        <div class="modal-header card-header card-header-primary bg-TelegramSingle">
+            <h4 class="modal-title card-title" id="tppname" style="color:white;">Add / Edit Transaction details</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         </div>
         <div class="modal-body">
             <form id="frmTranDetails">
@@ -11,7 +12,7 @@
                     <div class="col-sm-6">
                         <div class="form-horizontal form-fields cm-sec">
                             <div class="row form-group">
-                                <label for="inputtext3" class="col-sm-4 control-label">
+                                <label for="TranActBranch" class="col-sm-4 control-label">
                                     Account Branch<span class="req"></span>
                                 </label>
                                 <div class="col-sm-8 z-pad">
@@ -19,7 +20,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="inputtext4" class="col-sm-4 control-label">
+                                <label for="TranActNo" class="col-sm-4 control-label">
                                     Account Number
                                 </label>
                                 <div class="col-sm-8 z-pad">
@@ -27,7 +28,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="inputtext5" class="col-sm-4 control-label">
+                                <label for="TranSortCode" class="col-sm-4 control-label">
                                     SortCode <span class="req"></span>
                                 </label>
                                 <div class="col-sm-8 z-pad">
@@ -35,7 +36,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="inputtext6" class="col-sm-4 control-label">
+                                <label for="TranIBAN" class="col-sm-4 control-label">
                                     IBAN
                                 </label>
                                 <div class="col-sm-8 z-pad">
@@ -43,7 +44,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="inputtext7" class="col-sm-4 control-label">
+                                <label for="TranCurCode" class="col-sm-4 control-label">
                                     Currency Code <span class="req"></span>
                                 </label>
                                 <div class="col-sm-8 z-pad">
@@ -76,7 +77,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="inputtext7" class="col-sm-4 control-label">
+                                <label for="TranBalance" class="col-sm-4 control-label">
                                     Account Balance <span class="req"></span>
                                 </label>
                                 <div class="col-sm-8 z-pad">
@@ -84,7 +85,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="inputtext7" class="col-sm-4 control-label">
+                                <label for="TranIntAmt" class="col-sm-4 control-label">
                                     Interest Amount <span class="req"></span>
                                 </label>
                                 <div class="col-sm-8 z-pad">
@@ -92,7 +93,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="inputtext7" class="col-sm-4 control-label">
+                                <label for="TranpcustID" class="col-sm-4 control-label">
                                     Primary CustomerID <span class="req"></span>
                                 </label>
                                 <div class="col-sm-8 z-pad">
@@ -104,7 +105,7 @@
                     <div class="col-sm-6">
                         <div class="form-horizontal form-fields cm-sec">
                             <div class="row form-group">
-                                <label for="inputtext8" class="col-sm-4 control-label">
+                                <label for="TranPaymentCode" class="col-sm-4 control-label">
                                     Payment Code
                                 </label>
                                 <div class="col-sm-8 z-pad">
@@ -142,25 +143,29 @@
                                 </label>
                                 <div class="col-sm-8 z-pad">
                                     @*<input  name="Tran.ActClosed" id="TranActClosed" value="@Model.TranDetails.ActClsInd" class="form-control" type="text" />*@
+                                    @if (string.IsNullOrEmpty(Model.TranDetails.ActClsInd))
+                                    {
+                                        Model.TranDetails.ActClsInd = "0";
+                                    }
                                     <span>Yes @Html.RadioButtonFor(Model => Model.TranDetails.ActClsInd, "1")</span>
                                     <span class="col-sm-6">No @Html.RadioButtonFor(Model => Model.TranDetails.ActClsInd, "0", new { @checked = true })</span>
 
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="inputtext11" class="col-sm-4 control-label">
+                                <label for="TranClosedDate" class="col-sm-4 control-label">
                                     Account Closed Date
                                 </label>
                                 <div class="col-sm-8 z-pad">
-                                    <input name="TranDetails.ActClsDt" id="TranClosedDate" value="@Model.TranDetails.ActClsDt" class="form-control datetimepicker" data-date-end-date="0d" type="text" />
+                                    <input type="text" autocomplete="off" readonly name="TranDetails.ActClsDt" class="form-control datetimepicker" placeholder="Account Close Date" id="TranClosedDate" value="@Model.TranDetails.ActClsDt" />
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="inputtext12" class="col-sm-4 control-label">
+                                <label for="TranOpenDate" class="col-sm-4 control-label">
                                     Account Open Date
                                 </label>
                                 <div class="col-sm-8 z-pad">
-                                    <input name="TranDetails.ActOpenDt" id="TranOpenDate" value="@Model.TranDetails.ActOpenDt" class="form-control datetimepicker" data-date-end-date="0d" type="text" />
+                                    <input type="text" autocomplete="off" readonly name="TranDetails.ActOpenDt" class="form-control datetimepicker" placeholder="Account Open Date" id="TranOpenDate" value="@Model.TranDetails.ActOpenDt"/>
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -169,6 +174,10 @@
                                 </label>
                                 <div class="col-sm-8 z-pad">
                                     @*<input name="Tran.Undocumented" id="TranUndocumented" value="@Model.TranDetails.UndocumentedActInd" class="form-control" type="text" />*@
+                                    @if (string.IsNullOrEmpty(Model.TranDetails.UndocumentedActInd))
+                                    {
+                                        Model.TranDetails.UndocumentedActInd = "0";
+                                    }
                                     <span>Yes @Html.RadioButtonFor(Model => Model.TranDetails.UndocumentedActInd, "1")</span>
                                     <span class="col-sm-6">No @Html.RadioButtonFor(Model => Model.TranDetails.UndocumentedActInd, "0", new { @checked = true })</span>
                                 </div>
@@ -179,12 +188,16 @@
                                 </label>
                                 <div class="col-sm-8 z-pad">
                                     @*<input name="Tran.Dormant" id="TranDormant" value="@Model.TranDetails.DorActInd" class="form-control" type="text" />*@
+                                    @if (string.IsNullOrEmpty(Model.TranDetails.DorActInd))
+                                    {
+                                        Model.TranDetails.DorActInd = "0";
+                                    }
                                     <span>Yes @Html.RadioButtonFor(Model => Model.TranDetails.DorActInd, "1")</span>
                                     <span class="col-sm-6">No @Html.RadioButtonFor(Model => Model.TranDetails.DorActInd, "0", new { @checked = true })</span>
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="inputtext14" class="col-sm-4 control-label">
+                                <label for="TranCusType" class="col-sm-4 control-label">
                                     Customer Type
                                 </label>
                                 <div class="col-sm-8 z-pad">
@@ -192,7 +205,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="inputtext14" class="col-sm-4 control-label">
+                                <label for="TranActType" class="col-sm-4 control-label">
                                     Account Type
                                 </label>
                                 <div class="col-sm-8 z-pad">
@@ -209,6 +222,84 @@
                         </div>
                     </div>
                 </div>
+
+                <h4 id="tppname" class= "card-header card-header-primary bg-TelegramSingle" style="color:white;">Joint Customer Details</h4>
+                <br />
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-horizontal form-fields cm-sec">
+                            <div class="row form-group">
+                                <label for="TranJ1CUSTID" class="col-sm-4 control-label">
+                                    Joint CustomerID - 1
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.J1CUSTID" id="TranJ1CUSTID" value="@Model.TranDetails.J1CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="TranJ2CUSTID" class="col-sm-4 control-label">
+                                    Joint CustomerID - 2
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.J2CUSTID" id="TranJ2CUSTID" value="@Model.TranDetails.J2CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="TranJ3CUSTID" class="col-sm-4 control-label">
+                                    Joint CustomerID - 3
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.J3CUSTID" id="TranJ3CUSTID" value="@Model.TranDetails.J3CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="TranJ4CUSTID" class="col-sm-4 control-label">
+                                    Joint CustomerID - 4
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.J4CUSTID" id="TranJ4CUSTID" value="@Model.TranDetails.J4CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-horizontal form-fields cm-sec">
+                            <div class="row form-group">
+                                <label for="TranJ5CUSTID" class="col-sm-4 control-label">
+                                    Joint CustomerID - 5
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.J5CUSTID" id="TranJ5CUSTID" value="@Model.TranDetails.J5CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="TranJ6CUSTID" class="col-sm-4 control-label">
+                                    Joint CustomerID - 6
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.J6CUSTID" id="TranJ6CUSTID" value="@Model.TranDetails.J6CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="TranJ7CUSTID" class="col-sm-4 control-label">
+                                    Joint CustomerID - 7
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.J7CUSTID" id="TranJ7CUSTID" value="@Model.TranDetails.J7CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="TranJ8CUSTID" class="col-sm-4 control-label">
+                                    Joint CustomerID - 8
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="TranDetails.J8CUSTID" id="TranJ8CUSTID" value="@Model.TranDetails.J8CUSTID" class="form-control" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </form>
         </div>
         <div class="modal-footer">
@@ -218,11 +309,21 @@
         </div>
     </div>
 </div>
+<link href="~/css/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/js/jquery.datetimepicker.full.js"></script>
 <script>
     $(document).ready(function () {
         $('#save').click(function () {
             SaveTranData();
         });
 
+        $('.datetimepicker').datetimepicker({
+            format: 'Ymd',
+            timepicker: false,
+            autoclose: true,
+            todayHighlight: true,
+            maxDate: 0,
+            validateOnBlur: false,
+        }).datepicker('update', new Date());
     });
 </script>

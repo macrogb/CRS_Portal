@@ -965,7 +965,11 @@ a.file_upload {
 .modal-backdrop.fade {
     opacity: 0.5 !important;
 }
-
+.sep-line {
+    margin: 10px 0;
+    background: #d8d8d8;
+    height: 3px;
+}
 
 /*table tbody {
     overflow: scroll;
