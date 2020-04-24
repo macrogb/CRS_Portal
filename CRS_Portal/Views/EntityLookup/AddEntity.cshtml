@@ -498,28 +498,28 @@
 <script>
     $(document).ready(function () {
         // Enable Live Search.
-        $('.selectOption').attr('data-live-search', true);
+        //$('.selectOption').attr('data-live-search', true);
 
-        $('.selectOption').selectpicker(
-            {
-                width: '100%',
-                title: $(this).data('title'),
-                style: 'btn-info',
-                size: 6
-            });
-        $('.dropdown-menu').on('click', function (e) {
-            if ($(e.target).closest('.bootstrap-select.open').is(':visible') || $(e.target).closest('.btn.dropdown-toggle.btn-default').is(':visible')) {
-                selectpickerIsClicked = true;
-            }
-        });
+        //$('.selectOption').selectpicker(
+        //    {
+        //        width: '100%',
+        //        title: $(this).data('title'),
+        //        style: 'btn-info',
+        //        size: 6
+        //    });
+        //$('.dropdown-menu').on('click', function (e) {
+        //    if ($(e.target).closest('.bootstrap-select.open').is(':visible') || $(e.target).closest('.btn.dropdown-toggle.btn-default').is(':visible')) {
+        //        selectpickerIsClicked = true;
+        //    }
+        //});
 
-        // when the dialog is closed....
-        $('.dropdown').on('hide.bs.dropdown', function (e) {
-            if (selectpickerIsClicked) {
-                e.preventDefault();
-                selectpickerIsClicked = false;
-            }
-        });
+        //// when the dialog is closed....
+        //$('.dropdown').on('hide.bs.dropdown', function (e) {
+        //    if (selectpickerIsClicked) {
+        //        e.preventDefault();
+        //        selectpickerIsClicked = false;
+        //    }
+        //});
         $('#save').click(function () {
             SaveEntityData();
         });
