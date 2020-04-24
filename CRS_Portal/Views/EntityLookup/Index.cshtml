@@ -135,7 +135,7 @@
     <input id="btnEntityDelete" value="delete" type="hidden" data-url='@Url.Action("DeleteEntityDetails","EntityLookup")' />
     <input id="btnEntityDeleteAll" value="delete" type="hidden" data-url='@Url.Action("DeleteAllEntityDetails","EntityLookup")' />
 
-    <div class="modal fade bd-example-modal-lg" id="modalentity1" data-backdrop="true" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
+    <div class="modal fade bd-example-modal-lg" id="modalentity1" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
         <div class="modal-dialog modal-lg" role="document" style="max-width:1000px">
             <!-- /.modal-content -->
             @Html.Partial("AddEntity", Model)
