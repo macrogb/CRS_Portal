@@ -24,7 +24,7 @@
                                     Deal Date
                                 </label>
                                 <div class="col-sm-8 z-pad">
-                                    <input name="ClosedAccDetails.DealDt" id="ClosedAccountDealDt" value="@Model.ClosedAccDetails.DealDt" class="form-control" type="text" />
+                                    <input readonly name="ClosedAccDetails.DealDt" id="ClosedAccountDealDt" value="@Model.ClosedAccDetails.DealDt" class="form-control datetimepicker" type="text" />
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -32,7 +32,7 @@
                                     Value Date
                                 </label>
                                 <div class="col-sm-8 z-pad">
-                                    <input name="ClosedAccDetails.ValueDt" id="ClosedAccountValueDt" value="@Model.ClosedAccDetails.ValueDt" class="form-control" type="text" />
+                                    <input readonly name="ClosedAccDetails.ValueDt" id="ClosedAccountValueDt" value="@Model.ClosedAccDetails.ValueDt" class="form-control datetimepicker" type="text" />
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -40,7 +40,7 @@
                                     Maturity Date
                                 </label>
                                 <div class="col-sm-8 z-pad">
-                                    <input name="ClosedAccDetails.MaturityDt" id="ClosedAccountMaturityDt" value="@Model.ClosedAccDetails.MaturityDt" class="form-control" type="text" />
+                                    <input readonly name="ClosedAccDetails.MaturityDt" id="ClosedAccountMaturityDt" value="@Model.ClosedAccDetails.MaturityDt" class="form-control datetimepicker" type="text" />
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -172,11 +172,23 @@
         </div>
     </div>
 </div>
+
+<link href="~/css/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/js/jquery.datetimepicker.full.js"></script>
 <script>
     $(document).ready(function () {
         $('#save').click(function () {
             SaveClosedAccountData();
         });
 
+        $('.datetimepicker').datetimepicker({
+            format: 'Ymd',
+            timepicker: false,
+            autoclose: true,
+            todayHighlight: true,
+            //maxDate: 0,
+            validateOnBlur: false,
+        });
+        //}).datepicker('update', new Date());
     });
 </script>
