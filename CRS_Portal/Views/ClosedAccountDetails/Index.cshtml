@@ -1,9 +1,9 @@
-﻿bulk@model CRS_Portal.Models.ClosedAccountDetails
+﻿@model CRS_Portal.Models.ClosedAccountDetailsModel
 @{
     ViewData["Title"] = "Closed Account Details";
 }
-
-<partial name="_PageTitle" />
+    
+<partial name="_PageTitle" />`
 
 <div id="AccountStatus">
     <div class="card">
@@ -14,11 +14,11 @@
             <div class="row">
                 <div class="col-md-3" id="dvSCVABDType2" style="border-right: 2px solid #ccc;">
                     <h5 class="card-title">Manual Input</h5><br />
-                    <button class="btn btn-primary mr-2 btn-lg" id="btnAddAcctStsCode" onclick="AddAcctStsCodeData()"><i class="fas fa-plus"></i>  Add Closed Account Details </button>
+                    <button class="btn btn-primary mr-2 btn-lg" id="btnAddClosedAccountDetails"><i class="fas fa-plus"></i>  Add Closed Account Details </button>
                 </div>
                 <div class="col-md-9" id="dvSCVCType2">
                     <h5 class="card-title">Bulk Import</h5><br />
-                    <a class="btn btn-primary mr-2 btn-lg" href="@Url.Action("DownloadSCVAcctStsCodeTemplate", "AccountStatusCode")"><i class="fas fa-file-download"></i>  Download Closed Account Details Template file</a>
+                    @*<a class="btn btn-primary mr-2 btn-lg" href="@Url.Action("DownloadSCVAcctStsCodeTemplate", "AccountStatusCode")"><i class="fas fa-file-download"></i>  Download Closed Account Details Template file</a>*@
                     <button class="btn btn-primary mr-2 btn-lg" id="btnUploadAcctStsCodeDet" onclick="BulkUploadClosedAccountDetails()"><i class="fas fa-upload"></i>  Bulk Upload Closed Account Details</button>
                 </div>
             </div>
@@ -137,6 +137,16 @@
     <input id="btnLoadClosedAccountDetailsGrid" value="Load" type="hidden" data-url='@Url.Action("LoadClosedAccountDetails","ClosedAccountDetails")' />
     <input id="btnClosedAccountDetailsDeleteAll" value="deleteAll" type="hidden" data-url='@Url.Action("DeleteAllClosedAccountDetails","ClosedAccountDetails")' />
     <input id="btnClosedAccountDetailsDelete" value="delete" type="hidden" data-url='@Url.Action("DeleteClosedAccountDetails","ClosedAccountDetails")' />
+    <input id="btnClosedAccountDetailsEdit" value="edit" type="hidden" data-url='@Url.Action("LoadClosedAccountDetailsByID","ClosedAccountDetails")' />
+    <input id="btnClosedAccountDetailsSave" value="save" type="hidden" data-url='@Url.Action("SaveClosedAccountDetails","ClosedAccountDetails")' />
+
+    <div class="modal fade bd-example-modal-lg" id="modalClosedAccountDetails" data-backdrop="true" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
+        <div class="modal-dialog modal-lg" role="document" style="max-width:1000px">
+            @Html.Partial("AddClosedAccount", Model)
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 </div>
 <style>
     /*move tfoot to next to grid header*/
@@ -150,6 +160,10 @@
     $(document).ready(function () {
         $("#pageTitle").text("Closed Account Details");
         LoadClosedAccountDetailsGrid();
+
+        $('#btnAddClosedAccountDetails').click(function () {
+            LoadClosedAccountData();
+        });
     });
 
     function LoadClosedAccountDetailsGrid() {
@@ -181,7 +195,7 @@
                                 'data': '',
                                 'sortable': false,
                                 'render': function json(data, type, full, meta) {
-                                    return "<i  class='fas fa-edit edit' style='cursor:pointer;' ></i>"
+                                    return "<i  class='fas fa-edit edit' style='cursor:pointer;' onclick=LoadClosedAccountData('" + full.ID + "');></i>"
                                         + " " + "<i class='fas fa-trash-alt delete' style='padding-left: 7px; color:#ff0000a1; cursor:pointer;'  onclick=DeleteClosedAccountDetailsData('" + full.ID + "','" + full.CustNo + "'); ></i >";
                                 }
                             },
@@ -356,6 +370,40 @@
                     if (json.success == true) {
                         LoadClosedAccountDetailsGrid();
                         enableSucessDiv(json.message);
+                    }
+                    else {
+                        enableErrorDiv(json.message);
+                    }
+                }
+            });
+    }
+
+    function LoadClosedAccountData(ID) {
+        $.ajax(
+            {
+                type: 'GET',
+                data: { "id": ID },
+                url: $("#btnClosedAccountDetailsEdit").data('url'),
+                success: function (result) {
+                    $("#modalClosedAccountContent").html(result);
+                    $('#modalClosedAccountDetails').modal('show');
+                }
+            });
+
+    }
+
+    function SaveClosedAccountData() {
+        console.log($("#frmClosedAccDetails").serialize());
+        $.ajax(
+            {
+                type: 'POST',
+                data: $("#frmClosedAccDetails").serialize(),
+                url: $("#btnClosedAccountDetailsSave").data('url'),
+                success: function (json) {
+                    if (json.success == true) {
+                        enableSucessDiv(json.message);
+                        LoadClosedAccountDetailsGrid();
+                        $('#modalClosedAccountDetails').modal('hide');
                     }
                     else {
                         enableErrorDiv(json.message);

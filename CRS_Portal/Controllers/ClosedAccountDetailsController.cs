@@ -18,12 +18,20 @@ namespace CRS_Portal.Controllers
     public class ClosedAccountDetailsController : Controller
     {
         ClosedAccountDetailsDbContext objClosedAccountDetailsDbContext;
+        CurrencyDBContext objCurrencyDBContext;
         string _message = string.Empty;
         private IHostingEnvironment _hostingEnv;
 
         public IActionResult Index()
         {
-            return View();
+            ClosedAccountDetailsModel objModel = new ClosedAccountDetailsModel();
+            objModel.ClosedAccDetails = new ClosedAccountDetails();
+            using (objCurrencyDBContext = new CurrencyDBContext())
+            {
+                objModel.lstCurrency = objCurrencyDBContext.DbCurrency.AsEnumerable().ToList();
+            }
+
+            return View(objModel);
         }
 
         public IActionResult LoadClosedAccountDetails()
@@ -38,7 +46,7 @@ namespace CRS_Portal.Controllers
                         DealNo = p.DealNo,
                         DealDt = p.DealDt,
                         CustNo = p.CustNo,
-                        CustName = p.CustName,
+                        CustName = p.CustName.ToUpper(),
                         PrincipalAmt = p.PrincipalAmt,
                         InterestAmtPaid = p.InterestAmtPaid
                     }).ToList();
@@ -197,6 +205,98 @@ namespace CRS_Portal.Controllers
             catch (Exception ex)
             {
                 return "false";
+            }
+        }
+
+        [HttpGet]
+        public ActionResult LoadClosedAccountDetailsByID(string id)
+        {
+            try
+            {
+                ClosedAccountDetailsModel objModel = new ClosedAccountDetailsModel();
+                objModel.ClosedAccDetails = new ClosedAccountDetails();
+                using (objCurrencyDBContext = new CurrencyDBContext())
+                {
+                    objModel.lstCurrency = objCurrencyDBContext.DbCurrency.AsEnumerable().ToList();
+
+                }
+                if (!string.IsNullOrEmpty(id))
+                {
+                    using (objClosedAccountDetailsDbContext = new ClosedAccountDetailsDbContext())
+                    {
+                        objModel.ClosedAccDetails = objClosedAccountDetailsDbContext.DbClosedAccountDetails.Where(r => r.ID == int.Parse(id)).FirstOrDefault();
+                    }
+                }
+
+                return PartialView("AddClosedAccount", objModel);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "The server has encountered an unexpected internal error. Please try again later." });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult SaveClosedAccountDetails(ClosedAccountDetailsModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (model.ClosedAccDetails.ID == null)
+                    {
+                        //Add
+                        using (objClosedAccountDetailsDbContext = new ClosedAccountDetailsDbContext())
+                        {
+                            objClosedAccountDetailsDbContext.DbClosedAccountDetails.Add(model.ClosedAccDetails);
+                            objClosedAccountDetailsDbContext.SaveChanges();
+                            _message = "'" + model.ClosedAccDetails.CustNo + "' - Closed Account Detail added successfully";
+                        }
+                    }
+                    else
+                    {
+                        //Edit
+                        using (objClosedAccountDetailsDbContext = new ClosedAccountDetailsDbContext())
+                        {
+                            var modelFromDb = objClosedAccountDetailsDbContext.DbClosedAccountDetails.Where(r => r.ID == model.ClosedAccDetails.ID).FirstOrDefault();
+                            modelFromDb.DealNo = model.ClosedAccDetails.DealNo;
+                            modelFromDb.DealDt = model.ClosedAccDetails.DealDt;
+                            modelFromDb.ValueDt = model.ClosedAccDetails.ValueDt;
+                            modelFromDb.MaturityDt = model.ClosedAccDetails.MaturityDt;
+                            modelFromDb.CustNo = model.ClosedAccDetails.CustNo;
+                            modelFromDb.CustName = model.ClosedAccDetails.CustName;
+                            modelFromDb.PrincipalAmt = model.ClosedAccDetails.PrincipalAmt;
+                            modelFromDb.Currency = model.ClosedAccDetails.Currency;
+                            modelFromDb.InterestAmtPaid = model.ClosedAccDetails.InterestAmtPaid;
+                            modelFromDb.ProdType = model.ClosedAccDetails.ProdType;
+                            modelFromDb.PaymentCode = model.ClosedAccDetails.PaymentCode;
+
+                            objClosedAccountDetailsDbContext.DbClosedAccountDetails.Update(modelFromDb);
+                            objClosedAccountDetailsDbContext.SaveChanges();
+                            _message = "'" + model.ClosedAccDetails.CustNo + "' - Closed Account Detail updated successfully";
+                        }
+                    }
+                    return Json(new { success = true, message = _message });
+                }
+                else
+                {
+                    List<string> fieldOrder = new List<string>(new string[] {
+                                 "ClosedAccountDetails" })
+                         .Select(f => f.ToLower()).ToList();
+
+                    var _message1 = ModelState
+                        .Select(m => new { Order = fieldOrder.IndexOf(m.Key.ToLower()), Error = m.Value })
+                        .OrderBy(m => m.Order)
+                        .SelectMany(m => m.Error.Errors.Select(e => e.ErrorMessage)).ToList();
+
+                    _message = string.Join("<br/>", _message1);
+                    return Json(new { success = false, message = _message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = _message });
+
             }
         }
     }
