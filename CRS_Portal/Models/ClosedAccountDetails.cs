@@ -7,7 +7,7 @@ namespace CRS_Portal.Models
 {
     public class ClosedAccountDetails
     {
-        public long  ID { get; set; }
+        public Int64?  ID { get; set; }
         public string DealNo { get; set; }
         public string DealDt { get; set; }
         public string ValueDt { get; set; }

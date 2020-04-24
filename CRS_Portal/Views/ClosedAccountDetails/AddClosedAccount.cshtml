@@ -1,0 +1,182 @@
+﻿@model CRS_Portal.Models.ClosedAccountDetailsModel
+
+<div class="modal-content" id="modalClosedAccountContent">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 id="tppname">Add / Edit Closed Account Details</h4>
+        </div>
+        <div class="modal-body">
+            <form id="frmClosedAccDetails">
+                <input name="ClosedAccDetails.ID" id="ClosedAccDetailsID" value="@Model.ClosedAccDetails.ID" class="form-control" type="hidden" />
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-horizontal form-fields cm-sec">
+                            <div class="row form-group">
+                                <label for="inputtext1" class="col-sm-4 control-label">
+                                    Deal Number<span class="req"></span>
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="ClosedAccDetails.DealNo" id="ClosedAccountDealNo" value="@Model.ClosedAccDetails.DealNo" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext2" class="col-sm-4 control-label">
+                                    Deal Date
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="ClosedAccDetails.DealDt" id="ClosedAccountDealDt" value="@Model.ClosedAccDetails.DealDt" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext3" class="col-sm-4 control-label">
+                                    Value Date
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="ClosedAccDetails.ValueDt" id="ClosedAccountValueDt" value="@Model.ClosedAccDetails.ValueDt" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext4" class="col-sm-4 control-label">
+                                    Maturity Date
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="ClosedAccDetails.MaturityDt" id="ClosedAccountMaturityDt" value="@Model.ClosedAccDetails.MaturityDt" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext5" class="col-sm-4 control-label">
+                                    Customer Number <span class="req"></span>
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="ClosedAccDetails.CustNo" id="ClosedAccountCustNo" value="@Model.ClosedAccDetails.CustNo" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext6" class="col-sm-4 control-label">
+                                    Customer Name <span class="req"></span>
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="ClosedAccDetails.CustName" id="ClosedAccountCustName" value="@Model.ClosedAccDetails.CustName" class="form-control text-uppercase" type="text" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-horizontal form-fields cm-sec">
+                            <div class="row form-group">
+                                <label for="inputtext7" class="col-sm-4 control-label">
+                                    Principal Amount <span class="req"></span>
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="ClosedAccDetails.PrincipalAmt" id="ClosedAccountPrincipalAmt" value="@Model.ClosedAccDetails.PrincipalAmt" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext8" class="col-sm-4 control-label">
+                                    Currency <span class="req"></span>
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    @*<input name="ClosedAccount.CurCode" id="ClosedAccountCurCode" value="@Model.ClosedAccDetails.CurrCode" class="form-control" type="text" />*@
+                                    @{
+                                        string Currencytitle = "- [Choose Currency ] -";
+                                        <div class="col-xs-4 ">
+                                            <select id="ClosedAccountCurrency" name="ClosedAccDetails.Currency" class="form-control selectOption" data-title="@Currencytitle">
+                                                @{
+                                                    int j = 0;
+
+                                                    <option value="0">@Currencytitle</option>
+                                                    foreach (var item in Model.lstCurrency)
+                                                    {
+                                                        j++;
+                                                        if (Model.ClosedAccDetails.Currency != null && Model.ClosedAccDetails.Currency == item.C8CCY)
+                                                        {
+                                                            <option selected value="@item.C8CCY">@item.C8CCY - @item.C8CUR</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.C8CCY">@item.C8CCY - @item.C8CUR</option>
+                                                        }
+                                                    }
+                                                }
+
+                                            </select>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext9" class="col-sm-4 control-label">
+                                    Interest Amount Paid
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="ClosedAccDetails.InterestAmtPaid" id="ClosedAccountInterestAmtPaid" value="@Model.ClosedAccDetails.InterestAmtPaid" class="form-control" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext10" class="col-sm-4 control-label">
+                                    Product Type
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    <input name="ClosedAccDetails.ProdType" id="ClosedAccountProdType" value="@Model.ClosedAccDetails.ProdType" class="form-control text-uppercase" type="text" />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="inputtext11" class="col-sm-4 control-label">
+                                    Payment Code
+                                </label>
+                                <div class="col-sm-8 z-pad">
+                                    @*<input name="ClosedAccount.PaymentCode" id="ClosedAccountPaymentCode" value="@Model.ClosedAccDetails.PaymentCode" class="form-control" type="text" />*@
+                                    @{
+                                        string PaymentCodeTitle = "- [Choose Payment Code ] -";
+                                        <div class="col-xs-4 ">
+                                            <select id="ClosedAccountPaymentCode" name="ClosedAccDetails.PaymentCode" class="form-control selectOption" data-title="@PaymentCodeTitle">
+                                                @{
+                                                    int x = 0;
+
+                                                    <option value="0">@PaymentCodeTitle</option>
+                                                    foreach (var item in Model.lstPaymentCode)
+                                                    {
+                                                        x++;
+                                                        if (Model.ClosedAccDetails.PaymentCode != null && Model.ClosedAccDetails.PaymentCode == item.Code)
+                                                        {
+                                                            <option selected value="@item.Code">@item.Code - @item.Description</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Code">@item.Code - @item.Description</option>
+                                                        }
+                                                    }
+                                                }
+
+                                            </select>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="sep-line">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="col-md-5"></div>
+            <button type="button" id="save" class="btn btn-primary mr-2 btn-lg">Save</button>
+            <button type="button" id="cancel" class="btn btn-outline-primary btn-lg" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#save').click(function () {
+            SaveClosedAccountData();
+        });
+
+    });
+</script>
