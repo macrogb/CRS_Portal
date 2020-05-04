@@ -14,6 +14,7 @@
         </div>
         <form id="frmEntityCustDet">
             <input name="entity.ID" id="enityID" value="@Model.entity.ID" class="form-control" type="hidden" />
+            <input name="entity.Title" id="Title" value="@Model.entity.Title" class="form-control" type="hidden" />
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-horizontal form-fields cm-sec">
@@ -22,8 +23,8 @@
                                 Entity Customer ID<span class="req"></span>
                             </label>
                             <div class="col-sm-8 z-pad">
-                                @{ 
-                                    var isReadonly = Model.entity.ID!=null ? "readonly" : "";
+                                @{
+                                    var isReadonly = Model.entity.ID != null ? "readonly" : "";
                                 }
                                 <input name="entity.CUSTID" id="entityCustID" @isReadonly value="@Model.entity.CustID" class="form-control" type="text" />
                             </div>
@@ -38,7 +39,7 @@
                         </div>
                         <div class="row form-group">
                             <label for="BuildingIdentifier" class="col-sm-4 control-label">
-                                Building Identifier 
+                                Building Identifier
                             </label>
                             <div class="col-sm-8 z-pad">
                                 <input name="entity.BuildingIdentifier" id="BuildingIdentifier" value="@Model.entity.BuildingIdentifier" class="form-control" type="text" />
@@ -54,7 +55,7 @@
                         </div>
                         <div class="row form-group">
                             <label for="DistrictName" class="col-sm-4 control-label">
-                                District Name 
+                                District Name
                             </label>
                             <div class="col-sm-8 z-pad">
                                 <input class="form-control" name="entity.DistrictName" id="DistrictName" value="@Model.entity.DistrictName" type="text" />
@@ -92,7 +93,7 @@
                                             @{
                                                 int j = 0;
 
-                                                @*<option value="0">@title</option>*@
+                                                <option value="">@title</option>
                                                 foreach (var item in Model.lstcountry)
                                                 {
                                                     j++;
@@ -123,7 +124,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-horizontal form-fields cm-sec">
@@ -133,15 +133,15 @@
                             </label>
                             <div class="col-sm-6 z-pad" style="">
                                 @*@Html.DropDownListFor(M => M.lstEntityType,
-                                 new SelectList(Model.lstEntityType, "EntityType", "EntityType",Model.entity.AccHoldType),
-                                "- [Choose Entity Type ] -",htmlAttributes:new { @class="form-control"})*@
+                             new SelectList(Model.lstEntityType, "EntityType", "EntityType",Model.entity.AccHoldType),
+                            "- [Choose Entity Type ] -",htmlAttributes:new { @class="form-control"})*@
                                 @{
                                     <div class="col-xs-4 ">
                                         <select id="EntityType" name="entity.AccHoldType" class="form-control selectOption" data-title="- [Choose Entity Type ] -">
                                             @{
                                                 int l = 0;
 
-                                                @*<option value="0">- [Choose Entity Type ] -</option>*@
+                                                <option value="">- [Choose Entity Type ] -</option>
                                                 foreach (var item in Model.lstEntityType)
                                                 {
                                                     l++;
@@ -203,7 +203,7 @@
                                     @{
                                         int i = 0;
 
-                                        @*<option value="0">- [Choose country ] -</option>*@
+                                        <option value="">- [Choose country ] -</option>
                                         foreach (var item in Model.lstcountry)
                                         {
                                             i++;
@@ -229,7 +229,7 @@
                                 @{
                                     int k = 0;
 
-                                    @*<option value="0">- [Choose country ] -</option>*@
+                                    <option value="">- [Choose country ] -</option>
                                     foreach (var item in Model.lstcountry)
                                     {
                                         k++;
@@ -255,7 +255,7 @@
                                 @{
                                     int a = 0;
 
-                                    @*<option value="0">- [Choose country ] -</option>*@
+                                    <option value="">- [Choose country ] -</option>
                                     foreach (var item in Model.lstcountry)
                                     {
                                         a++;
@@ -292,7 +292,7 @@
                                 @{
                                     int x = 0;
 
-                                    @*<option value="0">- [Choose ID Type ] -</option>*@
+                                    <option value="">- [Choose ID Type ] -</option>
                                     foreach (var item in Model.lstIdentityType)
                                     {
                                         x++;
@@ -318,7 +318,7 @@
                                 @{
                                     int y = 0;
 
-                                    @*<option value="0">- [Choose country ] -</option>*@
+                                    <option value="">- [Choose country ] -</option>
                                     foreach (var item in Model.lstIdentityType)
                                     {
                                         y++;
@@ -344,7 +344,7 @@
                                 @{
                                     int z = 0;
 
-                                    @*<option value="0">- [Choose country ] -</option>*@
+                                    <option value="">- [Choose country ] -</option>
                                     foreach (var item in Model.lstIdentityType)
                                     {
                                         z++;
@@ -405,7 +405,7 @@
                                 @{
                                     int p = 0;
 
-                                    @*<option value="0">- [Choose country ] -</option>*@
+                                    <option value="">- [Choose country ] -</option>
                                     foreach (var item in Model.lstcountry)
                                     {
                                         p++;
@@ -431,7 +431,7 @@
                                 @{
                                     int n = 0;
 
-                                    @*<option value="0">- [Choose country ] -</option>*@
+                                    <option value="">- [Choose country ] -</option>
                                     foreach (var item in Model.lstcountry)
                                     {
                                         n++;
@@ -457,7 +457,7 @@
                                 @{
                                     int m = 0;
 
-                                    @*<option value="0">- [Choose country ] -</option>*@
+                                    <option value="">- [Choose country ] -</option>
                                     foreach (var item in Model.lstcountry)
                                     {
                                         m++;

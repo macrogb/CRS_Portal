@@ -134,6 +134,7 @@
     <input id="btnEntitySave" value="save" type="hidden" data-url='@Url.Action("SaveEntityDetails","EntityLookup")' />
     <input id="btnEntityDelete" value="delete" type="hidden" data-url='@Url.Action("DeleteEntityDetails","EntityLookup")' />
     <input id="btnEntityDeleteAll" value="delete" type="hidden" data-url='@Url.Action("DeleteAllEntityDetails","EntityLookup")' />
+    <input id="btnEntityExport" value="export" type="hidden" data-url='@Url.Action("EntityDataExport","EntityLookup")' />
 
     <div class="modal fade bd-example-modal-lg" id="modalentity1" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="word-wrap:break-word">
         <div class="modal-dialog modal-lg" role="document" style="max-width:1000px">
@@ -257,6 +258,7 @@
                     else {
                         $("#divErrorModal").show();
                         $("#divErrorMessModal").html(json.message);
+                        $('#modalentity1').animate({ scrollTop: 0 }, 400)
                     }
                 }
             });
@@ -405,5 +407,30 @@
             }
         );
     }
+
+    $("#EntityCustExport").click(function () {
+        spinner_On();
+        $.ajax(
+            {
+                url: $("#btnEntityExport").data('url'),
+                datatype: 'json',
+                success: function (data) {
+                    if (data.success == false) {
+                        spinner_Off();
+                        enableErrorDiv(data.message);
+                    }
+                    else {
+                        spinner_Off();
+                        //window.location = $("#btnCorpAccountCorpAccountExport").data('url');
+                        enableSucessDiv(data.message);
+                    }
+                },
+                error: function (data) {
+                    spinner_Off();
+                    enableErrorDiv(data.message);
+                }
+            });
+    });
+
 </script>
 
