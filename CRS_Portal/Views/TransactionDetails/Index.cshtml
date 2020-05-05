@@ -162,6 +162,9 @@
         $('#btnAddTranDetails').click(function () {
             LoadTransactionData();
         });
+
+
+
     });
 
     function LoadTranDetailsGrid() {
@@ -386,13 +389,23 @@
                 success: function (result) {
                     $("#modalTransactionContent").html(result);
                     $('#modalTranDetails').modal('show');
+                    var IsAccountClosed = $('input[name="TranDetails.ActClsInd"]:checked', '#frmTranDetails').val();
+                    if (IsAccountClosed == "1") {
+                        $("#TranClosedDate").css("background-color", "white");
+                        $("#TranClosedDate").attr("disabled", false);
+                    }
+                    else {
+                        $("#TranClosedDate").attr("disabled", true);
+                        $("#TranClosedDate").css("background-color", "lightgrey");
+                    }
                 }
             });
 
     }
 
     function SaveTranData() {
-        console.log($("#frmTranDetails").serialize());
+        hideSuccessErrorDiv();
+        $("#divTranErrorModal").hide();
         $.ajax(
             {
                 type: 'POST',
@@ -405,9 +418,15 @@
                         $('#modalTranDetails').modal('hide');
                     }
                     else {
-                        enableErrorDiv(json.message);
+                        $("#divTranErrorModal").show();
+                        $("#divTranErrorMessModal").html(json.message);
+                        //$('#modalTranDetails').scrollTop(0);
+                        $('#modalTranDetails').animate({ scrollTop: 0 }, 400);
+
                     }
                 }
             });
     }
+
+
 </script>

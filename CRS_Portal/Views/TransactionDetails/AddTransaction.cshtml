@@ -6,6 +6,9 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         </div>
         <div class="modal-body">
+            <div class="alert alert-danger alert-dismissible fade show" id="divTranErrorModal" role="alert" style="display:none">
+                <strong><span id="divTranErrorMessModal">message</span></strong>
+            </div>
             <form id="frmTranDetails">
                 <input name="TranDetails.ID" id="TranDetailsID" value="@Model.TranDetails.ID" class="form-control" type="hidden" />
                 <div class="row">
@@ -21,7 +24,7 @@
                             </div>
                             <div class="row form-group">
                                 <label for="TranActNo" class="col-sm-4 control-label">
-                                    Account Number
+                                    Account Number <span class="req"></span>
                                 </label>
                                 <div class="col-sm-8 z-pad">
                                     <input name="TranDetails.ActNo" id="TranActNo" value="@Model.TranDetails.ActNo" class="form-control" type="text" />
@@ -37,7 +40,7 @@
                             </div>
                             <div class="row form-group">
                                 <label for="TranIBAN" class="col-sm-4 control-label">
-                                    IBAN
+                                    IBAN <span class="req"></span>
                                 </label>
                                 <div class="col-sm-8 z-pad">
                                     <input name="TranDetails.IBAN" id="TranIBAN" value="@Model.TranDetails.IBAN" class="form-control" type="text" />
@@ -56,7 +59,7 @@
                                                 @{
                                                     int j = 0;
 
-                                                    <option value="0">@Currencytitle</option>
+                                                    <option value="">@Currencytitle</option>
                                                     foreach (var item in Model.lstCurrency)
                                                     {
                                                         j++;
@@ -106,7 +109,7 @@
                         <div class="form-horizontal form-fields cm-sec">
                             <div class="row form-group">
                                 <label for="TranPaymentCode" class="col-sm-4 control-label">
-                                    Payment Code
+                                    Payment Code<span class="req"></span>
                                 </label>
                                 <div class="col-sm-8 z-pad">
                                     @*<input name="Tran.PaymentCode" id="TranPaymentCode" value="@Model.TranDetails.PaymentCode" class="form-control" type="text" />*@
@@ -117,7 +120,7 @@
                                                 @{
                                                     int x = 0;
 
-                                                    <option value="0">@PaymentCodeTitle</option>
+                                                    <option value="">@PaymentCodeTitle</option>
                                                     foreach (var item in Model.lstPaymentCode)
                                                     {
                                                         x++;
@@ -141,14 +144,14 @@
                                 <label for="inputtext8" class="col-sm-4 control-label">
                                     Account Closed
                                 </label>
-                                <div class="col-sm-8 z-pad">
+                                <div class="col-sm-8 z-pad" id="dvActClsRadio">
                                     @*<input  name="Tran.ActClosed" id="TranActClosed" value="@Model.TranDetails.ActClsInd" class="form-control" type="text" />*@
                                     @if (string.IsNullOrEmpty(Model.TranDetails.ActClsInd))
                                     {
                                         Model.TranDetails.ActClsInd = "0";
                                     }
-                                    <span>Yes @Html.RadioButtonFor(Model => Model.TranDetails.ActClsInd, "1")</span>
-                                    <span class="col-sm-6">No @Html.RadioButtonFor(Model => Model.TranDetails.ActClsInd, "0", new { @checked = true })</span>
+                                    <span id="spClosedActYes">Yes @Html.RadioButtonFor(Model => Model.TranDetails.ActClsInd, "1")</span>
+                                    <span id="spClosedActNo" class="col-sm-6">No @Html.RadioButtonFor(Model => Model.TranDetails.ActClsInd, "0")</span>
 
                                 </div>
                             </div>
@@ -162,10 +165,10 @@
                             </div>
                             <div class="row form-group">
                                 <label for="TranOpenDate" class="col-sm-4 control-label">
-                                    Account Open Date
+                                    Account Open Date<span class="req"></span>
                                 </label>
                                 <div class="col-sm-8 z-pad">
-                                    <input type="text" autocomplete="off" readonly name="TranDetails.ActOpenDt" class="form-control datetimepicker" placeholder="Account Open Date" id="TranOpenDate" value="@Model.TranDetails.ActOpenDt"/>
+                                    <input type="text" autocomplete="off" readonly name="TranDetails.ActOpenDt" class="form-control datetimepicker" style="background-color:white !important;" placeholder="Account Open Date" id="TranOpenDate" value="@Model.TranDetails.ActOpenDt" />
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -198,7 +201,7 @@
                             </div>
                             <div class="row form-group">
                                 <label for="TranCusType" class="col-sm-4 control-label">
-                                    Customer Type
+                                    Customer Type<span class="req"></span>
                                 </label>
                                 <div class="col-sm-8 z-pad">
                                     <input name="TranDetails.CustType" id="TranCusType" value="@Model.TranDetails.CustType" class="form-control" type="text" />
@@ -206,7 +209,7 @@
                             </div>
                             <div class="row form-group">
                                 <label for="TranActType" class="col-sm-4 control-label">
-                                    Account Type
+                                    Account Type<span class="req"></span>
                                 </label>
                                 <div class="col-sm-8 z-pad">
                                     <input name="TranDetails.ActType" id="TranActType" value="@Model.TranDetails.ActType" class="form-control" type="text" />
@@ -223,7 +226,7 @@
                     </div>
                 </div>
 
-                <h4 id="tppname" class= "card-header card-header-primary bg-TelegramSingle" style="color:white;">Joint Customer Details</h4>
+                <h4 id="tppname" class="card-header card-header-primary bg-TelegramSingle" style="color:white;">Joint Customer Details</h4>
                 <br />
                 <div class="row">
                     <div class="col-sm-6">
@@ -317,6 +320,19 @@
             SaveTranData();
         });
 
+        $('#frmTranDetails input[name="TranDetails.ActClsInd"]').on('change', function () {
+            var IsAccountClosed = $('input[name="TranDetails.ActClsInd"]:checked', '#frmTranDetails').val();
+            if (IsAccountClosed == "1") {
+                $("#TranClosedDate").css("background-color", "white");
+                $("#TranClosedDate").attr("disabled", false);
+            }
+            else {
+                $("#TranClosedDate").attr("disabled", true);
+                $("#TranClosedDate").css("background-color", "lightgrey");
+            }
+
+        });
+
         $('.datetimepicker').datetimepicker({
             format: 'Ymd',
             timepicker: false,
@@ -325,5 +341,8 @@
             maxDate: 0,
             validateOnBlur: false,
         }).datepicker('update', new Date());
+
     });
+
+
 </script>
