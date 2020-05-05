@@ -7,14 +7,10 @@ using System.Threading.Tasks;
 
 namespace CRS_Portal.Models
 {
-    public class EntityLookupDetailDto
+    public class EntityLookupDto
     {
-        [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public long? ID { get; set; }
         [Required(ErrorMessage = "Entity ID is required.")]
         public string CustID { get; set; }
-        public string Title { get; set; }
         [Required(ErrorMessage = "Entity Name is required.")]
         [StringLength(105, MinimumLength = 1, ErrorMessage = "Entity Name must have minimum 1 and maximum 105 characters")]
         public string EntityName { get; set; }
@@ -50,6 +46,14 @@ namespace CRS_Portal.Models
         [StringLength(80, MinimumLength = 1, ErrorMessage = "Identity number must have minimum 1 and maximum 80 characters")]
         public string ThirdCountryIdentityNo { get; set; }
         public string ThirdIdentityIssuedBy { get; set; }
+
+    }
+    public class EntityLookupDetailDto :EntityLookupDto
+    {
+        [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        public long? ID { get; set; }
+        public string Title { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedDT { get; set; }
         public string CreatedTM { get; set; }

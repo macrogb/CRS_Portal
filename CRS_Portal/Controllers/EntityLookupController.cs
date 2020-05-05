@@ -19,6 +19,7 @@ namespace CRS_Portal.Controllers
     {
         EntityLookupDbContext objEntitytDbContext;
         CountryDbContext objCountryDbContext;
+        PolmtpfDbContext _objPolmtpfDbContext;
         private IHostingEnvironment _hostingEnv;
         string _message = string.Empty;
 
@@ -120,8 +121,13 @@ namespace CRS_Portal.Controllers
                         using (objEntitytDbContext = new EntityLookupDbContext())
                         {
                             //model.entity.CreatedBy = long.Parse(HttpContext.Session.GetString("UserID"));
+                            model.entity.CreatedBy = "";
                             model.entity.CreatedDT = DateTime.Today.ToString("yyyyMMdd");
                             model.entity.CreatedTM = DateTime.Now.ToString("HHmmss");
+
+                            model.entity.ModifiedBY = "";
+                            model.entity.ModifiedDT = "";
+                            model.entity.ModifiedTM = "";
 
                             objEntitytDbContext.DbEntityLookup.Add(model.entity);
                             objEntitytDbContext.SaveChanges();
@@ -136,28 +142,30 @@ namespace CRS_Portal.Controllers
                             var modelFromDb = objEntitytDbContext.DbEntityLookup.Where(r => r.ID == model.entity.ID).FirstOrDefault();
 
                             modelFromDb.EntityName = model.entity.EntityName;
-                            modelFromDb.BuildingIdentifier = model.entity.BuildingIdentifier;
-                            modelFromDb.StreetName = model.entity.StreetName;
-                            modelFromDb.DistrictName = model.entity.DistrictName;
+                            modelFromDb.Title = model.entity.Title;
+                            modelFromDb.BuildingIdentifier = !string.IsNullOrEmpty(model.entity.BuildingIdentifier) ? model.entity.BuildingIdentifier : "";
+                            modelFromDb.StreetName = !string.IsNullOrEmpty(model.entity.StreetName) ? model.entity.StreetName : "";
+                            modelFromDb.DistrictName = !string.IsNullOrEmpty(model.entity.DistrictName) ? model.entity.DistrictName : ""; 
                             modelFromDb.City = model.entity.City;
-                            modelFromDb.PostCode = model.entity.PostCode;
+                            modelFromDb.PostCode = !string.IsNullOrEmpty(model.entity.PostCode) ? model.entity.PostCode : ""; 
                             modelFromDb.CountryCode = model.entity.CountryCode;
-                            modelFromDb.EmailID = model.entity.EmailID;
+                            modelFromDb.EmailID = !string.IsNullOrEmpty(model.entity.EmailID) ? model.entity.EmailID : "";
                             modelFromDb.AccHoldType = model.entity.AccHoldType;
                             modelFromDb.ResCountryCode = model.entity.ResCountryCode;
-                            modelFromDb.PCountryIdentityType = model.entity.PCountryIdentityType;
-                            modelFromDb.PCountryIdentityNo = model.entity.PCountryIdentityNo;
-                            modelFromDb.PIdentityIssuedBy = model.entity.PIdentityIssuedBy;
-                            modelFromDb.secondResCountryCode = model.entity.secondResCountryCode;
-                            modelFromDb.SecondCountryIdentityType = model.entity.SecondCountryIdentityType;
-                            modelFromDb.SecondCountryIdentityNo = model.entity.SecondCountryIdentityNo;
-                            modelFromDb.SecondIdentityIssuedBy = model.entity.SecondIdentityIssuedBy;
-                            modelFromDb.ThirdResCountryCode = model.entity.ThirdResCountryCode;
-                            modelFromDb.ThirdCountryIdentityType = model.entity.ThirdCountryIdentityType;
-                            modelFromDb.ThirdCountryIdentityNo = model.entity.ThirdCountryIdentityNo;
-                            modelFromDb.ThirdIdentityIssuedBy = model.entity.ThirdIdentityIssuedBy;
+                            modelFromDb.PCountryIdentityType = !string.IsNullOrEmpty(model.entity.PCountryIdentityType) ? model.entity.PCountryIdentityType : "";
+                            modelFromDb.PCountryIdentityNo = !string.IsNullOrEmpty(model.entity.PCountryIdentityNo) ? model.entity.PCountryIdentityNo : "";
+                            modelFromDb.PIdentityIssuedBy = !string.IsNullOrEmpty(model.entity.PIdentityIssuedBy) ? model.entity.PIdentityIssuedBy : ""; 
+                            modelFromDb.secondResCountryCode = !string.IsNullOrEmpty(model.entity.secondResCountryCode) ? model.entity.secondResCountryCode : ""; 
+                            modelFromDb.SecondCountryIdentityType = !string.IsNullOrEmpty(model.entity.SecondCountryIdentityType) ? model.entity.SecondCountryIdentityType : ""; 
+                            modelFromDb.SecondCountryIdentityNo = !string.IsNullOrEmpty(model.entity.SecondCountryIdentityNo) ? model.entity.SecondCountryIdentityNo : ""; 
+                            modelFromDb.SecondIdentityIssuedBy = !string.IsNullOrEmpty(model.entity.SecondIdentityIssuedBy) ? model.entity.SecondIdentityIssuedBy : ""; 
+                            modelFromDb.ThirdResCountryCode = !string.IsNullOrEmpty(model.entity.ThirdResCountryCode) ? model.entity.ThirdResCountryCode : "";
+                            modelFromDb.ThirdCountryIdentityType = !string.IsNullOrEmpty(model.entity.ThirdCountryIdentityType) ? model.entity.ThirdCountryIdentityType : "";
+                            modelFromDb.ThirdCountryIdentityNo = !string.IsNullOrEmpty(model.entity.ThirdCountryIdentityNo) ? model.entity.ThirdCountryIdentityNo : "";
+                            modelFromDb.ThirdIdentityIssuedBy = !string.IsNullOrEmpty(model.entity.ThirdIdentityIssuedBy) ? model.entity.ThirdIdentityIssuedBy : "";
 
                             //modelFromDb.ModifiedBY = long.Parse(HttpContext.Session.GetString("UserID"));
+                            modelFromDb.ModifiedBY = "";
                             modelFromDb.ModifiedDT = DateTime.Today.ToString("yyyyMMdd");
                             modelFromDb.ModifiedTM = DateTime.Now.ToString("HHmmss");
 
@@ -301,6 +309,7 @@ namespace CRS_Portal.Controllers
                         EntityLookupDetailDto objEntityDetails = new EntityLookupDetailDto();
                         objEntityDetails.CustID = item.ItemArray[0].ToString();
                         objEntityDetails.EntityName = item.ItemArray[1].ToString();
+                        objEntityDetails.Title = "";
                         objEntityDetails.BuildingIdentifier = item.ItemArray[2].ToString();
                         objEntityDetails.StreetName = item.ItemArray[3].ToString();
                         objEntityDetails.DistrictName = item.ItemArray[4].ToString();
@@ -355,6 +364,71 @@ namespace CRS_Portal.Controllers
                 return "false";
             }
         }
+
+        public IActionResult EntityDataExport()
+        {
+            objCountryDbContext = new CountryDbContext();
+            try
+            {
+                using (objEntitytDbContext = new EntityLookupDbContext())
+                {
+                    var _lstmodel = objEntitytDbContext.DbEntityLookup.OrderBy(r => r.ID).ToList();
+
+                    List<EntityLookupDto> _export = new List<EntityLookupDto>();
+                    foreach (var item in _lstmodel)
+                    {
+                        EntityLookupDto _data = new EntityLookupDto();
+                        _data.CustID = item.CustID;
+                        _data.EntityName = item.EntityName;
+                        _data.BuildingIdentifier = item.BuildingIdentifier;
+                        _data.StreetName = item.StreetName ;
+                        _data.DistrictName = item.DistrictName;
+                        _data.City = item.City;
+                        _data.PostCode = item.PostCode;
+                        _data.CountryCode = objCountryDbContext.DbCountry.Where(x=>x.COUNTRYCD== item.CountryCode).Select(x=>x.COUNTRYCD +"-"+x.COUNTRY).FirstOrDefault();
+                        _data.EmailID = item.EmailID;
+                        _data.AccHoldType = item.AccHoldType;
+                        _data.ResCountryCode = objCountryDbContext.DbCountry.Where(x => x.COUNTRYCD == item.ResCountryCode).Select(x => x.COUNTRYCD + "-" + x.COUNTRY).FirstOrDefault();
+                        _data.PCountryIdentityType = item.PCountryIdentityType;
+                        _data.PCountryIdentityNo = item.PCountryIdentityNo;
+                        _data.PIdentityIssuedBy = objCountryDbContext.DbCountry.Where(x => x.COUNTRYCD == item.PIdentityIssuedBy).Select(x => x.COUNTRYCD + "-" + x.COUNTRY).FirstOrDefault();
+                        _data.secondResCountryCode = objCountryDbContext.DbCountry.Where(x => x.COUNTRYCD == item.secondResCountryCode).Select(x => x.COUNTRYCD + "-" + x.COUNTRY).FirstOrDefault();
+                        _data.SecondCountryIdentityType = item.SecondCountryIdentityType;
+                        _data.SecondCountryIdentityNo = item.SecondCountryIdentityNo;
+                        _data.SecondIdentityIssuedBy = objCountryDbContext.DbCountry.Where(x => x.COUNTRYCD == item.SecondIdentityIssuedBy).Select(x => x.COUNTRYCD + "-" + x.COUNTRY).FirstOrDefault();
+                        _data.ThirdResCountryCode = objCountryDbContext.DbCountry.Where(x => x.COUNTRYCD == item.ThirdResCountryCode).Select(x => x.COUNTRYCD + "-" + x.COUNTRY).FirstOrDefault();
+                        _data.ThirdCountryIdentityType = item.ThirdCountryIdentityType;
+                        _data.ThirdCountryIdentityNo = item.ThirdCountryIdentityNo;
+                        _data.ThirdIdentityIssuedBy = objCountryDbContext.DbCountry.Where(x => x.COUNTRYCD == item.ThirdIdentityIssuedBy).Select(x => x.COUNTRYCD + "-" + x.COUNTRY).FirstOrDefault();
+
+                        _export.Add(_data);
+                    }
+                    DataSet ds = Helper.ToDataSet(_export);
+
+                    using (_objPolmtpfDbContext = new PolmtpfDbContext())
+                    {
+                        string path = Helper.ReturnPolmtpf("EXPORT", "EXCELEXPORT") + @"EntityExport\";
+                        string fName = "SCV_EntityExport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
+
+                        if (Helper.DatasetToExcelExport(ds, path, fName, 22, "EntityExport"))
+                        {
+                            byte[] fileBytes = System.IO.File.ReadAllBytes(path + "" + fName);
+
+                            return Json(new { success = true, message = "Details are exported successfully." });
+                        }
+                        else
+                        {
+                            return Json(new { success = false, message = "The server has encountered an unexpected internal error. Please try again later." });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "The server has encountered an unexpected internal error. Please try again later." });
+            }
+        }
+
 
     }
 }
